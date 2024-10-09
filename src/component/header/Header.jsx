@@ -1,12 +1,12 @@
-import { CloseButton, Group, Image, Input, Text } from '@mantine/core';
-import { Search } from '@mui/icons-material';
+import { Button, Flex, Group, Image, Text } from '@mantine/core';
+import { Link } from 'react-router-dom';
 
 function Header() {
     return (
-        <Group pt={15} pb={15}>
-            <Group display={'flex'} justify='space-between' align='center'>
-                <Group align='center'>
-                    <a href='/'>
+        <Group pt={15} pb={15} justify='center' align='center'>
+            <Group display={'flex'} justify='space-between' align='center' maw={1200} w={'100%'}>
+                <a href='/'>
+                    <Flex direction={'row'} align='center'>
                         <Image
                             alt='logo'
                             src={
@@ -22,12 +22,12 @@ function Header() {
                             size={'xl'}
                             ml={12}
                         >
-                            Book Haven
+                            Cổng dịch vụ thú cưng
                         </Text>
-                    </a>
-                </Group>
+                    </Flex>
+                </a>
 
-                <Input
+                {/* <Input
                     // onKeyDown={handleKeyEnter}
                     w={350}
                     radius={'xl'}
@@ -52,8 +52,22 @@ function Header() {
                             // style={{ display: searchValue ? undefined : 'none' }}
                         />
                     }
-                />
+                /> */}
 
+                <div></div>
+
+                <Group>
+                    <Link to='/signup'>
+                        <Button variant='outline' radius={'md'} size='md'>
+                            Đăng kí
+                        </Button>
+                    </Link>
+                    <Link to='/login'>
+                        <Button variant='filled' radius={'md'} size='md'>
+                            Đăng nhập
+                        </Button>
+                    </Link>
+                </Group>
                 {/* <Group>
                     {!user.userId ? (
                         <Group>
