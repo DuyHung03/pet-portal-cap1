@@ -3,7 +3,7 @@ import { Search } from '@mui/icons-material';
 
 function Header() {
     return (
-        <header>
+        <Group pt={15} pb={15}>
             <Group display={'flex'} justify='space-between' align='center'>
                 <Group align='center'>
                     <a href='/'>
@@ -91,7 +91,7 @@ function Header() {
                     )}
                 </Group> */}
             </Group>
-        </header>
+        </Group>
     );
 }
 
