@@ -13,26 +13,20 @@ import {
 } from '@mantine/core';
 import { AccountCircle, ExpandMore, Logout } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-
+import logo from '../../assets/logo.png';
 function Header() {
     return (
         <Group pt={15} pb={15} justify='center' align='center'>
             <Group display={'flex'} justify='space-between' align='center' maw={1440} w={'100%'}>
                 <a href='/'>
                     <Flex direction={'row'} align='center'>
-                        <Image
-                            alt='logo'
-                            src={
-                                'https://book-haven-frontend-seven.vercel.app/assets/logo_only-Djt1EDPU.png'
-                            }
-                            width={76}
-                            height={76}
-                        />
+                        <Image alt='logo' src={logo} width={120} height={120} />
                         <Text
-                            c='cyan'
+                            ff={'Playwrite HU'}
+                            c='#165d94'
                             fw={'bold'}
                             style={{ letterSpacing: 1.25 }}
-                            size={'xl'}
+                            size={'30px'}
                             ml={12}
                         >
                             Cổng dịch vụ thú cưng
@@ -53,7 +47,7 @@ function Header() {
                     </Link>
                 </Group>
                 <Group>
-                    <Avatar size={'lg'} />
+                    <Avatar size={'lg'} allowedInitialsColors={'#dfe6e9'} />
                     <Text size='lg' fw={600} c={'gray'}>
                         Tran duy hung
                     </Text>
