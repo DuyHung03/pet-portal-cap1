@@ -8,11 +8,11 @@ function NavBar() {
 
     return (
         <Group w={'100%'} justify='center' align='center' bg={'#f5f5f5'}>
-            <Group maw={1200}>
+            <Group maw={1440}>
                 <Link to={'/'}>
                     <Text
                         c={isActive('/') ? 'white' : 'dark'}
-                        size='xl'
+                        size='md'
                         pr={12}
                         pl={12}
                         pt={6}
@@ -25,8 +25,7 @@ function NavBar() {
                 <Link to={'/about'}>
                     <Text
                         c={isActive('/about') ? 'white' : 'dark'}
-                        fw={500}
-                        size='xl'
+                        size='md'
                         pr={12}
                         pl={12}
                         pt={6}
@@ -38,9 +37,8 @@ function NavBar() {
                 </Link>
                 <Link to={'/service'}>
                     <Text
-                        fw={500}
                         c={isActive('/service') ? 'white' : 'dark'}
-                        size='xl'
+                        size='md'
                         pr={12}
                         pl={12}
                         pt={6}
@@ -53,8 +51,7 @@ function NavBar() {
                 <Link to={'/product'}>
                     <Text
                         c={isActive('/product') ? 'white' : 'dark'}
-                        size='xl'
-                        fw={500}
+                        size='md'
                         pr={12}
                         pl={12}
                         pt={6}
@@ -67,8 +64,7 @@ function NavBar() {
                 <Link to={'/product'}>
                     <Text
                         c={isActive('/product') ? 'white' : 'dark'}
-                        size='xl'
-                        fw={500}
+                        size='md'
                         pr={12}
                         pl={12}
                         pt={6}
