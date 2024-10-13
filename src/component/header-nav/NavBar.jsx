@@ -48,15 +48,15 @@ function NavBar() {
                         Dịch vụ
                     </Text>
                 </Link>
-                <Link to={'/product'}>
+                <Link to={'/shop'}>
                     <Text
-                        c={isActive('/product') ? 'white' : 'dark'}
+                        c={isActive('/shop') ? 'white' : 'dark'}
                         size='md'
                         pr={12}
                         pl={12}
                         pt={6}
                         pb={6}
-                        bg={isActive('/product') ? '#dfe6e9' : 'transparent'}
+                        bg={isActive('/shop') ? '#dfe6e9' : 'transparent'}
                     >
                         Sản phẩm
                     </Text>

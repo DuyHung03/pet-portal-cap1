@@ -1,21 +1,26 @@
 import { Button, Center, Flex, Group, Image, Loader, Text, TextInput } from '@mantine/core';
 import { hasLength, isEmail, useForm } from '@mantine/form';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import logo from '../../assets/logo.png';
+import axiosInstance from '../../network/httpRequest';
+import { login } from '../../redux/slice/authSlice';
 
 const Login = () => {
     // const { setUser } = useUserStore();
-    // const { login, isAuthenticated } = useAuthStore();
-    // const navigate = useNavigate();
-    // const location = useLocation();
+    const auth = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    // useEffect(() => {
-    //     if (isAuthenticated) {
-    //         navigate('/');
-    //     }
-    // }, [isAuthenticated, navigate]);
+    useEffect(() => {
+        if (auth.isAuthenticated) {
+            navigate('/');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [auth.isAuthenticated]);
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -30,43 +35,44 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const handleLogin = async () => {
-        // try {
-        //     setLoading(true);
-        //     const formData = {
-        //         email: form.getValues().email,
-        //         password: form.getValues().password,
-        //     };
-        //     const res = await axiosInstance.post('auth/login', JSON.stringify(formData));
-        //     if (res.data.code === 200) {
-        //         const user = res.data.result.user;
-        //         const role = res.data.result.user.role;
-        //         if (role.id == 1) {
-        //             setUser({
-        //                 userId: user.userId,
-        //                 email: user.email,
-        //                 phone: user.phone,
-        //                 address: user.address,
-        //                 photoUrl: user.photoUrl,
-        //                 name: user.name,
-        //                 birthday: user.birthday,
-        //                 gender: user.gender,
-        //             });
-        //             login(role.name);
-        //             console.log(location);
-        //             navigate(location?.state?.prevUrl ? location.state.prevUrl : '/');
-        //         } else {
-        //             toast.error('Invalid user');
-        //         }
-        //     } else {
-        //         form.setFieldError('email', 'Wrong email or password');
-        //         form.setFieldError('password', 'Wrong email or password');
-        //     }
-        // } catch (error) {
-        //     console.error('Login failed:', error);
-        //     toast.error('Server error !');
-        // } finally {
-        //     setLoading(false);
-        // }
+        try {
+            setLoading(true);
+            const formData = {
+                email: form.getValues().email,
+                password: form.getValues().password,
+            };
+            const res = await axiosInstance.post('auth/login', JSON.stringify(formData));
+            console.log(res);
+
+            if (res.status === 200) {
+                // if (role.id == 1) {
+                //     setUser({
+                //         userId: user.userId,
+                //         email: user.email,
+                //         phone: user.phone,
+                //         address: user.address,
+                //         photoUrl: user.photoUrl,
+                //         name: user.name,
+                //         birthday: user.birthday,
+                //         gender: user.gender,
+                //     });
+                //     login(role.name);
+                dispatch(login('PetOwner'));
+                //     console.log(location);
+                navigate(location?.state?.prevUrl ? location.state.prevUrl : '/');
+                // } else {
+                //     toast.error('Invalid user');
+                // }
+            } else {
+                form.setFieldError('email', 'Wrong email or password');
+                form.setFieldError('password', 'Wrong email or password');
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            toast.error('Server error !');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -78,7 +84,7 @@ const Login = () => {
                         <Image src={logo} alt='logo' w={200} />
                     </Link>
 
-                    <Text fw={600} size={'xl'} lts={1.5} mt={'lg'} c={'cyan'}>
+                    <Text fw={600} size={'xl'} lts={1.5} mt={'lg'} c={'blue'}>
                         PLEASE LOGIN
                     </Text>
                     <Group mt={30}>
@@ -132,17 +138,6 @@ const Login = () => {
                             </Group>
                         </form>
                     </Group>
-
-                    {/* <Button
-                        h={36}
-                        leftSection={<Image src={gg_logo} alt='' w={24} />}
-                        variant='outline'
-                        c={'gray'}
-                        color='gray'
-                        fullWidth
-                    >
-                        Connect with Google
-                    </Button> */}
                 </Flex>
             </Group>
         </>

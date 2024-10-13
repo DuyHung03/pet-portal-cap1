@@ -1,6 +1,6 @@
 import { Group } from '@mantine/core';
-import Banner from '../../component/banner/Banner';
 import HomePost from '../../component/home-post/HomePost';
+import Banner from '../../component/home/banner/Banner';
 
 function Home() {
     return (
