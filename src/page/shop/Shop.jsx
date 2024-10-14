@@ -12,7 +12,7 @@ function Shop() {
             params: {
                 limit: 10,
             },
-        });
+        }); 
         console.log(res.data);
 
         return res.data.products;
