@@ -18,9 +18,11 @@ import { Badge } from '@mui/material';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
+import { useAuthStore } from '../../../store/authStore';
 function ShopHeader() {
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
+    const { user } = useAuthStore();
 
     const handleSearchClick = () => {
         if (searchValue.trim()) {
@@ -76,40 +78,47 @@ function ShopHeader() {
                         />
                     }
                 />
+
                 <Group>
                     <Link to={'/cart'}>
                         <Badge color='error' badgeContent={1}>
                             <ShoppingCart color='primary' fontSize='large' />
                         </Badge>
                     </Link>
-                    <Link to='/login'>
-                        <Button variant='filled' radius={'md'} size='md'>
-                            Đăng nhập
-                        </Button>
-                    </Link>
+                    {!user ? (
+                        <Link to='/login'>
+                            <Button variant='filled' radius={'md'} size='md'>
+                                Đăng nhập
+                            </Button>
+                        </Link>
+                    ) : (
+                        <Group>
+                            <Avatar
+                                size={'lg'}
+                                allowedInitialsColors={'#dfe6e9'}
+                                src={user.avatar_url}
+                            />
+                            <Text size='lg' fw={600} c={'gray'}>
+                                {user.username}
+                            </Text>
+                            <Menu>
+                                <MenuTarget>
+                                    <UnstyledButton>
+                                        <ExpandMore color='action' />
+                                    </UnstyledButton>
+                                </MenuTarget>
 
-                    <Group>
-                        <Avatar size={'lg'} allowedInitialsColors={'#dfe6e9'} />
-                        <Text size='lg' fw={600} c={'gray'}>
-                            Tran duy hung
-                        </Text>
-                        <Menu>
-                            <MenuTarget>
-                                <UnstyledButton>
-                                    <ExpandMore color='action' />
-                                </UnstyledButton>
-                            </MenuTarget>
-
-                            <MenuDropdown>
-                                <MenuItem leftSection={<AccountCircle color='action' />}>
-                                    <Link to={'/'}>Thông tin cá nhân</Link>
-                                </MenuItem>
-                                <MenuItem leftSection={<Logout color='error' />}>
-                                    <Link to={'/'}>Đăng xuất</Link>
-                                </MenuItem>
-                            </MenuDropdown>
-                        </Menu>
-                    </Group>
+                                <MenuDropdown>
+                                    <MenuItem leftSection={<AccountCircle color='action' />}>
+                                        <Link to={'/'}>Thông tin cá nhân</Link>
+                                    </MenuItem>
+                                    <MenuItem leftSection={<Logout color='error' />}>
+                                        <Link to={'/'}>Đăng xuất</Link>
+                                    </MenuItem>
+                                </MenuDropdown>
+                            </Menu>
+                        </Group>
+                    )}
                 </Group>
             </Group>
         </Group>

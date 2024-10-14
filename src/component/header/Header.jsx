@@ -14,7 +14,9 @@ import {
 import { AccountCircle, ExpandMore, Logout } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
+import { useAuthStore } from '../../store/authStore';
 function Header() {
+    const { user } = useAuthStore();
     return (
         <Group pt={15} pb={15} justify='center' align='center'>
             <Group display={'flex'} justify='space-between' align='center' maw={1440} w={'100%'}>
@@ -33,41 +35,47 @@ function Header() {
                         </Text>
                     </Flex>
                 </a>
+                {!user ? (
+                    <Group>
+                        <Link to='/signup'>
+                            <Button variant='outline' radius={'md'} size='md'>
+                                Đăng kí
+                            </Button>
+                        </Link>
+                        <Link to='/login'>
+                            <Button variant='filled' radius={'md'} size='md'>
+                                Đăng nhập
+                            </Button>
+                        </Link>
+                    </Group>
+                ) : (
+                    <Group>
+                        <Avatar
+                            size={'lg'}
+                            allowedInitialsColors={'#dfe6e9'}
+                            src={user.avatar_url}
+                        />
+                        <Text size='lg' fw={600} c={'gray'}>
+                            {user.username}
+                        </Text>
+                        <Menu>
+                            <MenuTarget>
+                                <UnstyledButton>
+                                    <ExpandMore color='action' />
+                                </UnstyledButton>
+                            </MenuTarget>
 
-                <Group>
-                    <Link to='/signup'>
-                        <Button variant='outline' radius={'md'} size='md'>
-                            Đăng kí
-                        </Button>
-                    </Link>
-                    <Link to='/login'>
-                        <Button variant='filled' radius={'md'} size='md'>
-                            Đăng nhập
-                        </Button>
-                    </Link>
-                </Group>
-                <Group>
-                    <Avatar size={'lg'} allowedInitialsColors={'#dfe6e9'} />
-                    <Text size='lg' fw={600} c={'gray'}>
-                        Tran duy hung
-                    </Text>
-                    <Menu>
-                        <MenuTarget>
-                            <UnstyledButton>
-                                <ExpandMore color='action' />
-                            </UnstyledButton>
-                        </MenuTarget>
-
-                        <MenuDropdown>
-                            <MenuItem leftSection={<AccountCircle color='action' />}>
-                                <Link to={'/'}>Thông tin cá nhân</Link>
-                            </MenuItem>
-                            <MenuItem leftSection={<Logout color='error' />}>
-                                <Link to={'/'}>Đăng xuất</Link>
-                            </MenuItem>
-                        </MenuDropdown>
-                    </Menu>
-                </Group>
+                            <MenuDropdown>
+                                <MenuItem leftSection={<AccountCircle color='action' />}>
+                                    <Link to={'/'}>Thông tin cá nhân</Link>
+                                </MenuItem>
+                                <MenuItem leftSection={<Logout color='error' />}>
+                                    <Link to={'/'}>Đăng xuất</Link>
+                                </MenuItem>
+                            </MenuDropdown>
+                        </Menu>
+                    </Group>
+                )}
             </Group>
         </Group>
     );
