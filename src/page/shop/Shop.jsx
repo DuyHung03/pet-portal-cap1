@@ -5,24 +5,15 @@ import { Link } from 'react-router-dom';
 import ShopBanner from '../../component/shop/shop-banner/ShopBanner';
 import Product from '../../component/shop/shop-product/Product';
 import axiosInstance from '../../network/httpRequest';
+import useFetchData from '../../hooks/useFetchData';
+import { useMemo } from 'react';
 
 function Shop() {
-    const getBooks = async () => {
-        const res = await axiosInstance.get('/products', {
-            params: {
-                limit: 10,
-            },
-        }); 
-        console.log(res.data);
+    const params = useMemo(() => ({ limit: 10 }), []);
 
-        return res.data.products;
-    };
+     const { data, loading, error } = useFetchData('/products', params);
 
-    const { data = [], isLoading } = useQuery({
-        queryKey: ['products'],
-        queryFn: () => getBooks(),
-        staleTime: 1000 * 60 * 5, //5 mins
-    });
+    const products = data?.products || [];
 
     return (
         <Group w={'100%'} gap={0}>
@@ -32,13 +23,13 @@ function Shop() {
                     <Text ff={'Roboto Slab'} size='39px' ta={'center'} w={'100%'} c={'#003594'}>
                         Đề xuất
                     </Text>
-                    {isLoading ? (
+                    {loading ? (
                         <Group mt={20} mb={20} w={'100%'} justify='center'>
                             <Loader type='bars' />
                         </Group>
                     ) : (
                         <Group mt={20} mb={20} wrap='wrap' justify='space-between'>
-                            {data.map((product, index) => (
+                            {products.map((product, index) => (
                                 <Product key={index} product={product} />
                             ))}
                         </Group>

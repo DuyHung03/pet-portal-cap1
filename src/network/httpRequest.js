@@ -57,7 +57,7 @@ axiosInstance.interceptors.request.use(
         if (isTokenExpired(token)) {
             console.log('Token expired, trying to refresh');
             try {
-                token = await ref
+                token = await refreshAccessToken();
             } catch (error) {
                 console.log('Error refreshing token');
                 localStorage.removeItem('token'); 
