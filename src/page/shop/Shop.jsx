@@ -1,15 +1,13 @@
 import { Button, Group, Image, Loader, Text } from '@mantine/core';
 import { ArrowForward } from '@mui/icons-material';
-import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import ShopBanner from '../../component/shop/shop-banner/ShopBanner';
 import Product from '../../component/shop/shop-product/Product';
-import axiosInstance from '../../network/httpRequest';
 import useFetchData from '../../hooks/useFetchData';
-import { useMemo } from 'react';
 
 function Shop() {
-    const params = useMemo(() => ({ limit: 10 }), []);
+    const params = useMemo(() => ({ limit: 10 }), []); 
 
     const { data, loading, error } = useFetchData('/products', params);
 

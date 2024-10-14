@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { store } from '../redux/store';
 import { logout } from '../redux/slice/authSlice';
+import { store } from '../redux/store';
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:4000/api/v1',
@@ -14,16 +14,15 @@ const isTokenExpired = (token) => {
     if (!token) return true;
 
     try {
-        const base64Url = token.split('.')[1]; 
+        const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const decodedPayload = JSON.parse(window.atob(base64)); 
-        const currentTime = Date.now() / 1000; 
-        return decodedPayload.exp < currentTime; 
+        const decodedPayload = JSON.parse(window.atob(base64));
+        const currentTime = Date.now() / 1000;
+        return decodedPayload.exp < currentTime;
     } catch (error) {
         console.log('Error decoding token:', error);
         return true;
     }
-    console.log('decodedPayload', decodedPayload);
 };
 
 const refreshAccessToken = async () => {
@@ -32,11 +31,11 @@ const refreshAccessToken = async () => {
             'http://localhost:4000/api/v1/auth/refresh-token',
             {},
             {
-                withCredentials: true, 
+                withCredentials: true,
             }
         );
         const newToken = response.data.token;
-        localStorage.setItem('token', newToken); 
+        localStorage.setItem('token', newToken);
         return newToken;
     } catch (error) {
         console.log('Session expiry');
@@ -47,7 +46,7 @@ const refreshAccessToken = async () => {
 
 const handleAuthorizationError = () => {
     const dispatch = store.dispatch;
-    dispatch(logout()); 
+    dispatch(logout());
 };
 
 axiosInstance.interceptors.request.use(
@@ -60,7 +59,7 @@ axiosInstance.interceptors.request.use(
                 token = await refreshAccessToken();
             } catch (error) {
                 console.log('Error refreshing token');
-                localStorage.removeItem('token'); 
+                localStorage.removeItem('token');
                 return Promise.reject(error);
             }
         }
@@ -90,13 +89,13 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                const newToken = await refreshAccessToken(); 
+                const newToken = await refreshAccessToken();
                 if (newToken) {
-                    originalRequest.headers['Authorization'] = `Bearer ${newToken}`; 
+                    originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
                 }
-                return axiosInstance(originalRequest); 
+                return axiosInstance(originalRequest);
             } catch (refreshError) {
-                return Promise.reject(refreshError); 
+                return Promise.reject(refreshError);
             }
         }
 
