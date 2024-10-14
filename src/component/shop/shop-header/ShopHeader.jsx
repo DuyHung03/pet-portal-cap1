@@ -15,9 +15,22 @@ import {
 } from '@mantine/core';
 import { AccountCircle, ExpandMore, Logout, Search, ShoppingCart } from '@mui/icons-material';
 import { Badge } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 function ShopHeader() {
+    const [searchValue, setSearchValue] = useState('');
+    const navigate = useNavigate();
+
+    const handleSearchClick = () => {
+        if (searchValue.trim()) {
+            console.log('Searching for:', searchValue);
+            navigate(`search?name=${searchValue}`);
+        }
+    };
+    const handleKeyEnter = (event) => {
+        if (event.key === 'Enter') handleSearchClick();
+    };
     return (
         <Group pt={15} pb={15} justify='center' align='center'>
             <Group display={'flex'} justify='space-between' align='center' maw={1440} w={'100%'}>
@@ -38,28 +51,28 @@ function ShopHeader() {
                 </a>
 
                 <Input
-                    // onKeyDown={handleKeyEnter}
+                    onKeyDown={handleKeyEnter}
                     w={350}
                     radius={'xl'}
                     size='md'
-                    placeholder='Search'
+                    placeholder='Tìm kiếm'
                     leftSectionPointerEvents='all'
                     rightSectionPointerEvents='all'
                     leftSection={
                         <Search
                             fontSize='small'
-                            // onClick={handleSearchClick}
+                            onClick={handleSearchClick}
                             style={{ cursor: 'pointer' }}
                         />
                     }
-                    // onChange={(e) => setSearchValue(e.target.value)}
-                    // value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    value={searchValue}
                     rightSection={
                         <CloseButton
                             aria-label='Clear input'
                             size={'sm'}
-                            // onClick={() => setSearchValue('')}
-                            // style={{ display: searchValue ? undefined : 'none' }}
+                            onClick={() => setSearchValue('')}
+                            style={{ display: searchValue ? undefined : 'none' }}
                         />
                     }
                 />
