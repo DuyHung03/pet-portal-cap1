@@ -22,17 +22,17 @@ function NavBar() {
                         Trang chủ
                     </Text>
                 </Link>
-                <Link to={'/about'}>
+                <Link to={'/post'}>
                     <Text
-                        c={isActive('/about') ? 'white' : 'dark'}
+                        c={isActive('/post') ? 'white' : 'dark'}
                         size='md'
                         pr={12}
                         pl={12}
                         pt={6}
                         pb={6}
-                        bg={isActive('/about') ? '#dfe6e9' : 'transparent'}
+                        bg={isActive('/post') ? '#dfe6e9' : 'transparent'}
                     >
-                        Giới thiệu
+                        Diễn đàn
                     </Text>
                 </Link>
                 <Link to={'/service'}>

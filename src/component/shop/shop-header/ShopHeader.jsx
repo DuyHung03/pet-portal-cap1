@@ -34,7 +34,13 @@ function ShopHeader() {
         if (event.key === 'Enter') handleSearchClick();
     };
     return (
-        <Group pt={15} pb={15} justify='center' align='center'>
+        <Group
+            pt={15}
+            pb={15}
+            justify='center'
+            align='center'
+            style={{ boxShadow: 'rgba(33, 35, 38, 0.1) 0px 10px 10px -10px' }}
+        >
             <Group display={'flex'} justify='space-between' align='center' maw={1440} w={'100%'}>
                 <a href='/'>
                     <Flex direction={'row'} align='center'>
@@ -97,6 +103,8 @@ function ShopHeader() {
                                 size={'lg'}
                                 allowedInitialsColors={'#dfe6e9'}
                                 src={user.avatar_url}
+                                name={user.username}
+                                color='initials'
                             />
                             <Text size='lg' fw={600} c={'gray'}>
                                 {user.username}
