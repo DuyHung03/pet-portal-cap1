@@ -1,5 +1,7 @@
+import { Group } from '@mantine/core';
+
 function Cart() {
-    return;
+    return <Group></Group>;
 }
 
 export default Cart;
