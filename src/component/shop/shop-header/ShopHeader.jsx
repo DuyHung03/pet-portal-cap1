@@ -36,7 +36,7 @@ function ShopHeader() {
             <Group display={'flex'} justify='space-between' align='center' maw={1440} w={'100%'}>
                 <a href='/'>
                     <Flex direction={'row'} align='center'>
-                        <Image alt='logo' src={logo} width={120} height={120} />
+                        <Image alt='logo' src={logo} height={120} style={{ width: '120px' }} />
                         <Text
                             ff={'Playwrite HU'}
                             c='#165d94'
