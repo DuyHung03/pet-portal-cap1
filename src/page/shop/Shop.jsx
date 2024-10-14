@@ -11,7 +11,7 @@ import { useMemo } from 'react';
 function Shop() {
     const params = useMemo(() => ({ limit: 10 }), []);
 
-     const { data, loading, error } = useFetchData('/products', params);
+    const { data, loading, error } = useFetchData('/products', params);
 
     const products = data?.products || [];
 
