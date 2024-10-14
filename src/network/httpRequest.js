@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { store } from '../redux/store';
 import { logout } from '../redux/slice/authSlice';
-// import useAuthStore from '../store/useAuthStore';
-// import useUserStore from '../store/useUserStore';
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:4000/api/v1',
@@ -12,29 +10,70 @@ const axiosInstance = axios.create({
     withCredentials: true,
 });
 
-const handleAuthorizationError = () => {
-    // const { clearUser } = useUserStore.getState();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const dispatch = useDispatch();
-    // clearUser();
-    dispatch(logout);
+const isTokenExpired = (token) => {
+    if (!token) return true;
+
+    try {
+        const base64Url = token.split('.')[1]; 
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const decodedPayload = JSON.parse(window.atob(base64)); 
+        const currentTime = Date.now() / 1000; 
+        return decodedPayload.exp < currentTime; 
+    } catch (error) {
+        console.log('Error decoding token:', error);
+        return true;
+    }
+    console.log('decodedPayload', decodedPayload);
 };
 
 const refreshAccessToken = async () => {
     try {
-        await axios.post(
+        const response = await axios.post(
             'http://localhost:4000/api/v1/auth/refresh-token',
             {},
             {
-                withCredentials: true,
+                withCredentials: true, 
             }
         );
+        const newToken = response.data.token;
+        localStorage.setItem('token', newToken); 
+        return newToken;
     } catch (error) {
         console.log('Session expiry');
         handleAuthorizationError();
         throw error;
     }
 };
+
+const handleAuthorizationError = () => {
+    const dispatch = store.dispatch;
+    dispatch(logout()); 
+};
+
+axiosInstance.interceptors.request.use(
+    async (config) => {
+        let token = localStorage.getItem('token');
+
+        if (isTokenExpired(token)) {
+            console.log('Token expired, trying to refresh');
+            try {
+                token = await refreshAccessToken();
+            } catch (error) {
+                console.log('Error refreshing token');
+                localStorage.removeItem('token'); 
+                return Promise.reject(error);
+            }
+        }
+
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 axiosInstance.interceptors.response.use(
     (response) => {
@@ -51,11 +90,13 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                await refreshAccessToken();
-                // Retry the request without modifying headers (cookies will be sent automatically)
-                return axiosInstance(originalRequest);
+                const newToken = await refreshAccessToken(); 
+                if (newToken) {
+                    originalRequest.headers['Authorization'] = `Bearer ${newToken}`; 
+                }
+                return axiosInstance(originalRequest); 
             } catch (refreshError) {
-                return Promise.reject(refreshError);
+                return Promise.reject(refreshError); 
             }
         }
 

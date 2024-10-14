@@ -9,11 +9,15 @@ export const useAuthStore = create((set) => {
 	const storedUser = JSON.parse(localStorage.getItem('user'));
 	const storedIsAuthenticated = JSON.parse(localStorage.getItem('isAuthenticated'));
 	const storedRole = localStorage.getItem('role');
+	const storedToken = localStorage.getItem('token');
+	const storedRefreshToken = localStorage.getItem('refreshToken');
 
 	return {
 		user: storedUser || null,
 		isAuthenticated: storedIsAuthenticated || false,
 		role: storedRole || null,
+		token: storedToken || null,
+		refreshToken: storedRefreshToken || null,
 		error: null,
 		isLoading: false,
 		isCheckingAuth: true,
@@ -35,13 +39,17 @@ export const useAuthStore = create((set) => {
 			try {
 				const response = await axios.post(`${API_URL}/login`, { email, password });
 				const user = response.data.user;
-				const role = user.role; 
+				const role = user.role;
+				const token = response.data.token;
+				const refreshToken = response.data.refreshToken;
 
 				localStorage.setItem('user', JSON.stringify(user));
 				localStorage.setItem('isAuthenticated', JSON.stringify(true));
 				localStorage.setItem('role', role);
+				localStorage.setItem('token', token);
+				localStorage.setItem('refreshToken', refreshToken);
 
-				set({ user, role, isAuthenticated: true, error: null, isLoading: false });
+				set({ user, role, token, refreshToken, isAuthenticated: true, error: null, isLoading: false });
 			} catch (error) {
 				set({ error: error.response?.data?.message || "Error logging in", isLoading: false });
 				throw error;
@@ -69,7 +77,7 @@ export const useAuthStore = create((set) => {
 			try {
 				const response = await axios.post(`${API_URL}/verify-email`, { code });
 				const user = response.data.user;
-				const role = user.role; 
+				const role = user.role;
 
 				localStorage.setItem('user', JSON.stringify(user));
 				localStorage.setItem('isAuthenticated', JSON.stringify(true));
