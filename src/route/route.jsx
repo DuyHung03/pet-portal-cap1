@@ -19,6 +19,7 @@ import Search from '../page/search/Search';
 import Shop from '../page/shop/Shop';
 import SignUp from '../page/SignUpPage/SignUpPage';
 import ProtectedRoute from './ProtectedRoute';
+import MedicalPortal from '../page/doctor/MedicalPortal/MedicalPortal';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -33,11 +34,16 @@ const router = createBrowserRouter(
                 <Route path='search' element={<Search />} />
             </Route>
 
+            <Route path='/doctor' element={<ShopLayout />} errorElement={<Error404 />}>
+                <Route index element={<MedicalPortal />} />
+                {/* <Route path='detail/:id' element={<ProductDetails />} /> */}
+            </Route>
+
             <Route
                 path='/post'
-                // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
-                // element={<ProtectedRoute element={<PostLayout />} />}
-                // errorElement={<Error404 />}
+            // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
+            // element={<ProtectedRoute element={<PostLayout />} />}
+            // errorElement={<Error404 />}
             >
                 <Route index element={<PostPage />} />
             </Route>
