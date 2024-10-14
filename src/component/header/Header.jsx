@@ -15,7 +15,7 @@ import { AccountCircle, ExpandMore, Logout } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import { useAuthStore } from '../../store/authStore';
-function Header() {
+function Header({ title }) {
     const { user } = useAuthStore();
     return (
         <Group pt={15} pb={15} justify='center' align='center'>
@@ -31,7 +31,7 @@ function Header() {
                             size={'30px'}
                             ml={12}
                         >
-                            Cổng dịch vụ thú cưng
+                            {title}
                         </Text>
                     </Flex>
                 </a>
