@@ -8,12 +8,14 @@ import MainLayout from '../layout/MainLayout';
 import ShopLayout from '../layout/ShopLayout';
 import Error404 from '../page/404/Error404';
 import Home from '../page/home/Home';
-import Login from '../page/login/Login';
+import Login from '../page/LoginPage/LoginPage';
 import ProductDetails from '../page/product-details/ProductDetails';
 import Search from '../page/search/Search';
 import Shop from '../page/shop/Shop';
-import SignUp from '../page/sign-up/SignUp';
-import VerifyOtp from '../page/verify-otp/VerifyOtp';
+import SignUp from '../page/SignUpPage/SignUpPage';
+import EmailVerificationPage from '../page/EmailVerificationPage/EmailVerificationPage';
+import ResetPasswordPage from '../page/ResetPasswordPage/ResetPasswordPage';
+import ForgotPasswordPage from '../page/ForgotPasswordPage/ForgotPasswordPage';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -30,7 +32,17 @@ const router = createBrowserRouter(
 
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<SignUp />} />
-            <Route path='/auth/verify' element={<VerifyOtp />} />
+            <Route path='/verify-email' element={<EmailVerificationPage />} />
+            <Route
+                path='/forgot-password'
+                element={
+                    <ForgotPasswordPage />
+                }
+            />
+            <Route
+                path='/reset-password/:token'
+                element={<ResetPasswordPage />}
+            />
         </>
     )
 );
