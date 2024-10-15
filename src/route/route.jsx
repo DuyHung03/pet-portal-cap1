@@ -35,9 +35,8 @@ const router = createBrowserRouter(
 
             <Route
                 path='/post'
-                // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
-                // element={<ProtectedRoute element={<PostLayout />} />}
-                // errorElement={<Error404 />}
+                element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
+                errorElement={<Error404 />}
             >
                 <Route index element={<PostPage />} />
             </Route>

@@ -7,7 +7,7 @@ import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
 
 function Shop() {
-    const params = useMemo(() => ({ limit: 10 }), []); 
+    const params = useMemo(() => ({ limit: 10 }), []);
 
     const { data, loading, error } = useFetchData('/products', params);
 
