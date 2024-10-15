@@ -31,7 +31,7 @@ function ShopNavBar() {
             pt={6}
             pb={6}
             bg={isActive("/") || hoveredNav === "/" ? "#dfe6e9" : "transparent"}
-            onMouseEnter={() => setHoveredNav("about")}
+            onMouseEnter={() => setHoveredNav("/")}
             onMouseLeave={() => setHoveredNav(null)}
             style={{ transition: "background-color 0.3s" }}
           >
@@ -183,7 +183,7 @@ function ShopNavBar() {
             onMouseLeave={() => setHoveredNav(null)}
             style={{ transition: "background-color 0.3s" }}
           >
-            Giới Thiệu
+            Phụ Kiện
           </Text>
         </Link>
         <Link to={"/lien-he"}>

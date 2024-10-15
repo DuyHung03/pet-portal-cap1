@@ -3,7 +3,6 @@ import { ArrowForward } from "@mui/icons-material";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import ShopBanner from "../../component/shop/shop-banner/ShopBanner";
-import ShopNavBar from "../../component/shop/shop-nav/ShopNavBar";
 import Product from "../../component/shop/shop-product/Product";
 import useFetchData from "../../hooks/useFetchData";
 
@@ -16,7 +15,6 @@ function Shop() {
 
   return (
     <Group w={"100%"} gap={0} bg="#f9f9f9">
-      <ShopNavBar />
       <ShopBanner />
       <Group
         w="80%"
@@ -27,6 +25,10 @@ function Shop() {
         p={24}
         radius="md"
         shadow="lg"
+        style={{
+          paddingTop: "40px",
+          paddingBottom: "40px",
+        }}
       >
         <Text
           ff="Roboto Slab"
@@ -55,6 +57,84 @@ function Shop() {
             wrap="wrap"
             justify="space-between"
             spacing="lg"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gap: "20px",
+              width: "100%",
+            }}
+          >
+            {products.map((product, index) => (
+              <Product key={index} product={product} />
+            ))}
+          </Group>
+        )}
+
+        <Link to="/">
+          <Button
+            size="xl"
+            rightSection={<ArrowForward />}
+            variant="gradient"
+            gradient={{ from: "teal", to: "lime", deg: 45 }}
+            radius="xl"
+            style={{
+              marginTop: "20px",
+              paddingLeft: "20px",
+              paddingRight: "20px",
+              textTransform: "uppercase",
+            }}
+          >
+            Xem thêm sản phẩm
+          </Button>
+        </Link>
+      </Group>
+      <Group
+        w="80%"
+        mx="auto"
+        justify="center"
+        align="center"
+        bg="#f9f9f9"
+        p={24}
+        radius="md"
+        shadow="lg"
+        style={{
+          paddingTop: "40px",
+          paddingBottom: "40px",
+        }}
+      >
+        <Text
+          ff="Roboto Slab"
+          size="39px"
+          ta="center"
+          w="100%"
+          c="#003594"
+          style={{
+            fontWeight: "bold",
+            textShadow: "1px 1px 4px rgba(0, 0, 0, 0.3)",
+            paddingBottom: "20px",
+            borderBottom: "2px solid #003594",
+          }}
+        >
+          Sản Phẩm Bán Chạy
+        </Text>
+
+        {loading ? (
+          <Group mt={20} mb={20} w="100%" justify="center">
+            <Loader type="bars" />
+          </Group>
+        ) : (
+          <Group
+            mt={20}
+            mb={20}
+            wrap="wrap"
+            justify="space-between"
+            spacing="lg"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gap: "20px",
+              width: "100%",
+            }}
           >
             {products.map((product, index) => (
               <Product key={index} product={product} />

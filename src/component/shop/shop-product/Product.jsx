@@ -8,9 +8,9 @@ function Product({ product }) {
       to={`product/${product.id}`}
       style={{
         padding: "10px",
-        border: "1px solid #e0e0e0",
+        // border: "1px solid #e0e0e0",
         borderRadius: "12px",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+        // boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
         display: "block",
         textDecoration: "none",
@@ -29,7 +29,7 @@ function Product({ product }) {
         style={{ border: "1px solid #e0e0e0", borderRadius: "12px" }}
       >
         <Image
-          //   src={product.images}
+          // src={product.image}
           src={
             "https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg"
           }
