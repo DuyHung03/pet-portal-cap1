@@ -64,6 +64,9 @@ export const useAuthStore = create((set) => {
 				localStorage.removeItem('user');
 				localStorage.removeItem('isAuthenticated');
 				localStorage.removeItem('role');
+				localStorage.removeItem('token');
+				localStorage.removeItem('refreshToken');
+				
 
 				set({ user: null, role: null, isAuthenticated: false, error: null, isLoading: false });
 			} catch (error) {

@@ -8,6 +8,7 @@ import MainLayout from '../layout/MainLayout';
 import PostLayout from '../layout/PostLayout';
 import ShopLayout from '../layout/ShopLayout';
 import Error404 from '../page/404/Error404';
+import MedicalPortal from '../page/doctor/MedicalPortal/MedicalPortal';
 import EmailVerificationPage from '../page/EmailVerificationPage/EmailVerificationPage';
 import ForgotPasswordPage from '../page/ForgotPasswordPage/ForgotPasswordPage';
 import Home from '../page/home/Home';
@@ -31,6 +32,11 @@ const router = createBrowserRouter(
                 <Route index element={<Shop />} />
                 <Route path='product/:id' element={<ProductDetails />} />
                 <Route path='search' element={<Search />} />
+            </Route>
+
+            <Route path='/doctor' element={<ShopLayout />} errorElement={<Error404 />}>
+                <Route index element={<MedicalPortal />} />
+                {/* <Route path='detail/:id' element={<ProductDetails />} /> */}
             </Route>
 
             <Route
