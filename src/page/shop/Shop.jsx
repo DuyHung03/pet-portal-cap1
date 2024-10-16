@@ -7,14 +7,14 @@ import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
 
 function Shop() {
-  const params = useMemo(() => ({ limit: 8 }), []);
+    const params = useMemo(() => ({ limit: 10 }), []);
 
-  const { data, loading, error } = useFetchData('/products', params);
+  const { data, loading, error } = useFetchData("/products", params);
 
-  const products = data?.data || [];
+  const products = data?.products || [];
 
   return (
-    <Group w={'100%'} gap={0} bg="#f9f9f9">
+    <Group w={"100%"} gap={0} bg="#f9f9f9">
       <ShopBanner />
       <Group
         w="80%"
@@ -192,6 +192,7 @@ function Shop() {
       </div>
     </Group>
   );
+>>>>>>> 22787f03128bd5c87206b03e4350024b292b0c52
 }
 
 export default Shop;
