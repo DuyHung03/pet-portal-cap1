@@ -11,7 +11,7 @@ function Shop() {
 
   const { data, loading, error } = useFetchData("/products", params);
 
-  const products = data?.products || [];
+  const products = data?.data || [];
 
   return (
     <Group w={"100%"} gap={0} bg="#f9f9f9">
