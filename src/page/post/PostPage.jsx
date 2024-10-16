@@ -11,12 +11,12 @@ function PostPage() {
     console.log(data, loading, error);
 
     return (
-        <Group w={700} justify='center' m={20}>
+        <Group w={700} justify="center" m={20}>
             <AddPost />
 
             {loading ? (
-                <Group w={700} align='center' justify='center'>
-                    <Loader type='bars' />
+                <Group w={700} align="center" justify="center">
+                    <Loader type="bars" />
                 </Group>
             ) : null}
 

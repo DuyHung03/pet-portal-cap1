@@ -192,7 +192,6 @@ function Shop() {
       </div>
     </Group>
   );
->>>>>>> 22787f03128bd5c87206b03e4350024b292b0c52
 }
 
 export default Shop;
