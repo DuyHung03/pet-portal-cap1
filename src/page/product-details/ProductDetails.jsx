@@ -1,5 +1,5 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { Avatar } from "@mantine/core";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Avatar } from '@mantine/core';
 
 function ProductDetails() {
   const location = useLocation();
@@ -55,9 +55,9 @@ function ProductDetails() {
               {(
                 product.ProductReviews.reduce(
                   (acc, review) => acc + review.rating,
-                  0
+                  0,
                 ) / product.ProductReviews.length
-              ).toFixed(1)}{" "}
+              ).toFixed(1)}{' '}
               / 5
             </span>
             <span className="text-gray-500 ml-1">
@@ -104,8 +104,8 @@ function ProductDetails() {
       <hr className="my-8" />
 
       <p className="text-sm font-medium text-gray-600 mb-2">
-        Trung tâm bán hàng:{" "}
-        {product.SalesCenter.full_name || "Chưa có thông tin"}
+        Trung tâm bán hàng:{' '}
+        {product.SalesCenter.full_name || 'Chưa có thông tin'}
       </p>
 
       <h2 className="text-lg font-bold mt-8 mb-4">

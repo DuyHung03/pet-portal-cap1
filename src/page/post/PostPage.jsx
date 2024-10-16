@@ -5,6 +5,7 @@ import PostItem from '../../component/post/post-item/PostItem';
 import useFetchData from '../../hooks/useFetchData';
 
 function PostPage() {
+<<<<<<< HEAD
     const params = useMemo(() => [], []);
 
     const { data, loading, error } = useFetchData('/posts/latest', params);
@@ -35,6 +36,16 @@ function PostPage() {
             ) : null}
         </Group>
     );
+=======
+  return (
+    <Group w={700} justify="center" m={20}>
+      <AddPost />
+      <Group bg={'#f8f8f8'} p={20} w={700} style={{ borderRadius: '24px' }}>
+        <PostItem />
+      </Group>
+    </Group>
+  );
+>>>>>>> 22787f03128bd5c87206b03e4350024b292b0c52
 }
 
 export default PostPage;
