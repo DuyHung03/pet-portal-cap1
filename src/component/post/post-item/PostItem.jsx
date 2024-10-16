@@ -8,7 +8,6 @@ import { useAuthStore } from '../../../store/authStore';
 import { timeAgo } from '../../../util/convertTime';
 import PostComment from '../post-comment/PostComment';
 
-<<<<<<< HEAD
 function PostItem({ post }) {
     const [commentsVisible, setCommentsVisible] = useState(false);
     const [newComment, setNewComment] = useState('');
@@ -150,38 +149,6 @@ function PostItem({ post }) {
             </Group>
         </>
     );
-=======
-function PostItem() {
-  const { user } = useAuthStore();
-
-  const params = useMemo(() => [], []);
-
-  const { data, loading, error } = useFetchData('/posts', params);
-  console.log('data', data);
-
-  return (
-    <Group>
-      <Flex>
-        <Avatar
-          src={user.avatar_url}
-          size={'md'}
-          name={user.username}
-          color="initials"
-        />
-        {loading ? (
-          <Group w={'100%'} justify="center" align="center">
-            <Loader type="bars" />
-          </Group>
-        ) : (
-          <Group>
-            <Text>{user.username}</Text>
-            <Text>{timeAgo()}</Text>
-          </Group>
-        )}
-      </Flex>
-    </Group>
-  );
->>>>>>> 22787f03128bd5c87206b03e4350024b292b0c52
 }
 
 export default PostItem;
