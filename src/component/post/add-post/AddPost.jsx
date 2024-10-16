@@ -12,7 +12,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { AddPhotoAlternate } from '@mui/icons-material';
+import { Add, AddPhotoAlternate } from '@mui/icons-material';
 import axiosInstance from '../../../network/httpRequest';
 import { useAuthStore } from '../../../store/authStore';
 
@@ -60,23 +60,28 @@ function AddPost() {
 
     return (
         <>
-            <Flex
-                bg={'#f8f8f8'}
-                p={20}
-                w={700}
-                justify='center'
-                style={{ borderRadius: '24px' }}
-                gap={20}
-            >
-                <Avatar src={user.avatar_url} size={'md'} name={user.username} color='initials' />
-                <TextInput
-                    onClick={open}
-                    readOnly
-                    placeholder={`${user.username} ơi, hãy chia sẻ vài điều nào!`}
-                    radius={'xl'}
-                    w={'100%'}
-                />
-            </Flex>
+            <Group bg={'#f8f8f8'} p={20} w={700} style={{ borderRadius: '24px' }}>
+                <Flex justify='center' align={'center'} gap={20} w={'100%'}>
+                    <Avatar
+                        src={user.avatar_url}
+                        size={'lg'}
+                        name={user.username}
+                        color='initials'
+                    />
+                    <TextInput
+                        onClick={open}
+                        readOnly
+                        placeholder={`${user.username} ơi, hãy chia sẻ vài điều nào!`}
+                        radius={'xl'}
+                        w={'100%'}
+                    />
+                </Flex>
+                <Flex justify={'flex-end'} w={'100%'}>
+                    <Button onClick={open} leftSection={<Add />} radius={'xl'}>
+                        Tạo bài viết mới
+                    </Button>
+                </Flex>
+            </Group>
             <Modal size={500} opened={opened} onClose={close} centered>
                 <LoadingOverlay
                     pos={'absolute'}

@@ -22,8 +22,8 @@ function Header({ title }) {
 
     const handleLogout = async () => {
         try {
-            await logout();  
-            navigate('/login');  
+            await logout();
+            navigate('/login');
         } catch (error) {
             console.error('Logout failed', error);
         }
@@ -31,11 +31,13 @@ function Header({ title }) {
 
     return (
         <Group
+            w={'100%'}
+            bg={'white'}
             pt={15}
             pb={15}
             justify='center'
             align='center'
-            style={{ boxShadow: 'rgba(33, 35, 38, 0.1) 0px 10px 10px -10px' }}
+            style={{ boxShadow: 'rgba(33, 35, 38, 0.1) 0px 10px 10px -10px', zIndex: '10' }}
         >
             <Group display={'flex'} justify='space-between' align='center' maw={1440} w={'100%'}>
                 <a href='/'>
@@ -89,7 +91,10 @@ function Header({ title }) {
                                 <MenuItem leftSection={<AccountCircle color='action' />}>
                                     <Link to={'/'}>Thông tin cá nhân</Link>
                                 </MenuItem>
-                                <MenuItem leftSection={<Logout color='error' />} onClick={handleLogout}>
+                                <MenuItem
+                                    leftSection={<Logout color='error' />}
+                                    onClick={handleLogout}
+                                >
                                     Đăng xuất
                                 </MenuItem>
                             </MenuDropdown>
