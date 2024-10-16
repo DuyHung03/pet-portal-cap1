@@ -3,12 +3,12 @@ import Router from './route/route';
 import { Fragment } from 'react';
 
 function App() {
-    return (
-        <Fragment>
-            <Router />;
-            <ToastContainer/>
-        </Fragment>
-    )
+  return (
+    <Fragment>
+      <Router />;
+      <ToastContainer />
+    </Fragment>
+  );
 }
 
 export default App;

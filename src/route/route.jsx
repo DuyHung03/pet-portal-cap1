@@ -1,8 +1,8 @@
 import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Route,
-    RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
 } from 'react-router-dom';
 import MainLayout from '../layout/MainLayout';
 import PostLayout from '../layout/PostLayout';
@@ -22,41 +22,45 @@ import ProtectedRoute from './ProtectedRoute';
 import MedicalPortal from '../page/doctor/MedicalPortal/MedicalPortal';
 
 const router = createBrowserRouter(
-    createRoutesFromElements(
-        <>
-            <Route path='/' element={<MainLayout />} errorElement={<Error404 />}>
-                <Route index element={<Home />} />
-            </Route>
+  createRoutesFromElements(
+    <>
+      <Route path="/" element={<MainLayout />} errorElement={<Error404 />}>
+        <Route index element={<Home />} />
+      </Route>
 
-            <Route path='/shop' element={<ShopLayout />} errorElement={<Error404 />}>
-                <Route index element={<Shop />} />
-                <Route path='product/:id' element={<ProductDetails />} />
-                <Route path='search' element={<Search />} />
-            </Route>
+      <Route path="/shop" element={<ShopLayout />} errorElement={<Error404 />}>
+        <Route index element={<Shop />} />
+        <Route path="product/:id" element={<ProductDetails />} />
+        <Route path="search" element={<Search />} />
+      </Route>
 
-            <Route path='/doctor' element={<ShopLayout />} errorElement={<Error404 />}>
-                <Route index element={<MedicalPortal />} />
-                {/* <Route path='detail/:id' element={<ProductDetails />} /> */}
-            </Route>
+      <Route
+        path="/doctor"
+        element={<ShopLayout />}
+        errorElement={<Error404 />}
+      >
+        <Route index element={<MedicalPortal />} />
+        {/* <Route path='detail/:id' element={<ProductDetails />} /> */}
+      </Route>
 
-            <Route
-                path='/post'
-            // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
-            // element={<ProtectedRoute element={<PostLayout />} />}
-            // errorElement={<Error404 />}
-            >
-                <Route index element={<PostPage />} />
-            </Route>
+      <Route
+        path="/post"
+        // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
+        // element={<ProtectedRoute element={<PostLayout />} />}
+        // errorElement={<Error404 />}
+      >
+        <Route index element={<PostPage />} />
+      </Route>
 
-            <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<SignUp />} />
-            <Route path='/verify-email' element={<EmailVerificationPage />} />
-            <Route path='/forgot-password' element={<ForgotPasswordPage />} />
-            <Route path='/reset-password/:token' element={<ResetPasswordPage />} />
-        </>
-    )
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/verify-email" element={<EmailVerificationPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+    </>,
+  ),
 );
 
 export default function Router() {
-    return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 }

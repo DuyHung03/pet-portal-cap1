@@ -12,32 +12,32 @@ import {
   MenuTarget,
   Text,
   UnstyledButton,
-} from "@mantine/core";
+} from '@mantine/core';
 import {
   AccountCircle,
   ExpandMore,
   Logout,
   Search,
   ShoppingCart,
-} from "@mui/icons-material";
-import { Badge } from "@mui/material";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import logo from "../../../assets/logo.png";
-import { useAuthStore } from "../../../store/authStore";
+} from '@mui/icons-material';
+import { Badge } from '@mui/material';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../../../assets/logo.png';
+import { useAuthStore } from '../../../store/authStore';
 function ShopHeader() {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
   const handleSearchClick = () => {
     if (searchValue.trim()) {
-      console.log("Searching for:", searchValue);
+      console.log('Searching for:', searchValue);
       navigate(`search?name=${searchValue}`);
     }
   };
   const handleKeyEnter = (event) => {
-    if (event.key === "Enter") handleSearchClick();
+    if (event.key === 'Enter') handleSearchClick();
   };
   return (
     <Group
@@ -45,30 +45,30 @@ function ShopHeader() {
       pb={15}
       justify="center"
       align="center"
-      style={{ boxShadow: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px" }}
+      style={{ boxShadow: 'rgba(33, 35, 38, 0.1) 0px 10px 10px -10px' }}
       mx={20}
     >
       <Group
-        display={"flex"}
+        display={'flex'}
         justify="space-between"
         align="center"
         maw={1440}
-        w={"100%"}
+        w={'100%'}
       >
         <a href="/">
-          <Flex direction={"row"} align="center">
+          <Flex direction={'row'} align="center">
             <Image
               alt="logo"
               src={logo}
               height={120}
-              style={{ width: "120px" }}
+              style={{ width: '120px' }}
             />
             <Text
-              ff={"Playwrite HU"}
+              ff={'Playwrite HU'}
               c="#165d94"
-              fw={"bold"}
+              fw={'bold'}
               style={{ letterSpacing: 1.25 }}
-              size={"30px"}
+              size={'30px'}
               ml={12}
             >
               Cửa hàng
@@ -79,7 +79,7 @@ function ShopHeader() {
         <Input
           onKeyDown={handleKeyEnter}
           w={450}
-          radius={"xl"}
+          radius={'xl'}
           size="md"
           placeholder="Tìm kiếm"
           leftSectionPointerEvents="all"
@@ -88,7 +88,7 @@ function ShopHeader() {
             <Search
               fontSize="small"
               onClick={handleSearchClick}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
             />
           }
           onChange={(e) => setSearchValue(e.target.value)}
@@ -96,35 +96,35 @@ function ShopHeader() {
           rightSection={
             <CloseButton
               aria-label="Clear input"
-              size={"sm"}
-              onClick={() => setSearchValue("")}
-              style={{ display: searchValue ? undefined : "none" }}
+              size={'sm'}
+              onClick={() => setSearchValue('')}
+              style={{ display: searchValue ? undefined : 'none' }}
             />
           }
         />
 
         <Group>
-          <Link to={"/cart"}>
+          <Link to={'/cart'}>
             <Badge color="error" badgeContent={1}>
               <ShoppingCart color="primary" fontSize="large" />
             </Badge>
           </Link>
           {!user ? (
             <Link to="/login">
-              <Button variant="filled" radius={"md"} size="md">
+              <Button variant="filled" radius={'md'} size="md">
                 Đăng nhập
               </Button>
             </Link>
           ) : (
             <Group>
               <Avatar
-                size={"lg"}
-                allowedInitialsColors={"#dfe6e9"}
+                size={'lg'}
+                allowedInitialsColors={'#dfe6e9'}
                 src={user.avatar_url}
                 name={user.username}
                 color="initials"
               />
-              <Text size="lg" fw={600} c={"gray"}>
+              <Text size="lg" fw={600} c={'gray'}>
                 {user.username}
               </Text>
               <Menu>
@@ -136,10 +136,10 @@ function ShopHeader() {
 
                 <MenuDropdown>
                   <MenuItem leftSection={<AccountCircle color="action" />}>
-                    <Link to={"/"}>Thông tin cá nhân</Link>
+                    <Link to={'/'}>Thông tin cá nhân</Link>
                   </MenuItem>
                   <MenuItem leftSection={<Logout color="error" />}>
-                    <Link to={"/"}>Đăng xuất</Link>
+                    <Link to={'/'}>Đăng xuất</Link>
                   </MenuItem>
                 </MenuDropdown>
               </Menu>
