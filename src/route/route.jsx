@@ -17,9 +17,15 @@ import ProductDetails from '../page/product-details/ProductDetails';
 import ResetPasswordPage from '../page/ResetPasswordPage/ResetPasswordPage';
 import Search from '../page/search/Search';
 import Shop from '../page/shop/Shop';
+
+// trước khi config
 import SignUp from '../page/SignUpPage/SignUpPage';
+
+
 import ProtectedRoute from './ProtectedRoute';
-import MedicalPortal from '../page/doctor/MedicalPortal/MedicalPortal';
+import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
+
+// sau khi config
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,9 +51,9 @@ const router = createBrowserRouter(
 
       <Route
         path="/post"
-        // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
-        // element={<ProtectedRoute element={<PostLayout />} />}
-        // errorElement={<Error404 />}
+      // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
+      // element={<ProtectedRoute element={<PostLayout />} />}
+      // errorElement={<Error404 />}
       >
         <Route index element={<PostPage />} />
       </Route>
