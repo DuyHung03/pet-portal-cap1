@@ -7,7 +7,7 @@ import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
 
 function Shop() {
-    const params = useMemo(() => ({ limit: 10 }), []);
+  const params = useMemo(() => ({ limit: 10 }), []);
 
   const { data, loading, error } = useFetchData("/products", params);
 
@@ -192,7 +192,7 @@ function Shop() {
       </div>
     </Group>
   );
->>>>>>> 22787f03128bd5c87206b03e4350024b292b0c52
+
 }
 
 export default Shop;
