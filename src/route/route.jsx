@@ -5,7 +5,6 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import MainLayout from '../layout/MainLayout';
-import PostLayout from '../layout/PostLayout';
 import ShopLayout from '../layout/ShopLayout';
 import Error404 from '../page/404/Error404';
 import MedicalPortal from '../page/doctor/MedicalPortal/MedicalPortal';
@@ -19,7 +18,6 @@ import ResetPasswordPage from '../page/ResetPasswordPage/ResetPasswordPage';
 import Search from '../page/search/Search';
 import Shop from '../page/shop/Shop';
 import SignUp from '../page/SignUpPage/SignUpPage';
-import ProtectedRoute from './ProtectedRoute';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,32 +41,22 @@ const router = createBrowserRouter(
         {/* <Route path='detail/:id' element={<ProductDetails />} /> */}
       </Route>
 
-<<<<<<< HEAD
             <Route
                 path='/post'
-                element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
-                errorElement={<Error404 />}
+            // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
+            // element={<ProtectedRoute element={<PostLayout />} />}
+            // errorElement={<Error404 />}
             >
                 <Route index element={<PostPage />} />
             </Route>
-=======
-      <Route
-        path="/post"
-        // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
-        // element={<ProtectedRoute element={<PostLayout />} />}
-        // errorElement={<Error404 />}
-      >
-        <Route index element={<PostPage />} />
-      </Route>
->>>>>>> 22787f03128bd5c87206b03e4350024b292b0c52
 
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/verify-email" element={<EmailVerificationPage />} />
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-    </>,
-  ),
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route path='/verify-email' element={<EmailVerificationPage />} />
+            <Route path='/forgot-password' element={<ForgotPasswordPage />} />
+            <Route path='/reset-password/:token' element={<ResetPasswordPage />} />
+        </>
+    )
 );
 
 export default function Router() {

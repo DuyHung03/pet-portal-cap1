@@ -1,15 +1,15 @@
 import {
-    Avatar,
-    Button,
-    Flex,
-    Group,
-    Image,
-    Menu,
-    MenuDropdown,
-    MenuItem,
-    MenuTarget,
-    Text,
-    UnstyledButton,
+  Avatar,
+  Button,
+  Flex,
+  Group,
+  Image,
+  Menu,
+  MenuDropdown,
+  MenuItem,
+  MenuTarget,
+  Text,
+  UnstyledButton,
 } from '@mantine/core';
 import { AccountCircle, ExpandMore, Logout } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';

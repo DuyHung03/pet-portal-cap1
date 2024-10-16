@@ -1,14 +1,14 @@
 import {
-    Avatar,
-    Button,
-    FileButton,
-    Flex,
-    Group,
-    LoadingOverlay,
-    Modal,
-    Text,
-    Textarea,
-    TextInput,
+  Avatar,
+  Button,
+  FileButton,
+  Flex,
+  Group,
+  LoadingOverlay,
+  Modal,
+  Text,
+  Textarea,
+  TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
