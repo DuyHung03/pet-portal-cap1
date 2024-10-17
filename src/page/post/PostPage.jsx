@@ -7,7 +7,7 @@ import useFetchData from '../../hooks/useFetchData';
 function PostPage() {
     const params = useMemo(() => [], []);
 
-    const { data, loading, error } = useFetchData('/posts/latest', params);
+    const { data, loading, error } = useFetchData('/posts/all', params);
     console.log(data, loading, error);
 
     return (
@@ -22,7 +22,7 @@ function PostPage() {
 
             {data ? (
                 <Group w={700}>
-                    {data?.data?.map((post, index) => (
+                    {data?.data?.reverse().map((post, index) => (
                         <PostItem post={post} key={index} />
                     ))}
                 </Group>

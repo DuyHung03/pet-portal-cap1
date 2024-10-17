@@ -7,9 +7,10 @@ import {
     Text,
     Textarea,
 } from '@mantine/core';
-import { ChatBubbleOutline, FavoriteBorder } from '@mui/icons-material';
+import { ChatBubbleOutline, FavoriteBorderOutlined } from '@mui/icons-material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { toast, ToastContainer } from 'react-toastify';
 import axiosInstance from '../../../network/httpRequest';
 import { useAuthStore } from '../../../store/authStore';
@@ -24,16 +25,16 @@ function PostItem({ post }) {
     const { user } = useAuthStore();
     const queryClient = useQueryClient();
 
-    const postComment = async ({ postId, userId, content }) => {
+    const postComment = async ({ postId, user, content }) => {
         const response = await axiosInstance.post(
             '/comments',
-            { post_id: postId, petOwner_Id: userId, content },
+            { post_id: postId, petOwner_Id: user.id, content },
             { withCredentials: true },
         );
         return response.data;
     };
 
-    const mutation = useMutation({
+    const commentMutation = useMutation({
         mutationFn: postComment,
         onMutate: (newCommentData) => {
             queryClient.cancelQueries(['comments', post.id]);
@@ -45,10 +46,10 @@ function PostItem({ post }) {
 
             const newComment = {
                 content: newCommentData.content,
-                CommentUser: user.id,
+                CommentUser: user,
                 createdAt: new Date().toISOString(),
             };
-            setComments((prev) => [...prev, newComment]);
+            setComments((prev) => [newComment, ...prev]);
 
             return { previousComments };
         },
@@ -72,9 +73,9 @@ function PostItem({ post }) {
     const handleAddComment = (e) => {
         e.preventDefault();
         if (newComment.trim()) {
-            mutation.mutate({
+            commentMutation.mutate({
                 postId: post.id,
-                userId: user.id,
+                user: user,
                 content: newComment,
             });
             setNewComment('');
@@ -134,9 +135,24 @@ function PostItem({ post }) {
                     </Text>
                 </Group>
 
+                {post.image_url ? (
+                    <Group w={'100%'} justify="center">
+                        <LazyLoadImage
+                            src={post.image_url}
+                            style={{ maxHeight: '460px', borderRadius: '12px' }}
+                            alt="img"
+                        />
+                    </Group>
+                ) : null}
+
                 <Flex>
-                    <Button variant="subtle" radius={'xl'}>
-                        <FavoriteBorder />
+                    <Button
+                        variant="subtle"
+                        radius={'xl'}
+                        // onClick={toggleComments}
+                    >
+                        <FavoriteBorderOutlined />
+                        <Text ml={10}>{post.likeCount}</Text>
                     </Button>
                     <Button
                         variant="subtle"
@@ -144,7 +160,7 @@ function PostItem({ post }) {
                         onClick={toggleComments}
                     >
                         <ChatBubbleOutline />
-                        <Text ml={10}>Bình luận</Text>
+                        <Text ml={10}>{post.PostComments.length}</Text>
                     </Button>
                 </Flex>
 
@@ -169,7 +185,7 @@ function PostItem({ post }) {
                             <Button
                                 radius={'30px'}
                                 onClick={handleAddComment}
-                                disabled={mutation.isLoading}
+                                disabled={commentMutation.isLoading}
                             >
                                 Gửi
                             </Button>
@@ -185,7 +201,7 @@ function PostItem({ post }) {
                                 <Loader type="bars" size="sm" />
                             </Group>
                         )}
-                        <Group mt={20}>
+                        <Group mt={20} gap={20}>
                             {comments.length > 0 ? (
                                 comments.map((comment, index) => (
                                     <PostComment

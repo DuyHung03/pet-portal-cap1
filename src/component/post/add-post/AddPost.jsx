@@ -1,26 +1,32 @@
 import {
-  Avatar,
-  Button,
-  FileButton,
-  Flex,
-  Group,
-  LoadingOverlay,
-  Modal,
-  Text,
-  Textarea,
-  TextInput,
+    Avatar,
+    Button,
+    FileButton,
+    Flex,
+    Group,
+    Image,
+    LoadingOverlay,
+    Modal,
+    ScrollAreaAutosize,
+    Text,
+    Textarea,
+    TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { Add, AddPhotoAlternate } from '@mui/icons-material';
+import { Add, AddPhotoAlternate, Close } from '@mui/icons-material';
+import { useRef, useState } from 'react';
 import axiosInstance from '../../../network/httpRequest';
 import { useAuthStore } from '../../../store/authStore';
+import { uploadImage } from '../../../util/firebaseUtils';
 
 function AddPost() {
     const { user } = useAuthStore();
     const [opened, { open, close }] = useDisclosure(false);
-    const [visible, { close: closeLoading, open: showLoading }] = useDisclosure(false);
-
+    const [visible, { close: closeLoading, open: showLoading }] =
+        useDisclosure(false);
+    const [file, setFile] = useState(null);
+    const resetRef = useRef(null);
     const form = useForm({
         initialValues: {
             title: '',
@@ -28,8 +34,10 @@ function AddPost() {
         },
 
         validate: {
-            title: (value) => (value.length < 5 ? 'Tiêu đề phải dài ít nhất 5 ký tự' : null),
-            content: (value) => (value.length < 10 ? 'Nội dung phải dài ít nhất 10 ký tự' : null),
+            title: (value) =>
+                value.length < 5 ? 'Tiêu đề phải dài ít nhất 5 ký tự' : null,
+            content: (value) =>
+                value.length < 10 ? 'Nội dung phải dài ít nhất 10 ký tự' : null,
         },
     });
 
@@ -37,15 +45,23 @@ function AddPost() {
         console.log('Form submitted:', values);
         try {
             showLoading();
+            let imgUrl = null;
+
+            if (file) {
+                imgUrl = await uploadImage(file, (process) =>
+                    console.log(process),
+                );
+            }
+
             const res = await axiosInstance.post(
                 'posts',
                 {
                     petOwner_Id: user.id,
                     title: form.getValues().title,
                     content: form.getValues().content,
-                    image_url: '',
+                    image_url: imgUrl,
                 },
-                {}
+                {},
             );
             if (res.status == 201) {
                 form.reset();
@@ -58,15 +74,25 @@ function AddPost() {
         }
     };
 
+    const clearFile = () => {
+        setFile(null);
+        resetRef.current?.();
+    };
+
     return (
         <>
-            <Group bg={'#f8f8f8'} p={20} w={700} style={{ borderRadius: '24px' }}>
-                <Flex justify='center' align={'center'} gap={20} w={'100%'}>
+            <Group
+                bg={'#f8f8f8'}
+                p={20}
+                w={700}
+                style={{ borderRadius: '24px' }}
+            >
+                <Flex justify="center" align={'center'} gap={20} w={'100%'}>
                     <Avatar
                         src={user.avatar_url}
                         size={'lg'}
                         name={user.username}
-                        color='initials'
+                        color="initials"
                     />
                     <TextInput
                         onClick={open}
@@ -82,7 +108,13 @@ function AddPost() {
                     </Button>
                 </Flex>
             </Group>
-            <Modal size={500} opened={opened} onClose={close} centered>
+            <Modal
+                size={500}
+                opened={opened}
+                onClose={close}
+                centered
+                scrollAreaComponent={ScrollAreaAutosize}
+            >
                 <LoadingOverlay
                     pos={'absolute'}
                     visible={visible}
@@ -90,7 +122,7 @@ function AddPost() {
                     overlayProps={{ radius: 'sm', blur: 2 }}
                     loaderProps={{ color: 'pink', type: 'bars' }}
                 />
-                <Text ta={'center'} size='24px' c={'#5a5f64'} fw={500}>
+                <Text ta={'center'} size="24px" c={'#5a5f64'} fw={500}>
                     Tạo bài viết
                 </Text>
                 <Group p={20}>
@@ -99,9 +131,9 @@ function AddPost() {
                             src={user.avatar_url}
                             size={'md'}
                             name={user.username}
-                            color='initials'
+                            color="initials"
                         />
-                        <Text fw={500} c={'#5a5f64'} size='lg'>
+                        <Text fw={500} c={'#5a5f64'} size="lg">
                             {user.username}
                         </Text>
                     </Flex>
@@ -113,8 +145,8 @@ function AddPost() {
                         <TextInput
                             data-autofocus
                             w={'100%'}
-                            label='Tiêu đề'
-                            placeholder='Tiêu đề'
+                            label="Tiêu đề"
+                            placeholder="Tiêu đề"
                             withAsterisk
                             {...form.getInputProps('title')}
                         />
@@ -123,22 +155,49 @@ function AddPost() {
                             maxRows={6}
                             minRows={4}
                             w={'100%'}
-                            label='Nội dung'
+                            label="Nội dung"
                             placeholder={`${user.username} ơi, hãy chia sẻ vài điều nào!`}
                             withAsterisk
                             mb={20}
                             {...form.getInputProps('content')}
                         />
+                        {file ? (
+                            <Group pos={'relative'}>
+                                <Image src={URL.createObjectURL(file)} />
+                                <Button
+                                    onClick={clearFile}
+                                    pos={'absolute'}
+                                    top={0}
+                                    right={0}
+                                    radius={0}
+                                    color="white"
+                                    variant="subtle"
+                                    bg={'red'}
+                                >
+                                    <Close />
+                                </Button>
+                            </Group>
+                        ) : (
+                            <Text>No image selected</Text>
+                        )}
+
                         <Flex w={'100%'} justify={'flex-end'} mb={20}>
-                            <FileButton accept='image/png,image/jpeg'>
+                            <FileButton
+                                resetRef={resetRef}
+                                accept="image/png,image/jpeg,image/jpg"
+                                onChange={setFile}
+                            >
                                 {(props) => (
-                                    <Button {...props} variant='transparent'>
-                                        <AddPhotoAlternate fontSize='large' color='action' />
+                                    <Button {...props} variant="transparent">
+                                        <AddPhotoAlternate
+                                            fontSize="large"
+                                            color="action"
+                                        />
                                     </Button>
                                 )}
                             </FileButton>
                         </Flex>
-                        <Button type='submit' w={'100%'}>
+                        <Button type="submit" w={'100%'}>
                             Tạo bài viết
                         </Button>
                     </form>
