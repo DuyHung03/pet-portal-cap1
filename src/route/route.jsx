@@ -21,7 +21,16 @@ import Shop from '../page/shop/Shop';
 // trước khi config
 import PostLayout from '../layout/PostLayout';
 import SignUp from '../page/SignUpPage/SignUpPage';
+<<<<<<< HEAD
 import ProtectedRoute from './ProtectedRoute';
+=======
+
+import ProtectedRoute from './ProtectedRoute';
+import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
+import Cart from '@pages/cart/Cart';
+
+// sau khi config
+>>>>>>> bc66c20 (update cart)
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -34,6 +43,7 @@ const router = createBrowserRouter(
                 <Route index element={<Home />} />
             </Route>
 
+<<<<<<< HEAD
             <Route
                 path="/shop"
                 element={<ShopLayout />}
@@ -43,6 +53,14 @@ const router = createBrowserRouter(
                 <Route path="product/:id" element={<ProductDetails />} />
                 <Route path="search" element={<Search />} />
             </Route>
+=======
+      <Route path="/shop" element={<ShopLayout />} errorElement={<Error404 />}>
+        <Route index element={<Shop />} />
+        <Route path="product/:id" element={<ProductDetails />} />
+        <Route path="search" element={<Search />} />
+      </Route>
+      <Route path="cart" element={<Cart />} />
+>>>>>>> bc66c20 (update cart)
 
             <Route
                 path="/doctor"
@@ -53,6 +71,7 @@ const router = createBrowserRouter(
                 {/* <Route path='detail/:id' element={<ProductDetails />} /> */}
             </Route>
 
+<<<<<<< HEAD
             <Route
                 path="/post"
                 element={
@@ -76,6 +95,33 @@ const router = createBrowserRouter(
             />
         </>,
     ),
+=======
+      <Route
+        path="/post"
+        // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
+        // element={<ProtectedRoute element={<PostLayout />} />}
+        // errorElement={<Error404 />}
+      >
+        <Route index element={<PostPage />} />
+      </Route>
+
+      <Route
+        path="/post"
+        // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
+        // element={<ProtectedRoute element={<PostLayout />} />}
+        // errorElement={<Error404 />}
+      >
+        <Route index element={<PostPage />} />
+      </Route>
+
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/verify-email" element={<EmailVerificationPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+    </>,
+  ),
+>>>>>>> bc66c20 (update cart)
 );
 
 export default function Router() {

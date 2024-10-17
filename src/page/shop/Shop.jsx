@@ -7,14 +7,18 @@ import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
 
 function Shop() {
+<<<<<<< HEAD
     const params = useMemo(() => ({ limit: 10 }), []);
+=======
+  const params = useMemo(() => ({ limit: 8 }), []);
+>>>>>>> bc66c20 (update cart)
 
-  const { data, loading, error } = useFetchData("/products", params);
+  const { data, loading, error } = useFetchData('/products', params);
 
-  const products = data?.products || [];
+  const products = data?.data || [];
 
   return (
-    <Group w={"100%"} gap={0} bg="#f9f9f9">
+    <Group w={'100%'} gap={0} bg="#f9f9f9">
       <ShopBanner />
       <Group
         w="80%"

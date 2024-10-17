@@ -25,10 +25,14 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useAuthStore } from '../../../store/authStore';
+import { useSelector } from 'react-redux';
 function ShopHeader() {
   const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
   const { user } = useAuthStore();
+
+  const cartItems = useSelector((state) => state.cart.items);
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const handleSearchClick = () => {
     if (searchValue.trim()) {
@@ -105,7 +109,7 @@ function ShopHeader() {
 
         <Group>
           <Link to={'/cart'}>
-            <Badge color="error" badgeContent={1}>
+            <Badge color="error" badgeContent={cartCount}>
               <ShoppingCart color="primary" fontSize="large" />
             </Badge>
           </Link>

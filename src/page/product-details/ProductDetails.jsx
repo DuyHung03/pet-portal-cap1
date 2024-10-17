@@ -1,10 +1,25 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar } from '@mantine/core';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { addToCart } from '@redux/slice/cartSlice';
 
 function ProductDetails() {
   const location = useLocation();
   const { product } = location.state;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false); // State để theo dõi khi sản phẩm được thêm vào giỏ hàng
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({ ...product, quantity }));
+    setAddedToCart(true);
+    setTimeout(() => {
+      setAddedToCart(false);
+    }, 2000);
+  };
+
   return (
     <div className="container mx-auto my-10 p-6 bg-white rounded-lg shadow-lg">
       <button
@@ -15,7 +30,6 @@ function ProductDetails() {
       </button>
       <div className="flex flex-row items-start justify-between mb-8 space-x-6">
         <img
-          //   src={product.images}
           src="https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg"
           alt={product.name}
           className="w-64 h-64 object-cover rounded-md shadow-md"
@@ -34,16 +48,17 @@ function ProductDetails() {
             Danh mục: {product.Category.name}
           </span>
 
-          <div className="flex items-center mb-2  mt-3">
+          <div className="flex items-center mb-2 mt-3">
             <label className="font-medium" htmlFor="quantity">
               Số lượng:
             </label>
             <input
               id="quantity"
               type="number"
-              defaultValue={1}
+              value={quantity}
               min={1}
               max={product.stock_quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
               className="ml-2 w-16 border border-gray-300 rounded-md px-2"
               aria-label="Số lượng sản phẩm"
             />
@@ -65,9 +80,19 @@ function ProductDetails() {
             </span>
           </div>
 
-          <button className="bg-gradient-to-r from-teal-400 to-lime-400 text-white font-bold py-2 px-4 rounded-xl mt-4 hover:scale-105 transition-transform">
+          <button
+            className="bg-gradient-to-r from-teal-400 to-lime-400 text-white font-bold py-2 px-4 rounded-xl mt-4 hover:scale-105 transition-transform"
+            onClick={handleAddToCart}
+          >
             Thêm vào giỏ hàng
           </button>
+
+          {/* Hiển thị thông báo đã thêm vào giỏ hàng */}
+          {addedToCart && (
+            <div className="absolute top-0 right-0 p-4 bg-green-500 text-white rounded-md shadow-lg">
+              Sản phẩm đã được thêm vào giỏ hàng!
+            </div>
+          )}
         </div>
       </div>
       <hr className="my-8" />
