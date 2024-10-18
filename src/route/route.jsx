@@ -26,6 +26,7 @@ import ProtectedRoute from './ProtectedRoute';
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
 import Cart from '@pages/cart/Cart';
+import UserProfile from '@pages/User/user';
 
 // sau khi config
 
@@ -71,6 +72,8 @@ const router = createBrowserRouter(
             >
                 <Route index element={<PostPage />} />
             </Route>
+
+            <Route path="/user" element={<UserProfile />} />
 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
