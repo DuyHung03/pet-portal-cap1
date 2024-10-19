@@ -26,7 +26,6 @@ import ProtectedRoute from './ProtectedRoute';
 
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
-// import Cart from '@pages/cart/Cart';
 
 // sau khi config
 
