@@ -1,17 +1,33 @@
-import { Button, Group, Image, Loader, Text } from '@mantine/core';
+import { useState, useMemo, useEffect } from 'react';
+import { Button, Group, Loader, Text } from '@mantine/core';
 import { ArrowForward } from '@mui/icons-material';
-import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import ShopBanner from '../../component/shop/shop-banner/ShopBanner';
 import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
 
 function Shop() {
-    const params = useMemo(() => ({ limit: 8 }), []);
+    const [skip, setSkip] = useState(0);
+    const [allProducts, setAllProducts] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+
+    const params = useMemo(() => ({ limit: 8, skip }), [skip]);
 
     const { data, loading, error } = useFetchData('/products', params);
 
-    const products = data?.data || [];
+    useEffect(() => {
+        if (data) {
+            setAllProducts((prevProducts) => [...prevProducts, ...data.data]);
+            if (data.data.length < 8) {
+                setHasMore(false);
+            }
+        }
+    }, [data]);
+
+    const loadMoreProducts = () => {
+        if (hasMore) {
+            setSkip((prevSkip) => prevSkip + 8);
+        }
+    };
 
     return (
         <Group w={'100%'} gap={0} bg="#f9f9f9">
@@ -46,7 +62,7 @@ function Shop() {
                     Đề xuất
                 </Text>
 
-                {loading ? (
+                {loading && allProducts.length === 0 ? (
                     <Group mt={20} mb={20} w="100%" justify="center">
                         <Loader type="bars" />
                     </Group>
@@ -65,13 +81,13 @@ function Shop() {
                             width: '100%',
                         }}
                     >
-                        {products.map((product, index) => (
+                        {allProducts.map((product, index) => (
                             <Product key={index} product={product} />
                         ))}
                     </Group>
                 )}
 
-                <Link to="/">
+                {hasMore && (
                     <Button
                         size="xl"
                         rightSection={<ArrowForward />}
@@ -84,10 +100,11 @@ function Shop() {
                             paddingRight: '20px',
                             textTransform: 'uppercase',
                         }}
+                        onClick={loadMoreProducts}
                     >
                         Xem thêm sản phẩm
                     </Button>
-                </Link>
+                )}
             </Group>
             <Group
                 w="80%"
@@ -116,10 +133,10 @@ function Shop() {
                         borderBottom: '2px solid #003594',
                     }}
                 >
-                    Sản Phẩm Bán Chạy
+                    Đề xuất
                 </Text>
 
-                {loading ? (
+                {loading && allProducts.length === 0 ? (
                     <Group mt={20} mb={20} w="100%" justify="center">
                         <Loader type="bars" />
                     </Group>
@@ -138,13 +155,13 @@ function Shop() {
                             width: '100%',
                         }}
                     >
-                        {products.map((product, index) => (
+                        {allProducts.map((product, index) => (
                             <Product key={index} product={product} />
                         ))}
                     </Group>
                 )}
 
-                <Link to="/">
+                {hasMore && (
                     <Button
                         size="xl"
                         rightSection={<ArrowForward />}
@@ -157,41 +174,12 @@ function Shop() {
                             paddingRight: '20px',
                             textTransform: 'uppercase',
                         }}
+                        onClick={loadMoreProducts}
                     >
                         Xem thêm sản phẩm
                     </Button>
-                </Link>
+                )}
             </Group>
-            <div
-                style={{
-                    width: '100%',
-                    height: '400px',
-                    position: 'relative',
-                }}
-            >
-                <Image
-                    src={
-                        'https://shop.akc.org/cdn/shop/files/Why_AKC_2_1440x440.png?v=1634144065'
-                    }
-                    alt="Shop Banner"
-                    style={{
-                        width: '100%',
-                        height: '400px',
-                        objectFit: 'cover',
-                        objectPosition: 'center',
-                    }}
-                />
-                <Text
-                    size="40px"
-                    ff={'Roboto Slab'}
-                    pos={'absolute'}
-                    top={'40%'}
-                    left={'35%'}
-                    c={'white'}
-                >
-                    Sản phẩm dành cho cún yêu của bạn
-                </Text>
-            </div>
         </Group>
     );
 }
