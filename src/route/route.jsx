@@ -20,6 +20,7 @@ import Shop from '../page/shop/Shop';
 // trước khi config
 import PostLayout from '../layout/PostLayout';
 import Cart from '../page/cart/Cart';
+import PetListPage from '../page/pet/PetListPage';
 import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
                 errorElement={<Error404 />}
             >
                 <Route index element={<Home />} />
+                <Route path="your-pet" element={<PetListPage />} />
             </Route>
             <Route
                 path="/shop"
