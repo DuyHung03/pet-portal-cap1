@@ -4,11 +4,20 @@ import {
     Flex,
     Group,
     Loader,
+    Menu,
+    MenuDropdown,
+    MenuItem,
+    MenuTarget,
     Text,
     Textarea,
 } from '@mantine/core';
-import { ChatBubbleOutline, FavoriteBorderOutlined } from '@mui/icons-material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+    ChatBubbleOutline,
+    Delete,
+    FavoriteBorderOutlined,
+    MoreHoriz,
+} from '@mui/icons-material';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { toast, ToastContainer } from 'react-toastify';
@@ -23,7 +32,6 @@ function PostItem({ post }) {
     const [comments, setComments] = useState([]);
     const [loadingComments, setLoadingComments] = useState(false);
     const { user } = useAuthStore();
-    const queryClient = useQueryClient();
 
     const postComment = async ({ postId, user, content }) => {
         const response = await axiosInstance.post(
@@ -37,36 +45,21 @@ function PostItem({ post }) {
     const commentMutation = useMutation({
         mutationFn: postComment,
         onMutate: (newCommentData) => {
-            queryClient.cancelQueries(['comments', post.id]);
-
-            const previousComments = queryClient.getQueryData([
-                'comments',
-                post.id,
-            ]);
-
             const newComment = {
                 content: newCommentData.content,
                 CommentUser: user,
                 createdAt: new Date().toISOString(),
             };
             setComments((prev) => [newComment, ...prev]);
-
-            return { previousComments };
+            toast.success('Đã thêm bài viết mới');
         },
-        onError: (err, newComment, context) => {
-            queryClient.setQueryData(
-                ['comments', post.id],
-                context.previousComments,
-            );
+        onError: (err, newComment) => {
             setComments((prevComments) =>
                 prevComments.filter(
                     (comment) => comment.content !== newComment.content,
                 ),
             );
             toast.error('An error occurred');
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries(['comments', post.id]);
         },
     });
 
@@ -102,6 +95,23 @@ function PostItem({ post }) {
         }
     };
 
+    const deletePost = async () => {
+        const response = await axiosInstance.delete(`posts/${post.id}`, {
+            withCredentials: true,
+        });
+
+        return response.data;
+    };
+
+    const deletePostMutation = useMutation({
+        mutationFn: deletePost,
+        onMutate: () => {},
+    });
+
+    const handleDeletePost = async () => {
+        deletePostMutation.mutate();
+    };
+
     return (
         <>
             <ToastContainer style={{ marginTop: '100px' }} />
@@ -112,18 +122,44 @@ function PostItem({ post }) {
                 style={{ borderRadius: '24px' }}
             >
                 {/* Post content */}
-                <Flex gap={20}>
-                    <Avatar
-                        size={'lg'}
-                        name={post.PostOwner.username}
-                        color="initials"
-                    />
-                    <Flex direction={'column'}>
-                        <Text fw={600} size="lg">
-                            {post.PostOwner.username}
-                        </Text>
-                        <Text c={'gray'}>{timeAgo(post.createdAt)}</Text>
+                <Flex w={'100%'} justify={'space-between'}>
+                    <Flex gap={20}>
+                        <Avatar
+                            size={'lg'}
+                            name={post.PostOwner.username}
+                            color="initials"
+                        />
+                        <Flex direction={'column'}>
+                            <Text fw={600} size="lg">
+                                {post.PostOwner.username}
+                            </Text>
+                            <Text c={'gray'}>{timeAgo(post.createdAt)}</Text>
+                        </Flex>
                     </Flex>
+                    <Menu shadow="sm" zIndex={0}>
+                        <MenuTarget>
+                            <Button variant="transparent" c={'#626262'}>
+                                <MoreHoriz />
+                            </Button>
+                        </MenuTarget>
+                        <MenuDropdown>
+                            {post.petOwner_Id == user.id ? (
+                                <MenuItem
+                                    component="button"
+                                    onClick={handleDeletePost}
+                                    color="red"
+                                    leftSection={
+                                        <Delete
+                                            fontSize="small"
+                                            color="error"
+                                        />
+                                    }
+                                >
+                                    Delete
+                                </MenuItem>
+                            ) : null}
+                        </MenuDropdown>
+                    </Menu>
                 </Flex>
 
                 <Group w={'100%'}>
@@ -152,7 +188,7 @@ function PostItem({ post }) {
                         // onClick={toggleComments}
                     >
                         <FavoriteBorderOutlined />
-                        <Text ml={10}>{post.likeCount}</Text>
+                        <Text ml={10}>{post.likeCount ?? 0}</Text>
                     </Button>
                     <Button
                         variant="subtle"
@@ -160,7 +196,7 @@ function PostItem({ post }) {
                         onClick={toggleComments}
                     >
                         <ChatBubbleOutline />
-                        <Text ml={10}>{post.PostComments.length}</Text>
+                        <Text ml={10}>{post?.PostComments?.length}</Text>
                     </Button>
                 </Flex>
 

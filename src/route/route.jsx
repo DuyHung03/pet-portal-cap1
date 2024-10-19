@@ -7,7 +7,6 @@ import {
 import MainLayout from '../layout/MainLayout';
 import ShopLayout from '../layout/ShopLayout';
 import Error404 from '../page/404/Error404';
-import MedicalPortal from '../page/doctor/MedicalPortal/MedicalPortal';
 import EmailVerificationPage from '../page/EmailVerificationPage/EmailVerificationPage';
 import ForgotPasswordPage from '../page/ForgotPasswordPage/ForgotPasswordPage';
 import Home from '../page/home/Home';
@@ -20,12 +19,14 @@ import Shop from '../page/shop/Shop';
 
 // trước khi config
 import PostLayout from '../layout/PostLayout';
+import Cart from '../page/cart/Cart';
 import SignUp from '../page/SignUpPage/SignUpPage';
+import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
 
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
-import Cart from '@pages/cart/Cart';
+// import Cart from '@pages/cart/Cart';
 
 // sau khi config
 
@@ -47,6 +48,7 @@ const router = createBrowserRouter(
                 <Route index element={<Shop />} />
                 <Route path="product/:id" element={<ProductDetails />} />
                 <Route path="search" element={<Search />} />
+                <Route path="cart" element={<Cart />} />
             </Route>
             <Route path="cart" element={<Cart />} />
 
@@ -70,6 +72,19 @@ const router = createBrowserRouter(
                 errorElement={<Error404 />}
             >
                 <Route index element={<PostPage />} />
+            </Route>
+
+            <Route
+                path="/account"
+                element={
+                    <ProtectedRoute
+                        element={<MainLayout />}
+                        allowedRoles={['PetOwner']}
+                    />
+                }
+                errorElement={<Error404 />}
+            >
+                <Route index element={<UserPage />} />
             </Route>
 
             <Route path="/login" element={<Login />} />
