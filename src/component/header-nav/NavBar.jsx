@@ -4,7 +4,12 @@ import { Link, useLocation } from 'react-router-dom';
 function NavBar() {
     const location = useLocation();
 
-    const isActive = (path) => location.pathname === path;
+    const isActive = (path) => {
+        if (path === '/') {
+            return location.pathname === '/';
+        }
+        return location.pathname.includes(path);
+    };
 
     return (
         <Group w={'100%'} justify="center" align="center" bg={'#f5f5f5'}>

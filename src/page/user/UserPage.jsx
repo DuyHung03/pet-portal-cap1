@@ -118,7 +118,7 @@ function UserPage() {
                     </Text>
                     <Divider h={1} w={'100%'} />
                     <Group pt={20}>
-                        <Link to={'#'}>
+                        <Link to={'/your-pet'}>
                             <Button
                                 leftSection={<CreateOutlined />}
                                 variant="transparent"
