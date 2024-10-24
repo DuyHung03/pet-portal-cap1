@@ -16,6 +16,7 @@ import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { Add, AddPhotoAlternate, Close } from '@mui/icons-material';
 import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axiosInstance from '../../../network/httpRequest';
 import { useAuthStore } from '../../../store/authStore';
 import { uploadImage } from '../../../util/firebaseUtils';
@@ -88,12 +89,14 @@ function AddPost() {
                 style={{ borderRadius: '24px' }}
             >
                 <Flex justify="center" align={'center'} gap={20} w={'100%'}>
-                    <Avatar
-                        src={user.avatar_url}
-                        size={'lg'}
-                        name={user.username}
-                        color="initials"
-                    />
+                    <Link to={'/account'}>
+                        <Avatar
+                            src={user.avatar_url}
+                            size={'lg'}
+                            name={user.username}
+                            color="initials"
+                        />
+                    </Link>
                     <TextInput
                         onClick={open}
                         readOnly
@@ -162,14 +165,13 @@ function AddPost() {
                             {...form.getInputProps('content')}
                         />
                         {file ? (
-                            <Group pos={'relative'}>
+                            <Group pos={'relative'} w={'100%'} justify="center">
                                 <Image src={URL.createObjectURL(file)} />
                                 <Button
                                     onClick={clearFile}
                                     pos={'absolute'}
-                                    top={0}
-                                    right={0}
-                                    radius={0}
+                                    top={10}
+                                    right={10}
                                     color="white"
                                     variant="subtle"
                                     bg={'red'}
