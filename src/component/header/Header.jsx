@@ -11,7 +11,12 @@ import {
     Text,
     UnstyledButton,
 } from '@mantine/core';
-import { AccountCircle, ExpandMore, Logout } from '@mui/icons-material';
+import {
+    AccountCircle,
+    ExpandMore,
+    Logout,
+    MedicalInformation,
+} from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import { useAuthStore } from '../../store/authStore';
@@ -111,9 +116,24 @@ function Header({ title }) {
                                         Thông tin cá nhân
                                     </Link>
                                 </MenuItem>
+                                {user.role == 'Doctor' ? (
+                                    <MenuItem
+                                        leftSection={
+                                            <MedicalInformation color="action" />
+                                        }
+                                    >
+                                        <Link
+                                            to={'/doctor-dashboard'}
+                                            target="_blank"
+                                        >
+                                            Quản lý phòng khám
+                                        </Link>
+                                    </MenuItem>
+                                ) : null}
                                 <MenuItem
                                     leftSection={<Logout color="error" />}
                                     onClick={handleLogout}
+                                    color="red"
                                 >
                                     Đăng xuất
                                 </MenuItem>

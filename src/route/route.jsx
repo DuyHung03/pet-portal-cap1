@@ -1,6 +1,7 @@
 import {
     createBrowserRouter,
     createRoutesFromElements,
+    Navigate,
     Route,
     RouterProvider,
 } from 'react-router-dom';
@@ -19,8 +20,11 @@ import Shop from '../page/shop/Shop';
 
 // trước khi config
 import AddNewPet from '../component/pet/AddNewPet';
+import DoctorDashboardLayout from '../layout/DoctorDashboardLayout';
 import PostLayout from '../layout/PostLayout';
 import Cart from '../page/cart/Cart';
+import AppoinmentDetails from '../page/doctor-dashboard/AppoinmentDetails';
+import CalendarPage from '../page/doctor-dashboard/CalendarPage';
 import PetListPage from '../page/pet/PetListPage';
 import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
@@ -62,6 +66,19 @@ const router = createBrowserRouter(
             >
                 {/* <Route index element={<MedicalPortal />} /> */}
                 {/* <Route path='detail/:id' element={<ProductDetails />} /> */}
+            </Route>
+
+            <Route
+                path="/doctor-dashboard"
+                element={<DoctorDashboardLayout />}
+                errorElement={<Error404 />}
+            >
+                <Route index element={<Navigate to={'calendar'} />} />
+                <Route path="calendar" element={<CalendarPage />} />
+                <Route
+                    path="appointment/:appointmentId"
+                    element={<AppoinmentDetails />}
+                />
             </Route>
 
             <Route

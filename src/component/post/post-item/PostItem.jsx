@@ -112,6 +112,8 @@ function PostItem({ post }) {
         deletePostMutation.mutate();
     };
 
+    const handleLike = async () => {};
+
     return (
         <>
             <ToastContainer style={{ marginTop: '100px' }} />
@@ -182,11 +184,7 @@ function PostItem({ post }) {
                 ) : null}
 
                 <Flex>
-                    <Button
-                        variant="subtle"
-                        radius={'xl'}
-                        // onClick={toggleComments}
-                    >
+                    <Button variant="subtle" radius={'xl'} onClick={handleLike}>
                         <FavoriteBorderOutlined />
                         <Text ml={10}>{post.likeCount ?? 0}</Text>
                     </Button>
