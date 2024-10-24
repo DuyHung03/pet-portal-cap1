@@ -4,8 +4,11 @@ import {
     Route,
     RouterProvider,
 } from 'react-router-dom';
+
 import MainLayout from '../layout/MainLayout';
 import ShopLayout from '../layout/ShopLayout';
+import PostLayout from '../layout/PostLayout';
+
 import Error404 from '../page/404/Error404';
 import MedicalPortal from '../page/doctor/MedicalPortal/MedicalPortal';
 import EmailVerificationPage from '../page/EmailVerificationPage/EmailVerificationPage';
@@ -17,24 +20,14 @@ import ProductDetails from '../page/product-details/ProductDetails';
 import ResetPasswordPage from '../page/ResetPasswordPage/ResetPasswordPage';
 import Search from '../page/search/Search';
 import Shop from '../page/shop/Shop';
-
-// trước khi config
-import PostLayout from '../layout/PostLayout';
 import SignUp from '../page/SignUpPage/SignUpPage';
-<<<<<<< HEAD
 import ProtectedRoute from './ProtectedRoute';
-=======
-
-import ProtectedRoute from './ProtectedRoute';
-import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
 import Cart from '@pages/cart/Cart';
-
-// sau khi config
->>>>>>> bc66c20 (update cart)
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
+            {/* Main Layout */}
             <Route
                 path="/"
                 element={<MainLayout />}
@@ -43,7 +36,7 @@ const router = createBrowserRouter(
                 <Route index element={<Home />} />
             </Route>
 
-<<<<<<< HEAD
+            {/* Shop Layout */}
             <Route
                 path="/shop"
                 element={<ShopLayout />}
@@ -53,25 +46,18 @@ const router = createBrowserRouter(
                 <Route path="product/:id" element={<ProductDetails />} />
                 <Route path="search" element={<Search />} />
             </Route>
-=======
-      <Route path="/shop" element={<ShopLayout />} errorElement={<Error404 />}>
-        <Route index element={<Shop />} />
-        <Route path="product/:id" element={<ProductDetails />} />
-        <Route path="search" element={<Search />} />
-      </Route>
-      <Route path="cart" element={<Cart />} />
->>>>>>> bc66c20 (update cart)
+            <Route path="/cart" element={<Cart />} />
 
+            {/* Medical Portal */}
             <Route
                 path="/doctor"
                 element={<ShopLayout />}
                 errorElement={<Error404 />}
             >
                 <Route index element={<MedicalPortal />} />
-                {/* <Route path='detail/:id' element={<ProductDetails />} /> */}
             </Route>
 
-<<<<<<< HEAD
+            {/* Post Layout with Protected Route */}
             <Route
                 path="/post"
                 element={
@@ -85,43 +71,14 @@ const router = createBrowserRouter(
                 <Route index element={<PostPage />} />
             </Route>
 
+            {/* Authentication */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/verify-email" element={<EmailVerificationPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route
-                path="/reset-password/:token"
-                element={<ResetPasswordPage />}
-            />
-        </>,
-    ),
-=======
-      <Route
-        path="/post"
-        // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
-        // element={<ProtectedRoute element={<PostLayout />} />}
-        // errorElement={<Error404 />}
-      >
-        <Route index element={<PostPage />} />
-      </Route>
-
-      <Route
-        path="/post"
-        // element={<ProtectedRoute element={<PostLayout />} allowedRoles={['PetOwner']} />}
-        // element={<ProtectedRoute element={<PostLayout />} />}
-        // errorElement={<Error404 />}
-      >
-        <Route index element={<PostPage />} />
-      </Route>
-
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/verify-email" element={<EmailVerificationPage />} />
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-    </>,
-  ),
->>>>>>> bc66c20 (update cart)
+            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        </>
+    )
 );
 
 export default function Router() {
