@@ -19,7 +19,8 @@ import Search from '../page/search/Search';
 import Shop from '../page/shop/Shop';
 
 // trước khi config
-import AddNewPet from '../component/pet/AddNewPet';
+import AddNewPet from '@pages/pet/AddNewPet';
+import PetDetail from '@pages/pet/PetDetail';
 import DoctorDashboardLayout from '../layout/DoctorDashboardLayout';
 import PostLayout from '../layout/PostLayout';
 import Cart from '../page/cart/Cart';
@@ -45,6 +46,7 @@ const router = createBrowserRouter(
             >
                 <Route index element={<Home />} />
                 <Route path="your-pet" element={<PetListPage />} />
+                <Route path="your-pet/:petId" element={<PetDetail />} />
                 <Route path="your-pet/add-new-pet" element={<AddNewPet />} />
             </Route>
             <Route
