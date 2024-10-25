@@ -1,5 +1,10 @@
-import { removeFromCart, updateItemQuantity } from '@redux/slice/cartSlice';
-import { useSelector, useDispatch } from 'react-redux';
+// src/components/Cart.js
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    removeFromCart,
+    updateItemQuantity,
+    clearCart,
+} from '../../redux/slice/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
@@ -7,28 +12,32 @@ function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const cartItems = useSelector((state) => state.cart.items);
-    const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+    const totalQuantity = cartItems.reduce(
+        (total, item) => total + item.quantity,
+        0,
+    );
     const totalPrice = cartItems.reduce(
         (total, item) => total + item.price * item.quantity,
         0,
     );
 
     const handleRemoveFromCart = (itemId) => {
-        const confirmDelete = window.confirm(
-            'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
-        );
-        if (confirmDelete) {
+        if (
+            window.confirm(
+                'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
+            )
+        ) {
             dispatch(removeFromCart(itemId));
         }
     };
 
     const handleQuantityChange = (itemId, quantity) => {
-        if (quantity < 1) return;
-        dispatch(updateItemQuantity({ itemId, quantity }));
+        if (quantity > 0) {
+            dispatch(updateItemQuantity({ itemId, quantity }));
+        }
     };
 
     const handleCheckout = () => {
-        alert('Chuyển sang trang thanh toán...');
         navigate('/checkout');
     };
 
@@ -45,8 +54,10 @@ function Cart() {
                         className="flex items-center mb-6 p-5 bg-white rounded-lg shadow-sm transition-shadow duration-300 hover:shadow-md"
                     >
                         <img
-                            // src={item.images}
-                            src="https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg"
+                            // src={item.image}
+                            src={
+                                'https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg'
+                            }
                             alt={item.name}
                             className="w-32 h-32 object-cover rounded-md mr-6"
                         />
