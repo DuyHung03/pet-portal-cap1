@@ -149,7 +149,7 @@ function ShopHeader() {
                                             <AccountCircle color="action" />
                                         }
                                     >
-                                        <Link to={'/user'}>
+                                        <Link to={'/account'}>
                                             Thông tin cá nhân
                                         </Link>
                                     </MenuItem>

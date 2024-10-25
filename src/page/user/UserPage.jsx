@@ -63,7 +63,7 @@ function UserPage() {
                     <Flex direction={'column'} gap={10} pt={20} c={'#5789CF'}>
                         <Flex align={'flex-end'} gap={6}>
                             <Cake />
-                            birthday
+                            birthday :
                         </Flex>
                         <Flex align={'flex-end'} gap={6}>
                             <LocationOn />
@@ -106,7 +106,7 @@ function UserPage() {
                             <Text w={'100%'} ta={'center'} c={'gray'}>
                                 Bạn chưa có bài đăng nào
                             </Text>
-                            <Link to={'post'}>
+                            <Link to={'/post'}>
                                 <Button bg={'#5789CF'}>Tạo bài đăng mới</Button>
                             </Link>
                         </Group>
