@@ -20,11 +20,9 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import { useAuthStore } from '../../store/authStore';
-
 function Header({ title }) {
     const { user, logout } = useAuthStore();
     const navigate = useNavigate();
-
     const handleLogout = async () => {
         try {
             await logout();

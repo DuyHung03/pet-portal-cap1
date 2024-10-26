@@ -1,13 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar } from '@mantine/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import {
-    addToCart,
-    updateCartFromLocalStorage,
-} from '../../redux/slice/cartSlice';
+import { addToCart, loadCartFromStorage } from '../../redux/slice/cartSlice';
 
-function ProductDetails() {
+function ProductDetails({ userId }) {
     const location = useLocation();
     const { product } = location.state;
     const dispatch = useDispatch();
@@ -15,19 +12,16 @@ function ProductDetails() {
     const [addedToCart, setAddedToCart] = useState(false);
 
     useEffect(() => {
-        const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
-        dispatch(updateCartFromLocalStorage(savedCart));
-    }, [dispatch]);
+        dispatch(loadCartFromStorage(userId));
+    }, [dispatch, userId]);
 
     const handleAddToCart = () => {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const item = { ...product, quantity };
-        const updatedCart = [...cart, item];
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
-        dispatch(addToCart(item)); // Sync with Redux
+        dispatch(addToCart({ userId, item }));
         setAddedToCart(true);
         setTimeout(() => setAddedToCart(false), 2000);
     };
+
     return (
         <div className="container mx-auto my-10 p-6 bg-white rounded-lg shadow-lg">
             <button
@@ -97,9 +91,8 @@ function ProductDetails() {
                         Thêm vào giỏ hàng
                     </button>
 
-                    {/* Hiển thị thông báo đã thêm vào giỏ hàng */}
                     {addedToCart && (
-                        <div className="absolute top-0 right-0 p-4 bg-green-500 text-white rounded-md shadow-lg">
+                        <div className="fixed top-0 right-0 p-4 bg-green-500 text-white rounded-md shadow-lg">
                             Sản phẩm đã được thêm vào giỏ hàng!
                         </div>
                     )}
