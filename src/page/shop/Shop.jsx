@@ -6,13 +6,9 @@ import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
 
 function Shop() {
-<<<<<<< HEAD
-  const params = useMemo(() => ({ limit: 10 }), []);
-=======
     const [skip, setSkip] = useState(0);
     const [allProducts, setAllProducts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
->>>>>>> d8cdaf9ddf9618a10af55e2f78efdae685b6725e
 
     const params = useMemo(() => ({ limit: 8, skip }), [skip]);
 

@@ -51,27 +51,17 @@ const handleAuthorizationError = () => {
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-    if (isTokenExpired(token)) {
-      console.log('Token expired, trying to refresh');
-      try {
-        token = await refreshAccessToken();
-      } catch (error) {
-        console.log('Error refreshing token');
-        localStorage.removeItem('token');
-        return Promise.reject(error);
-      }
-    }
-
-    if (token) {
+    if (token && !isTokenExpired(token)) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
+
     return config;
   },
   (error) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 axiosInstance.interceptors.response.use(
@@ -81,26 +71,33 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (
-      error.response &&
-      (error.response.status === 401 || error.response.status === 403) &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      const token = localStorage.getItem('token');
 
-      try {
-        const newToken = await refreshAccessToken();
-        if (newToken) {
-          originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+      if (!token) {
+        console.log('User is not logged in, proceeding without token');
+        return Promise.resolve();
+      }
+
+      if (!originalRequest._retry) {
+        originalRequest._retry = true;
+
+        try {
+          const newToken = await refreshAccessToken();
+          if (newToken) {
+            originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+          }
+          return axiosInstance(originalRequest);
+        } catch (refreshError) {
+          handleAuthorizationError();
+          return Promise.reject(refreshError);
         }
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        return Promise.reject(refreshError);
       }
     }
 
-    return Promise.reject(error);
-  },
+    return Promise.reject(error); // Các lỗi khác, trả về bình thường
+  }
 );
+
 
 export default axiosInstance;
