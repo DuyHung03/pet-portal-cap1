@@ -21,14 +21,17 @@ import {
     ShoppingCart,
 } from '@mui/icons-material';
 import { Badge } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useAuthStore } from '../../../store/authStore';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadCartFromStorage } from '../../../redux/slice/cartSlice';
+
 function ShopHeader() {
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { user } = useAuthStore();
 
     const cartItems = useSelector((state) => state.cart.items);
@@ -36,6 +39,9 @@ function ShopHeader() {
         (total, item) => total + item.quantity,
         0,
     );
+    useEffect(() => {
+        dispatch(loadCartFromStorage(user.id));
+    }, [dispatch, user.id]);
 
     const handleSearchClick = () => {
         if (searchValue.trim()) {

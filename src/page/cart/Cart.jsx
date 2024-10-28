@@ -26,23 +26,17 @@ function Cart() {
 
     useEffect(() => {
         if (user) {
-            dispatch(loadCartFromStorage(user));
+            dispatch(loadCartFromStorage(user.id));
         }
-    }, [dispatch, user]);
+    }, [dispatch, user.id]);
 
     const handleRemoveFromCart = (itemId) => {
-        if (
-            window.confirm(
-                'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
-            )
-        ) {
-            dispatch(removeFromCart({ userId: user, itemId }));
-        }
+        dispatch(removeFromCart({ userId: user, itemId }));
     };
 
     const handleQuantityChange = (itemId, quantity) => {
         if (quantity > 0) {
-            dispatch(updateItemQuantity({ userId: user, itemId, quantity }));
+            dispatch(updateItemQuantity({ userId: user.id, itemId, quantity }));
         }
     };
 

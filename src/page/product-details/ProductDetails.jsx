@@ -15,10 +15,9 @@ function ProductDetails() {
     const [quantity, setQuantity] = useState(1);
     const [addedToCart, setAddedToCart] = useState(false);
     const { isAuthenticated, user } = useAuthStore();
-
     useEffect(() => {
-        dispatch(loadCartFromStorage(user));
-    }, [dispatch, user]);
+        dispatch(loadCartFromStorage(user.id));
+    }, [dispatch, user.id]);
 
     const handleAddToCart = () => {
         if (!isAuthenticated) {
@@ -26,7 +25,7 @@ function ProductDetails() {
             navigate('/login');
         } else {
             const item = { ...product, quantity };
-            dispatch(addToCart({ userId: user, item }));
+            dispatch(addToCart({ userId: user.id, item }));
             setAddedToCart(true);
             setTimeout(() => setAddedToCart(false), 2000);
         }
