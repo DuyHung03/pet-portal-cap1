@@ -10,7 +10,7 @@ function Shop() {
     const [allProducts, setAllProducts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
 
-    const params = useMemo(() => ({ limit: 8, skip }), [skip]);
+    const params = useMemo(() => ({ limit: 10, skip }), [skip]);
 
     const { data, loading, error } = useFetchData('/products', params);
 

@@ -1,11 +1,11 @@
 import {
-    Avatar,
     Button,
     FileButton,
     Flex,
     Grid,
     GridCol,
     Group,
+    Image,
     Loader,
     NumberInput,
     Select,
@@ -16,6 +16,7 @@ import {
 import { useForm } from '@mantine/form';
 import { AddAPhoto, Pets } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
+import { uploadImage } from '@util/firebaseUtils';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../network/httpRequest';
@@ -49,6 +50,13 @@ function AddNewPet() {
     });
 
     const addPet = async () => {
+        let imgUrl = null;
+
+        if (file) {
+            imgUrl = await uploadImage(file, (process) => console.log(process));
+        }
+        console.log(imgUrl);
+
         await axiosInstance.post(
             'pets',
             {
@@ -60,6 +68,7 @@ function AddNewPet() {
                 gender: form.getValues().gender,
                 description: form.getValues().description,
                 medical_history: form.getValues().medical_history,
+                images: imgUrl,
             },
             { withCredentials: true },
         );
@@ -172,7 +181,16 @@ function AddNewPet() {
                             justify="center"
                             align="center"
                         >
-                            <Avatar size={200} />
+                            {file ? (
+                                <Image
+                                    size={200}
+                                    src={URL.createObjectURL(file)}
+                                />
+                            ) : (
+                                <Text c={'gray'} fs={'italic'}>
+                                    Hãy thêm ảnh cho thú cưng của bạn
+                                </Text>
+                            )}
                             <FileButton
                                 resetRef={resetRef}
                                 accept="image/png,image/jpeg,image/jpg"
@@ -185,7 +203,7 @@ function AddNewPet() {
                                         c={'#5789cf'}
                                         variant="transparent"
                                     >
-                                        Thêm ảnh của thú cưng
+                                        Thêm ảnh của thú cưnggg
                                     </Button>
                                 )}
                             </FileButton>

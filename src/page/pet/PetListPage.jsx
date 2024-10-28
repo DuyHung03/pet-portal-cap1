@@ -23,6 +23,7 @@ function PetListPage() {
         `/pets/owner/${user.id}`,
         params,
     );
+    console.log(data);
 
     console.log(error);
 
