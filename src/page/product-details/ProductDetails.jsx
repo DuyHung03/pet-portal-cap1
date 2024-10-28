@@ -3,23 +3,33 @@ import { Avatar } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { addToCart, loadCartFromStorage } from '../../redux/slice/cartSlice';
+import { useAuthStore } from '@store/authStore';
 
-function ProductDetails({ userId }) {
+// login cart
+// login cart => login new cart
+function ProductDetails() {
     const location = useLocation();
     const { product } = location.state;
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [quantity, setQuantity] = useState(1);
     const [addedToCart, setAddedToCart] = useState(false);
+    const { isAuthenticated, user } = useAuthStore();
 
     useEffect(() => {
-        dispatch(loadCartFromStorage(userId));
-    }, [dispatch, userId]);
+        dispatch(loadCartFromStorage(user));
+    }, [dispatch, user]);
 
     const handleAddToCart = () => {
-        const item = { ...product, quantity };
-        dispatch(addToCart({ userId, item }));
-        setAddedToCart(true);
-        setTimeout(() => setAddedToCart(false), 2000);
+        if (!isAuthenticated) {
+            // false
+            navigate('/login');
+        } else {
+            const item = { ...product, quantity };
+            dispatch(addToCart({ userId: user, item }));
+            setAddedToCart(true);
+            setTimeout(() => setAddedToCart(false), 2000);
+        }
     };
 
     return (

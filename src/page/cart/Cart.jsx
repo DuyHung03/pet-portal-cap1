@@ -8,10 +8,12 @@ import {
 } from '../../redux/slice/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useAuthStore } from '@store/authStore';
 
-function Cart({ userId }) {
+function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { user } = useAuthStore();
     const cartItems = useSelector((state) => state.cart.items);
     const totalQuantity = cartItems.reduce(
         (total, item) => total + item.quantity,
@@ -23,10 +25,10 @@ function Cart({ userId }) {
     );
 
     useEffect(() => {
-        if (userId) {
-            dispatch(loadCartFromStorage(userId));
+        if (user) {
+            dispatch(loadCartFromStorage(user));
         }
-    }, [dispatch, userId]);
+    }, [dispatch, user]);
 
     const handleRemoveFromCart = (itemId) => {
         if (
@@ -34,13 +36,13 @@ function Cart({ userId }) {
                 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
             )
         ) {
-            dispatch(removeFromCart({ userId, itemId }));
+            dispatch(removeFromCart({ userId: user, itemId }));
         }
     };
 
     const handleQuantityChange = (itemId, quantity) => {
         if (quantity > 0) {
-            dispatch(updateItemQuantity({ userId, itemId, quantity }));
+            dispatch(updateItemQuantity({ userId: user, itemId, quantity }));
         }
     };
 
