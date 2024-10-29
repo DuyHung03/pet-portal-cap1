@@ -46,7 +46,7 @@ function PetDetail() {
     const navigate = useNavigate();
     const [file, setFile] = useState(null);
     const resetRef = useRef(null);
-
+    let changedFields = {};
     const form = useForm({
         initialValues: {
             category_id: pet.Category.id.toString(),
@@ -111,7 +111,7 @@ function PetDetail() {
 
     const handleSubmit = async () => {
         openLoading();
-        const changedFields = {};
+
         for (const key in form.values) {
             if (form.isDirty(key)) {
                 changedFields[key] = form.values[key];
@@ -144,7 +144,7 @@ function PetDetail() {
     return (
         <Group w={'100%'} justify="center" p={20}>
             <Group w={1200}>
-                <Group w={'100%'}>
+                <Group w={'100%'} h={'100%'}>
                     <LoadingOverlay
                         visible={visible}
                         zIndex={100000}

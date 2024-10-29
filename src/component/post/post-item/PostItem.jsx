@@ -77,7 +77,11 @@ function PostItem({ post }) {
 
     const toggleComments = async () => {
         setCommentsVisible((prev) => !prev);
-        if (!commentsVisible && comments.length === 0) {
+        if (
+            !commentsVisible &&
+            comments.length === 0 &&
+            post?.PostComments?.length > 0
+        ) {
             setLoadingComments(true);
             try {
                 const response = await axiosInstance.get(
@@ -194,7 +198,7 @@ function PostItem({ post }) {
                         onClick={toggleComments}
                     >
                         <ChatBubbleOutline />
-                        <Text ml={10}>{post?.PostComments?.length}</Text>
+                        <Text ml={10}>{post?.PostComments?.length ?? 0}</Text>
                     </Button>
                 </Flex>
 
