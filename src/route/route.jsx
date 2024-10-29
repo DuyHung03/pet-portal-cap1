@@ -35,7 +35,7 @@ import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
 
 // sau khi config
-const getUserId = () => localStorage.getItem('userId');
+
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
@@ -55,14 +55,11 @@ const router = createBrowserRouter(
                 errorElement={<Error404 />}
             >
                 <Route index element={<Shop />} />
-                <Route
-                    path="product/:id"
-                    element={<ProductDetails userId={getUserId()} />}
-                />
+                <Route path="product/:id" element={<ProductDetails />} />
                 <Route path="search" element={<Search />} />
-                <Route path="cart" element={<Cart userId={getUserId()} />} />
+                <Route path="cart" element={<Cart />} />
             </Route>
-            <Route path="cart" element={<Cart userId={getUserId()} />} />
+            <Route path="cart" element={<Cart />} />
 
             <Route
                 path="/doctor"

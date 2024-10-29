@@ -20,12 +20,14 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import { useAuthStore } from '../../store/authStore';
+import { clearCart } from '../../redux/slice/cartSlice';
 function Header({ title }) {
     const { user, logout } = useAuthStore();
     const navigate = useNavigate();
     const handleLogout = async () => {
         try {
             await logout();
+            dispatch(clearCart(user));
             navigate('/login');
         } catch (error) {
             console.error('Logout failed', error);
