@@ -22,7 +22,7 @@ function NavBar() {
                         pl={12}
                         pt={6}
                         pb={6}
-                        bg={isActive('/') ? 'blue' : 'transparent'}
+                        bg={isActive('/') ? '#5789cf' : 'transparent'}
                     >
                         Trang chủ
                     </Text>
@@ -35,7 +35,7 @@ function NavBar() {
                         pl={12}
                         pt={6}
                         pb={6}
-                        bg={isActive('/post') ? 'blue' : 'transparent'}
+                        bg={isActive('/post') ? '#5789cf' : 'transparent'}
                     >
                         Diễn đàn
                     </Text>
@@ -48,7 +48,7 @@ function NavBar() {
                         pl={12}
                         pt={6}
                         pb={6}
-                        bg={isActive('/your-pet') ? 'blue' : 'transparent'}
+                        bg={isActive('/your-pet') ? '#5789cf' : 'transparent'}
                     >
                         Quản lý thú cưng
                     </Text>
@@ -61,9 +61,24 @@ function NavBar() {
                         pl={12}
                         pt={6}
                         pb={6}
-                        bg={isActive('/shop') ? 'blue' : 'transparent'}
+                        bg={isActive('/shop') ? '#5789cf' : 'transparent'}
                     >
                         Cửa Hàng
+                    </Text>
+                </Link>
+                <Link to={'/appointment'}>
+                    <Text
+                        c={isActive('/appointment') ? 'white' : 'dark'}
+                        size="md"
+                        pr={12}
+                        pl={12}
+                        pt={6}
+                        pb={6}
+                        bg={
+                            isActive('/appointment') ? '#5789cf' : 'transparent'
+                        }
+                    >
+                        Đặt lịch hẹn
                     </Text>
                 </Link>
                 <Link to={'/service'}>
@@ -74,22 +89,9 @@ function NavBar() {
                         pl={12}
                         pt={6}
                         pb={6}
-                        bg={isActive('/service') ? 'blue' : 'transparent'}
+                        bg={isActive('/service') ? '#5789cf' : 'transparent'}
                     >
-                        Dịch vụ
-                    </Text>
-                </Link>
-                <Link to={'/product'}>
-                    <Text
-                        c={isActive('/product') ? 'white' : 'dark'}
-                        size="md"
-                        pr={12}
-                        pl={12}
-                        pt={6}
-                        pb={6}
-                        bg={isActive('/product') ? 'blue' : 'transparent'}
-                    >
-                        Đặt lịch hẹn
+                        Đăng kí dịch vụ
                     </Text>
                 </Link>
             </Group>

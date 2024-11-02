@@ -9,7 +9,7 @@ function PostLayout() {
             <Group pos={'fixed'} style={{ zIndex: '10' }} w={'100%'}>
                 <Header title={'Diễn đàn'} />
             </Group>
-            <Group w={'100%'} justify='center' pt={150}>
+            <Group w={'100%'} justify="center" pt={150}>
                 <Outlet />
             </Group>
             <Footer />

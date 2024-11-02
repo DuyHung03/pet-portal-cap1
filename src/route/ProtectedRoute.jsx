@@ -2,18 +2,17 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 
 const ProtectedRoute = ({ element, allowedRoles }) => {
-  const { isAuthenticated, role } = useAuthStore();
-  const location = useLocation();
+    const { isAuthenticated, role } = useAuthStore();
+    const location = useLocation();
 
-  if (!isAuthenticated || (role && !allowedRoles.includes(role))) {
-    console.log(location);
+    const hasAccess = role && role.some((r) => allowedRoles.includes(r));
 
-    return (
-      <Navigate to="/login" replace state={{ prevUrl: location.pathname }} />
-    );
-  }
+    if (!isAuthenticated || !hasAccess) {
+        const prevUrl = location.pathname;
+        return <Navigate to="/login" state={{ prevUrl }} />;
+    }
 
-  return element;
+    return element;
 };
 
 export default ProtectedRoute;

@@ -294,7 +294,7 @@ function PetDetail() {
             </Modal>
             <Modal
                 opened={openedUpdateModal}
-                onClose={closeUpdateModal}
+                onClose={visible ? () => {} : closeUpdateModal}
                 centered
                 title="Chỉnh sửa thông tin thú cưng"
             >

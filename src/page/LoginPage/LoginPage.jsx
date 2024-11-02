@@ -14,11 +14,12 @@ const LoginPage = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log(email, password);
 
         await login(email, password);
+        const prevUrl = location.state?.prevUrl || '/';
+        console.log(location);
 
-        navigate('/');
+        navigate(prevUrl, { replace: true });
     };
 
     return (
