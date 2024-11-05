@@ -35,6 +35,7 @@ import PetListPage from '../page/pet/PetListPage';
 import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
+import Checkout from '@pages/checkout/checkout';
 
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
@@ -63,6 +64,7 @@ const router = createBrowserRouter(
                 <Route path="product/:id" element={<ProductDetails />} />
                 <Route path="search" element={<Search />} />
                 <Route path="cart" element={<Cart />} />
+                <Route path="checkout/:id" element={<Checkout />} />
             </Route>
             <Route path="cart" element={<Cart />} />
 

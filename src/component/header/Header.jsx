@@ -29,7 +29,7 @@ function Header({ title }) {
     const handleLogout = async () => {
         try {
             await logout();
-            dispatch(clearCart(user));
+            dispatch(clearCart(user.id));
             navigate('/login');
         } catch (error) {
             console.error('Logout failed', error);

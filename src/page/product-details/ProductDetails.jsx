@@ -7,6 +7,7 @@ import { useAuthStore } from '@store/authStore';
 
 // login cart
 // login cart => login new cart
+
 function ProductDetails() {
     const location = useLocation();
     const { product } = location.state;
@@ -19,15 +20,21 @@ function ProductDetails() {
         dispatch(loadCartFromStorage(user.id));
     }, [dispatch, user.id]);
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (!isAuthenticated) {
-            // false
             navigate('/login');
         } else {
-            const item = { ...product, quantity };
-            dispatch(addToCart({ userId: user.id, item }));
-            setAddedToCart(true);
-            setTimeout(() => setAddedToCart(false), 2000);
+            try {
+                const item = { ...product, quantity };
+                await dispatch(addToCart({ userId: user.id, item }));
+                setAddedToCart(true);
+                setTimeout(() => setAddedToCart(false), 2000);
+            } catch (error) {
+                console.log(
+                    'Error adding item to API:',
+                    error.response?.data || error.message,
+                );
+            }
         }
     };
 
@@ -101,7 +108,7 @@ function ProductDetails() {
                     </button>
 
                     {addedToCart && (
-                        <div className="fixed top-0 right-0 p-4 bg-green-500 text-white rounded-md shadow-lg">
+                        <div className="fixed z-10 top-0 right-0 p-4 bg-green-500 text-white rounded-md shadow-lg">
                             Sản phẩm đã được thêm vào giỏ hàng!
                         </div>
                     )}
