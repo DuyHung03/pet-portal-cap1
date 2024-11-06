@@ -36,6 +36,12 @@ import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
 import Checkout from '@pages/checkout/checkout';
+import ShopDashboardLayout from '@layout/ShopDashboard';
+import Overview from '@pages/shop-dashboard/shop-overview';
+import Products from '@pages/shop-dashboard/shop-products';
+import Orders from '@pages/shop-dashboard/shop-orders';
+import Users from '@pages/shop-dashboard/shop-users';
+import Reports from '@pages/shop-dashboard/shop-reports';
 
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
@@ -94,6 +100,25 @@ const router = createBrowserRouter(
                     element={<AppoinmentDetails />}
                 />
             </Route>
+
+            <Route
+                path="/shop-dashboard"
+                element={
+                    <ProtectedRoute
+                        allowedRoles={['PetOwner']}
+                        element={<ShopDashboardLayout />}
+                    />
+                }
+                errorElement={<Error404 />}
+            >
+                <Route index element={<Navigate to="overview" replace />} />
+                <Route path="overview" element={<Overview />} />
+                <Route path="products" element={<Products />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="users" element={<Users />} />
+                <Route path="reports" element={<Reports />} />
+            </Route>
+
             <Route
                 path="/your-pet"
                 element={
