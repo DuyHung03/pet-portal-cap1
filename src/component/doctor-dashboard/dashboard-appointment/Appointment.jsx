@@ -8,8 +8,8 @@ function Appointment({ appointment }) {
         appointment.status === 'Scheduled'
             ? 'green'
             : appointment.status === 'Completed'
-                ? 'gray'
-                : 'red';
+              ? 'gray'
+              : 'red';
     return (
         <Link
             to={`/doctor-dashboard/appointment/${appointment.id}`}

@@ -10,13 +10,13 @@ import { Buffer } from 'buffer';
 window.Buffer = Buffer;
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
-    {/* <PersistGate loading={null} persistor={persistor}> */}
-    <QueryClientProvider client={queryClient}>
-      <MantineProvider>
-        <App />
-      </MantineProvider>
-    </QueryClientProvider>
-    {/* </PersistGate> */}
-  </Provider>,
+    <Provider store={store}>
+        {/* <PersistGate loading={null} persistor={persistor}> */}
+        <QueryClientProvider client={queryClient}>
+            <MantineProvider>
+                <App />
+            </MantineProvider>
+        </QueryClientProvider>
+        {/* </PersistGate> */}
+    </Provider>,
 );
