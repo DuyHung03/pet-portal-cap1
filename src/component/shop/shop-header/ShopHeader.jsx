@@ -21,14 +21,19 @@ import {
     ShoppingCart,
 } from '@mui/icons-material';
 import { Badge } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useAuthStore } from '../../../store/authStore';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadCartFromStorage } from '../../../redux/slice/cartSlice';
+import CartPanel from '../shop-header-cart/shop-header-cart';
+
 function ShopHeader() {
     const [searchValue, setSearchValue] = useState('');
+    const [isCartOpen, setCartOpen] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { user } = useAuthStore();
 
     const cartItems = useSelector((state) => state.cart.items);
@@ -37,24 +42,25 @@ function ShopHeader() {
         0,
     );
 
+    useEffect(() => {
+        dispatch(loadCartFromStorage(user?.id || 0));
+    }, [dispatch, user?.id]);
+
     const handleSearchClick = () => {
         if (searchValue.trim()) {
-            console.log('Searching for:', searchValue);
             navigate(`search?name=${searchValue}`);
         }
     };
+
     const handleKeyEnter = (event) => {
         if (event.key === 'Enter') handleSearchClick();
     };
+
+    const openCartPanel = () => setCartOpen(true);
+    const closeCartPanel = () => setCartOpen(false);
+
     return (
-        <Group
-            pt={15}
-            pb={15}
-            justify="center"
-            align="center"
-            style={{ boxShadow: 'rgba(33, 35, 38, 0.1) 0px 10px 10px -10px' }}
-            mx={20}
-        >
+        <Group pt={10} pb={10} justify="center" align="center" mx={20}>
             <Group
                 display={'flex'}
                 justify="space-between"
@@ -67,16 +73,16 @@ function ShopHeader() {
                         <Image
                             alt="logo"
                             src={logo}
-                            height={120}
-                            style={{ width: '120px' }}
+                            height={80}
+                            style={{ width: '80px' }}
                         />
                         <Text
                             ff={'Playwrite HU'}
                             c="#165d94"
                             fw={'bold'}
-                            style={{ letterSpacing: 1.25 }}
-                            size={'30px'}
-                            ml={12}
+                            style={{ letterSpacing: 1 }}
+                            size={'28px'}
+                            ml={10}
                         >
                             Cửa hàng
                         </Text>
@@ -89,8 +95,6 @@ function ShopHeader() {
                     radius={'xl'}
                     size="md"
                     placeholder="Tìm kiếm"
-                    leftSectionPointerEvents="all"
-                    rightSectionPointerEvents="all"
                     leftSection={
                         <Search
                             fontSize="small"
@@ -98,8 +102,6 @@ function ShopHeader() {
                             style={{ cursor: 'pointer' }}
                         />
                     }
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    value={searchValue}
                     rightSection={
                         <CloseButton
                             aria-label="Clear input"
@@ -110,14 +112,19 @@ function ShopHeader() {
                             }}
                         />
                     }
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    value={searchValue}
                 />
 
                 <Group>
-                    <Link to={'/cart'}>
-                        <Badge color="error" badgeContent={cartCount}>
-                            <ShoppingCart color="primary" fontSize="large" />
-                        </Badge>
-                    </Link>
+                    <Badge color="error" badgeContent={cartCount}>
+                        <ShoppingCart
+                            color="primary"
+                            fontSize="large"
+                            onClick={openCartPanel}
+                            style={{ cursor: 'pointer' }}
+                        />
+                    </Badge>
                     {!user ? (
                         <Link to="/login">
                             <Button variant="filled" radius={'md'} size="md">
@@ -126,14 +133,8 @@ function ShopHeader() {
                         </Link>
                     ) : (
                         <Group>
-                            <Avatar
-                                size={'lg'}
-                                allowedInitialsColors={'#dfe6e9'}
-                                src={user.avatar_url}
-                                name={user.username}
-                                color="initials"
-                            />
-                            <Text size="lg" fw={600} c={'gray'}>
+                            <Avatar src={user.avatar_url} alt={user.username} />
+                            <Text size="lg" fw={600} color={'gray'}>
                                 {user.username}
                             </Text>
                             <Menu>
@@ -142,7 +143,6 @@ function ShopHeader() {
                                         <ExpandMore color="action" />
                                     </UnstyledButton>
                                 </MenuTarget>
-
                                 <MenuDropdown>
                                     <MenuItem
                                         leftSection={
@@ -156,13 +156,17 @@ function ShopHeader() {
                                     <MenuItem
                                         leftSection={<Logout color="error" />}
                                     >
-                                        <Link to={'/'}>Đăng xuất</Link>
+                                        <Link to={'/logout'}>Đăng xuất</Link>
                                     </MenuItem>
                                 </MenuDropdown>
                             </Menu>
                         </Group>
                     )}
                 </Group>
+
+                {isCartOpen && (
+                    <CartPanel isOpen={isCartOpen} onClose={closeCartPanel} />
+                )}
             </Group>
         </Group>
     );

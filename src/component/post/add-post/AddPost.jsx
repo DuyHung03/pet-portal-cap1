@@ -114,7 +114,7 @@ function AddPost() {
             <Modal
                 size={500}
                 opened={opened}
-                onClose={close}
+                onClose={visible ? () => {} : close}
                 centered
                 scrollAreaComponent={ScrollAreaAutosize}
             >

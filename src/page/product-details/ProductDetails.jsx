@@ -3,23 +3,39 @@ import { Avatar } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { addToCart, loadCartFromStorage } from '../../redux/slice/cartSlice';
+import { useAuthStore } from '@store/authStore';
 
-function ProductDetails({ userId }) {
+// login cart
+// login cart => login new cart
+
+function ProductDetails() {
     const location = useLocation();
     const { product } = location.state;
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [quantity, setQuantity] = useState(1);
     const [addedToCart, setAddedToCart] = useState(false);
-
+    const { isAuthenticated, user } = useAuthStore();
     useEffect(() => {
-        dispatch(loadCartFromStorage(userId));
-    }, [dispatch, userId]);
+        dispatch(loadCartFromStorage(user.id));
+    }, [dispatch, user.id]);
 
-    const handleAddToCart = () => {
-        const item = { ...product, quantity };
-        dispatch(addToCart({ userId, item }));
-        setAddedToCart(true);
-        setTimeout(() => setAddedToCart(false), 2000);
+    const handleAddToCart = async () => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        } else {
+            try {
+                const item = { ...product, quantity };
+                await dispatch(addToCart({ userId: user.id, item }));
+                setAddedToCart(true);
+                setTimeout(() => setAddedToCart(false), 2000);
+            } catch (error) {
+                console.log(
+                    'Error adding item to API:',
+                    error.response?.data || error.message,
+                );
+            }
+        }
     };
 
     return (
@@ -92,7 +108,7 @@ function ProductDetails({ userId }) {
                     </button>
 
                     {addedToCart && (
-                        <div className="fixed top-0 right-0 p-4 bg-green-500 text-white rounded-md shadow-lg">
+                        <div className="fixed z-10 top-0 right-0 p-4 bg-green-500 text-white rounded-md shadow-lg">
                             Sản phẩm đã được thêm vào giỏ hàng!
                         </div>
                     )}

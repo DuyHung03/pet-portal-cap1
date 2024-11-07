@@ -4,12 +4,14 @@ import {
     Flex,
     Grid,
     Group,
+    Image,
     Loader,
     Text,
 } from '@mantine/core';
 import { Add } from '@mui/icons-material';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import petFood from '../../assets/pet-food.png';
 import PetItem from '../../component/pet/PetItem';
 import useFetchData from '../../hooks/useFetchData';
 import { useAuthStore } from '../../store/authStore';
@@ -46,11 +48,21 @@ function PetListPage() {
                         <Loader type="bars" />
                     </Group>
                 ) : null}
-                <Grid gutter={'xl'} w={'100%'}>
-                    {data?.data?.map((pet, index) => (
-                        <PetItem key={index} pet={pet} />
-                    ))}
-                </Grid>
+                {data?.data?.length > 0 ? (
+                    <Grid gutter={'xl'} w={'100%'}>
+                        {data?.data?.map((pet, index) => (
+                            <PetItem key={index} pet={pet} />
+                        ))}
+                    </Grid>
+                ) : (
+                    <Group mt={30} w={'100%'} justify="center">
+                        <Image src={petFood} w={200} />
+                        <Text w={'100%'} ta={'center'} c={'gray'} fs={'italic'}>
+                            Bạn chưa có thú cưng nào trong danh sách, hãy đăng
+                            kí thú cưng mới
+                        </Text>
+                    </Group>
+                )}
             </Group>
         </Group>
     );

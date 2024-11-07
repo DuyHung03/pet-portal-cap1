@@ -10,7 +10,13 @@ import {
     Loader,
     Text,
 } from '@mantine/core';
-import { Cake, CreateOutlined, LocationOn, Phone } from '@mui/icons-material';
+import {
+    Cake,
+    CreateOutlined,
+    Email,
+    LocationOn,
+    Phone,
+} from '@mui/icons-material';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import PostItem from '../../component/post/post-item/PostItem';
@@ -60,18 +66,22 @@ function UserPage() {
                         Thông tin cá nhân
                     </Text>
                     <Divider h={1} w={'100%'} />
-                    <Flex direction={'column'} gap={10} pt={20} c={'#5789CF'}>
-                        <Flex align={'flex-end'} gap={6}>
-                            <Cake />
-                            birthday :
+                    <Flex direction={'column'} gap={20} pt={20} c={'#5789CF'}>
+                        <Flex align={'center'} gap={10}>
+                            <Email />
+                            {user.email}
                         </Flex>
-                        <Flex align={'flex-end'} gap={6}>
+                        <Flex align={'center'} gap={10}>
+                            <Cake />
+                            {user.date_of_birth}
+                        </Flex>
+                        <Flex align={'center'} gap={10}>
                             <LocationOn />
                             address
                         </Flex>
-                        <Flex align={'flex-end'} gap={6}>
+                        <Flex align={'center'} gap={10}>
                             <Phone />
-                            phone
+                            {user.phone}
                         </Flex>
                     </Flex>
                 </GridCol>

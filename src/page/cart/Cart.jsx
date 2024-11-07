@@ -1,17 +1,19 @@
-// src/components/Cart.js
 import { useDispatch, useSelector } from 'react-redux';
 import {
     removeFromCart,
     updateItemQuantity,
-    clearCart,
     loadCartFromStorage,
+    // clearCart,
 } from '../../redux/slice/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useAuthStore } from '@store/authStore';
+import axiosInstance from '@network/httpRequest';
 
-function Cart({ userId }) {
+function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { user } = useAuthStore();
     const cartItems = useSelector((state) => state.cart.items);
     const totalQuantity = cartItems.reduce(
         (total, item) => total + item.quantity,
@@ -23,37 +25,51 @@ function Cart({ userId }) {
     );
 
     useEffect(() => {
-        if (userId) {
-            dispatch(loadCartFromStorage(userId));
+        if (user && user.id) {
+            dispatch(loadCartFromStorage(user.id));
         }
-    }, [dispatch, userId]);
+    }, [dispatch, user.id]);
 
     const handleRemoveFromCart = (itemId) => {
-        if (
-            window.confirm(
-                'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
-            )
-        ) {
-            dispatch(removeFromCart({ userId, itemId }));
-        }
+        dispatch(removeFromCart({ userId: user.id, itemId }));
     };
 
     const handleQuantityChange = (itemId, quantity) => {
         if (quantity > 0) {
-            dispatch(updateItemQuantity({ userId, itemId, quantity }));
+            dispatch(updateItemQuantity({ userId: user.id, itemId, quantity }));
         }
     };
 
-    const handleCheckout = () => {
+    const handleSaveOrder = async () => {
         if (totalQuantity === 0) {
             alert(
                 'Giỏ hàng trống! Vui lòng thêm sản phẩm trước khi thanh toán.',
             );
             return;
         }
-        navigate('/checkout');
-    };
 
+        const orderData = {
+            petOwner_id: user.id,
+            items: cartItems.map((item) => ({
+                productId: item.id,
+                quantity: item.quantity,
+                price: item.price,
+            })),
+        };
+        try {
+            const response = await axiosInstance.post(
+                '/orders/products',
+                orderData,
+            );
+
+            if (response.status === 201 && response.data.orderId) {
+                navigate(`/checkout/${response.data.orderId}`);
+            }
+        } catch (error) {
+            console.error('Lỗi khi lưu đặt hàng:', error);
+            alert('Không thể lưu đơn hàng. Vui lòng thử lại!');
+        }
+    };
     return (
         <div className="container mx-auto my-10 p-6 bg-gray-100 rounded-lg shadow-lg max-w-5xl">
             <h2 className="text-4xl font-bold mb-6 text-blue-900 text-center">
@@ -73,7 +89,7 @@ function Cart({ userId }) {
                         >
                             <img
                                 src={
-                                    item.imageUrl ||
+                                    item.image ||
                                     'https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg'
                                 }
                                 alt={item.name}
@@ -142,10 +158,10 @@ function Cart({ userId }) {
                             Tiếp tục mua sắm
                         </button>
                         <button
-                            onClick={handleCheckout}
+                            onClick={handleSaveOrder}
                             className="bg-green-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-green-600"
                         >
-                            Thanh toán
+                            Mua hàng
                         </button>
                     </div>
                 </div>

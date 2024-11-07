@@ -17,15 +17,19 @@ import {
     Logout,
     MedicalInformation,
 } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
+import { clearCart } from '../../redux/slice/cartSlice';
 import { useAuthStore } from '../../store/authStore';
 function Header({ title }) {
     const { user, logout } = useAuthStore();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const handleLogout = async () => {
         try {
             await logout();
+            dispatch(clearCart(user.id));
             navigate('/login');
         } catch (error) {
             console.error('Logout failed', error);
@@ -42,13 +46,14 @@ function Header({ title }) {
             align="center"
             style={{
                 boxShadow: 'rgba(33, 35, 38, 0.1) 0px 10px 10px -10px',
-                zIndex: '10',
+                zIndex: '100',
             }}
         >
             <Group
                 display={'flex'}
                 justify="space-between"
                 align="center"
+                bg={'white'}
                 maw={1440}
                 w={'100%'}
             >
@@ -114,7 +119,7 @@ function Header({ title }) {
                                         Thông tin cá nhân
                                     </Link>
                                 </MenuItem>
-                                {user.role == 'Doctor' ? (
+                                {user.role.includes('Doctor') ? (
                                     <MenuItem
                                         leftSection={
                                             <MedicalInformation color="action" />
