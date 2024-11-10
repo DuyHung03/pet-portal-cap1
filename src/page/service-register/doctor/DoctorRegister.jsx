@@ -101,7 +101,7 @@ function DoctorRegister() {
     const handleRegisterDoctor = async () => {
         setLoading(true);
         try {
-            // const avatar = await uploadImage(avatarUrl);
+            const avatar = await uploadImage(avatarUrl);
             const certificate = await uploadImage(certificateUrl, (process) =>
                 console.log(process),
             );
@@ -126,6 +126,7 @@ function DoctorRegister() {
                     cccd_front_image: front_id,
                     cccd_back_image: back_id,
                     certificate_image: certificate,
+                    avatar_url: avatar,
                 },
                 {
                     withCredentials: true,
@@ -166,7 +167,7 @@ function DoctorRegister() {
                     active={active}
                     onStepClick={setActive}
                     w={'100%'}
-                    // allowNextStepsSelect={false}
+                    allowNextStepsSelect={false}
                 >
                     <Stepper.Step
                         label="Thông tin cá nhân"

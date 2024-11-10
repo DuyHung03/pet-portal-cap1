@@ -26,6 +26,8 @@ function Header({ title }) {
     const { user, logout } = useAuthStore();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    console.log(user);
+
     const handleLogout = async () => {
         try {
             await logout();
@@ -119,7 +121,7 @@ function Header({ title }) {
                                         Thông tin cá nhân
                                     </Link>
                                 </MenuItem>
-                                {user.role.includes('Doctor') ? (
+                                {user?.role?.includes('Doctor') ? (
                                     <MenuItem
                                         leftSection={
                                             <MedicalInformation color="action" />

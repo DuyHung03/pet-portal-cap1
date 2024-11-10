@@ -17,7 +17,6 @@ const LoginPage = () => {
 
         await login(email, password);
         const prevUrl = location.state?.prevUrl || '/';
-        console.log(location);
 
         navigate(prevUrl, { replace: true });
     };

@@ -2,10 +2,10 @@ import {
     Button,
     Divider,
     Flex,
-    Grid,
     Group,
     Image,
     Loader,
+    SimpleGrid,
     Text,
 } from '@mantine/core';
 import { Add } from '@mui/icons-material';
@@ -49,11 +49,14 @@ function PetListPage() {
                     </Group>
                 ) : null}
                 {data?.data?.length > 0 ? (
-                    <Grid gutter={'xl'} w={'100%'}>
+                    <SimpleGrid
+                        w={'100%'}
+                        cols={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+                    >
                         {data?.data?.map((pet, index) => (
                             <PetItem key={index} pet={pet} />
                         ))}
-                    </Grid>
+                    </SimpleGrid>
                 ) : (
                     <Group mt={30} w={'100%'} justify="center">
                         <Image src={petFood} w={200} />

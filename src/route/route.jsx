@@ -20,7 +20,9 @@ import Shop from '../page/shop/Shop';
 
 // trước khi config
 import NoneFooterLayout from '@layout/NoneFooterLayout';
-import AppointmentList from '@pages/appointment/AppointmentList';
+import AppointmentList from '@pages/appointment/AppointmentsPage';
+import DoctorList from '@pages/appointment/doctor/DoctorList';
+import MakeAppointment from '@pages/appointment/MakeAppointment';
 import AddNewPet from '@pages/pet/AddNewPet';
 import PetDetail from '@pages/pet/PetDetail';
 import DoctorRegister from '@pages/service-register/doctor/DoctorRegister';
@@ -73,15 +75,6 @@ const router = createBrowserRouter(
                 <Route path="checkout/:id" element={<Checkout />} />
             </Route>
             <Route path="cart" element={<Cart />} />
-
-            <Route
-                path="/doctor"
-                element={<ShopLayout />}
-                errorElement={<Error404 />}
-            >
-                {/* <Route index element={<MedicalPortal />} /> */}
-                {/* <Route path='detail/:id' element={<ProductDetails />} /> */}
-            </Route>
 
             <Route
                 path="/doctor-dashboard"
@@ -186,6 +179,21 @@ const router = createBrowserRouter(
                 errorElement={<Error404 />}
             >
                 <Route index element={<AppointmentList />} />
+                <Route path="make-appointment" element={<MakeAppointment />} />
+            </Route>
+
+            <Route
+                path="/doctors"
+                element={
+                    <ProtectedRoute
+                        element={<NoneFooterLayout />}
+                        allowedRoles={['PetOwner']}
+                    />
+                }
+                errorElement={<Error404 />}
+            >
+                <Route index element={<DoctorList />} />
+                {/* <Route path="make-appointment" element={<MakeAppointment />} /> */}
             </Route>
 
             <Route path="/login" element={<Login />} />

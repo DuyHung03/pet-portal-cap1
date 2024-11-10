@@ -129,25 +129,30 @@ function DetailSummary({ data }) {
                 Ảnh đại diện và chứng chỉ
             </Text>
             <Flex justify={'space-between'} wrap="wrap" w={'100%'}>
-                <Flex align={'center'} direction={'column'} gap={10}>
+                <Flex
+                    align={'center'}
+                    direction={'column'}
+                    gap={10}
+                    maw={'50%'}
+                >
                     <Text fs={'italic'} fw={600} c={'dark.2'}>
                         Ảnh đại diện
                     </Text>
-                    <Image
-                        src={data.avatarUrl}
-                        mah={350}
-                        radius="md"
-                        w={'fit-content'}
-                    />
+                    <Image src={data.avatarUrl} h={350} radius="md" w={'450'} />
                 </Flex>
-                <Flex align={'center'} direction={'column'} gap={10}>
+                <Flex
+                    align={'center'}
+                    direction={'column'}
+                    gap={10}
+                    maw={'50%'}
+                >
                     <Text fs={'italic'} fw={600} c={'dark.2'}>
                         Chứng chỉ hành nghề
                     </Text>
                     <Image
                         src={data.certificateUrl}
-                        w={'fit-content'}
-                        mah={350}
+                        w={'450'}
+                        h={350}
                         radius="md"
                     />
                 </Flex>

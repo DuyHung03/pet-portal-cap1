@@ -6,7 +6,7 @@ import {
     GridCol,
     Group,
     Image,
-    Loader,
+    LoadingOverlay,
     NumberInput,
     Select,
     Text,
@@ -92,11 +92,7 @@ function AddNewPet() {
     return (
         <Group w={'100%'} justify="center">
             <Group w={1000}>
-                {addPetMutation.isPending ? (
-                    <Group w={'100%'} justify="center" align="center">
-                        <Loader type="bar" />
-                    </Group>
-                ) : null}
+                <LoadingOverlay w={'100%'} visible={addPetMutation.isPending} />
                 <Group w={'100%'} align="center" pt={20} pl={20}>
                     <Text fw={500} c={'#5789CF'} size={'26px'}>
                         Thêm thú cưng

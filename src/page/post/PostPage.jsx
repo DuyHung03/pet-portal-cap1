@@ -7,11 +7,14 @@ import useFetchData from '../../hooks/useFetchData';
 function PostPage() {
     const params = useMemo(() => [], []);
 
-    const { data, loading, error } = useFetchData('/posts/all', params);
+    const { data, loading, error, refetch } = useFetchData(
+        '/posts/all',
+        params,
+    );
 
     return (
         <Group w={700} justify="center" m={20}>
-            <AddPost />
+            <AddPost onPostCreated={refetch} />
 
             {loading ? (
                 <Group w={700} align="center" justify="center">

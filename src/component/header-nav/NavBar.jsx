@@ -81,6 +81,19 @@ function NavBar() {
                         Đặt lịch hẹn
                     </Text>
                 </Link>
+                <Link to={'/doctors'}>
+                    <Text
+                        c={isActive('/doctors') ? 'white' : 'dark'}
+                        size="md"
+                        pr={12}
+                        pl={12}
+                        pt={6}
+                        pb={6}
+                        bg={isActive('/doctors') ? '#5789cf' : 'transparent'}
+                    >
+                        Bác sĩ
+                    </Text>
+                </Link>
                 <Link to={'/service'}>
                     <Text
                         c={isActive('/service') ? 'white' : 'dark'}
