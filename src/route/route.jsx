@@ -44,6 +44,7 @@ import Products from '@pages/shop-dashboard/shop-products';
 import Orders from '@pages/shop-dashboard/shop-orders';
 import Users from '@pages/shop-dashboard/shop-users';
 import Reports from '@pages/shop-dashboard/shop-reports';
+import ShopCategory from '@pages/shop-category/shop-category.dogs';
 
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
@@ -73,6 +74,10 @@ const router = createBrowserRouter(
                 <Route path="search" element={<Search />} />
                 <Route path="cart" element={<Cart />} />
                 <Route path="checkout/:id" element={<Checkout />} />
+                <Route
+                    path="shop-category/:category"
+                    element={<ShopCategory />}
+                />
             </Route>
             <Route path="cart" element={<Cart />} />
 
