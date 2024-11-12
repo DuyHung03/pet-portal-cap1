@@ -102,6 +102,7 @@ function MakeAppointment() {
                 fetchPets();
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [openedPetModal]);
 
     useEffect(() => {
@@ -113,6 +114,7 @@ function MakeAppointment() {
                 fetchDoctors();
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [openedDoctorModal]);
 
     const onSubmitBookingForm = () => {

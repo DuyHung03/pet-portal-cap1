@@ -31,6 +31,7 @@ import PetDetail from '@pages/pet/PetDetail';
 import DoctorRegister from '@pages/service-register/doctor/DoctorRegister';
 import ServiceRegister from '@pages/service-register/ServiceRegister';
 import ShopRegister from '@pages/service-register/shop/ShopRegister';
+import ShopCategory from '@pages/shop-category/shop-category.dogs';
 import Orders from '@pages/shop-dashboard/shop-orders';
 import Overview from '@pages/shop-dashboard/shop-overview';
 import Products from '@pages/shop-dashboard/shop-products';
