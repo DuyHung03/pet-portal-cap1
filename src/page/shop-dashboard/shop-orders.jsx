@@ -1,206 +1,211 @@
-import React, { useState } from 'react';
-import { FiSettings } from 'react-icons/fi';
-
-// Example data
-const orders = [
-    {
-        id: '#2632',
-        name: 'Brooklyn Zoe',
-        address: '302 Snider Street, RUTLAND, VT, 05701',
-        date: '31 Jul 2020',
-        price: '$64.00',
-        status: 'Pending',
-        avatar: 'https://i.pravatar.cc/100?img=3',
-    },
-    {
-        id: '#2633',
-        name: 'Avery Harper',
-        address: '57 Baker Avenue, MESA, AZ, 85202',
-        date: '01 Aug 2020',
-        price: '$72.50',
-        status: 'Completed',
-        avatar: 'https://i.pravatar.cc/100?img=4',
-    },
-    {
-        id: '#2634',
-        name: 'Riley Finn',
-        address: '98 Elm Street, SEATTLE, WA, 98101',
-        date: '02 Aug 2020',
-        price: '$53.20',
-        status: 'Pending',
-        avatar: 'https://i.pravatar.cc/100?img=5',
-    },
-    {
-        id: '#2635',
-        name: 'Jordan Lee',
-        address: '65 Main Street, MIAMI, FL, 33101',
-        date: '03 Aug 2020',
-        price: '$45.00',
-        status: 'Shipped',
-        avatar: 'https://i.pravatar.cc/100?img=6',
-    },
-    {
-        id: '#2636',
-        name: 'Skyler Avery',
-        address: '145 Oak Street, DALLAS, TX, 75201',
-        date: '04 Aug 2020',
-        price: '$80.10',
-        status: 'Pending',
-        avatar: 'https://i.pravatar.cc/100?img=7',
-    },
-    {
-        id: '#2637',
-        name: 'Taylor Quinn',
-        address: '21 Pine Avenue, DENVER, CO, 80201',
-        date: '05 Aug 2020',
-        price: '$67.40',
-        status: 'Completed',
-        avatar: 'https://i.pravatar.cc/100?img=8',
-    },
-    {
-        id: '#2638',
-        name: 'Casey Morgan',
-        address: '32 Cedar Road, SAN FRANCISCO, CA, 94102',
-        date: '06 Aug 2020',
-        price: '$50.50',
-        status: 'Pending',
-        avatar: 'https://i.pravatar.cc/100?img=9',
-    },
-    {
-        id: '#2639',
-        name: 'Jamie Casey',
-        address: '78 Birch Lane, PHOENIX, AZ, 85001',
-        date: '07 Aug 2020',
-        price: '$62.75',
-        status: 'Shipped',
-        avatar: 'https://i.pravatar.cc/100?img=10',
-    },
-    {
-        id: '#2640',
-        name: 'Emery Parker',
-        address: '120 Maple Avenue, NEW YORK, NY, 10001',
-        date: '08 Aug 2020',
-        price: '$79.20',
-        status: 'Completed',
-        avatar: 'https://i.pravatar.cc/100?img=11',
-    },
-    {
-        id: '#2641',
-        name: 'Logan Sage',
-        address: '49 Walnut Street, ATLANTA, GA, 30301',
-        date: '09 Aug 2020',
-        price: '$56.80',
-        status: 'Pending',
-        avatar: 'https://i.pravatar.cc/100?img=12',
-    },
-];
-
-const ROWS_PER_PAGE = 7;
+import React, { useState, useEffect, useRef } from 'react';
+import useFetchData from '@hooks/useFetchData';
+import { FiSettings, FiEdit, FiTrash2 } from 'react-icons/fi';
+import { vietnameseDate } from '../../util/getDateInVietnamese';
+import logo from '../../assets/logo-transparent.png';
 
 function Orders() {
+    const [showActionMenu, setShowActionMenu] = useState(null);
+    const actionMenuRef = useRef(null);
+    const { data } = useFetchData(`/orders`);
+
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = Math.ceil(orders.length / ROWS_PER_PAGE);
+    const ordersPerPage = 10;
+    const totalPages = Math.ceil((data?.data.length || 0) / ordersPerPage);
 
-    const displayedOrders = orders.slice(
-        (currentPage - 1) * ROWS_PER_PAGE,
-        currentPage * ROWS_PER_PAGE,
-    );
-
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+    const toggleActionMenu = (id) => {
+        setShowActionMenu(showActionMenu === id ? null : id);
     };
 
-    return (
-        <div className="p-6 bg-gray-100 min-h-screen">
-            <h1 className="text-3xl font-bold mb-4">Order</h1>
+    const paginateData = () => {
+        const startIndex = (currentPage - 1) * ordersPerPage;
+        return data?.data.slice(startIndex, startIndex + ordersPerPage);
+    };
 
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-                <table className="w-full">
-                    <thead>
-                        <tr className="bg-gray-100 text-left">
-                            <th className="p-4">ID</th>
-                            <th className="p-4">Name</th>
-                            <th className="p-4">Address</th>
-                            <th className="p-4">Date</th>
-                            <th className="p-4">Price</th>
-                            <th className="p-4">Status</th>
-                            <th className="p-4">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {displayedOrders.map((order, index) => (
-                            <tr
-                                key={order.id}
-                                className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}
-                            >
-                                <td className="p-4">{order.id}</td>
-                                <td className="p-4 flex items-center space-x-3">
-                                    <img
-                                        src={order.avatar}
-                                        alt="avatar"
-                                        className="w-8 h-8 rounded-full"
-                                    />
-                                    <span>{order.name}</span>
-                                </td>
-                                <td className="p-4">{order.address}</td>
-                                <td className="p-4">{order.date}</td>
-                                <td className="p-4">{order.price}</td>
-                                <td className="p-4">
-                                    <span
-                                        className={`px-2 py-1 rounded-full text-white text-sm ${
-                                            order.status === 'Pending'
-                                                ? 'bg-red-500'
-                                                : order.status === 'Dispatch'
-                                                  ? 'bg-blue-500'
-                                                  : 'bg-green-500'
-                                        }`}
-                                    >
-                                        {order.status}
-                                    </span>
-                                </td>
-                                <td className="p-4">
-                                    <button className="text-gray-500 hover:text-blue-500">
-                                        <FiSettings className="w-5 h-5" />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                        {displayedOrders.length < ROWS_PER_PAGE &&
-                            Array.from({
-                                length: ROWS_PER_PAGE - displayedOrders.length,
-                            }).map((_, index) => (
-                                <tr
-                                    key={index}
-                                    className="border-b bg-white h-12"
-                                >
-                                    <td className="p-4" colSpan="7"></td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
+    const handlePageChange = (pageNumber) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                actionMenuRef.current &&
+                !actionMenuRef.current.contains(event.target)
+            ) {
+                setShowActionMenu(null);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    return (
+        <div className="px-8 pt-8 pb-5 bg-gray-100 w-full min-h-screen flex flex-col">
+            <div className="flex justify-between items-center mb-8 bg-[#FAFAFC] rounded-xl shadow-md">
+                <div className="flex items-center space-x-4">
+                    <img src={logo} alt="Logo" className="w-16" />
+                    <h1 className="text-2xl font-bold text-[#5789cf]">
+                        Quản Lý Đặt Hàng
+                    </h1>
+                </div>
+                <p className="text-gray-600 text-lg">{vietnameseDate}</p>
             </div>
 
-            <div className="flex justify-between items-center mt-4">
-                <p className="text-gray-600">
-                    Showing {(currentPage - 1) * ROWS_PER_PAGE + 1} -{' '}
-                    {Math.min(currentPage * ROWS_PER_PAGE, orders.length)} of{' '}
-                    {orders.length}
-                </p>
-                <div className="flex space-x-2">
-                    {[...Array(totalPages)].map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handlePageChange(index + 1)}
-                            className={`w-8 h-8 flex items-center justify-center ${
-                                currentPage === index + 1
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-gray-200 hover:bg-blue-500 hover:text-white'
-                            } rounded`}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
+            <div className="bg-white rounded-lg shadow overflow-hidden flex-1">
+                <div className="overflow-x-auto">
+                    <table className="w-full table-fixed">
+                        <thead>
+                            <tr className="bg-gray-100 text-left">
+                                <th className="p-4">ID</th>
+                                <th className="p-4">Total Amount</th>
+                                <th className="p-4">Date</th>
+                                <th className="p-4">Status</th>
+                                <th className="p-4">Order Items</th>
+                                <th className="p-4">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <div className="max-h-[400px] overflow-y-auto">
+                        <table className="w-full table-fixed">
+                            <tbody>
+                                {paginateData()?.map((order, index) => (
+                                    <tr
+                                        key={order.id}
+                                        className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}
+                                    >
+                                        <td className="p-4">{order.id}</td>
+                                        <td className="p-4">
+                                            ${order.total_amount}
+                                        </td>
+                                        <td className="p-4">
+                                            {new Date(
+                                                order.createdAt,
+                                            ).toLocaleDateString()}
+                                        </td>
+                                        <td className="p-4">
+                                            <span
+                                                className={`px-2 py-1 rounded-full text-white text-sm ${
+                                                    order.status === 'Pending'
+                                                        ? 'bg-red-500'
+                                                        : order.status ===
+                                                            'Dispatch'
+                                                          ? 'bg-blue-500'
+                                                          : 'bg-green-500'
+                                                }`}
+                                            >
+                                                {order.status}
+                                            </span>
+                                        </td>
+                                        <td className="p-4">
+                                            {order.OrderItems.map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    className="flex items-center mb-2"
+                                                >
+                                                    <img
+                                                        src={
+                                                            item.Product
+                                                                .image ||
+                                                            'https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg'
+                                                        }
+                                                        alt={item.Product.name}
+                                                        className="w-8 h-8 mr-2 rounded"
+                                                    />
+                                                    <div>
+                                                        <p className="font-semibold">
+                                                            {item.Product.name}
+                                                        </p>
+                                                        <p className="text-sm text-gray-600">
+                                                            {item.quantity} x $
+                                                            {item.unit_price} =
+                                                            ${item.subtotal}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </td>
+
+                                        <td
+                                            className="p-4 relative"
+                                            ref={actionMenuRef}
+                                        >
+                                            <button
+                                                onClick={() =>
+                                                    toggleActionMenu(order.id)
+                                                }
+                                                className="text-gray-500 hover:text-blue-500"
+                                            >
+                                                <FiSettings className="w-5 h-5" />
+                                            </button>
+                                            {showActionMenu === order.id && (
+                                                <div className="absolute right-0 mt-2 w-32 bg-white shadow-lg rounded-lg z-10">
+                                                    <button
+                                                        onClick={() =>
+                                                            alert(
+                                                                `Edit ${order.id}`,
+                                                            )
+                                                        }
+                                                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        <FiEdit className="mr-2" />
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            alert(
+                                                                `Delete ${order.id}`,
+                                                            )
+                                                        }
+                                                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        <FiTrash2 className="mr-2" />
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center mt-4">
+                <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 bg-gray-300 rounded-l hover:bg-gray-400 disabled:opacity-50"
+                >
+                    Previous
+                </button>
+                {[...Array(totalPages)].map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handlePageChange(index + 1)}
+                        className={`px-4 py-2 ${
+                            currentPage === index + 1
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-gray-300 hover:bg-gray-400'
+                        }`}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+                <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 bg-gray-300 rounded-r hover:bg-gray-400 disabled:opacity-50"
+                >
+                    Next
+                </button>
             </div>
         </div>
     );

@@ -11,13 +11,16 @@ const cartSlice = createSlice({
     reducers: {
         loadCartFromStorage(state, action) {
             const userId = action.payload;
-            const savedCart =
-                JSON.parse(localStorage.getItem(getUserCartKey(userId))) || [];
-            state.items = savedCart;
-            state.totalQuantity = savedCart.reduce(
-                (total, item) => total + item.quantity,
-                0,
-            );
+            if (userId) {
+                const savedCart =
+                    JSON.parse(localStorage.getItem(getUserCartKey(userId))) ||
+                    [];
+                state.items = savedCart;
+                state.totalQuantity = savedCart.reduce(
+                    (total, item) => total + item.quantity,
+                    0,
+                );
+            }
         },
         addToCart(state, action) {
             const { userId, item } = action.payload;
@@ -28,10 +31,12 @@ const cartSlice = createSlice({
                 state.items.push(item);
             }
             state.totalQuantity += item.quantity;
-            localStorage.setItem(
-                getUserCartKey(userId),
-                JSON.stringify(state.items),
-            );
+            if (userId) {
+                localStorage.setItem(
+                    getUserCartKey(userId),
+                    JSON.stringify(state.items),
+                );
+            }
         },
         updateItemQuantity(state, action) {
             const { userId, itemId, quantity } = action.payload;
@@ -43,10 +48,12 @@ const cartSlice = createSlice({
                 (total, i) => total + i.quantity,
                 0,
             );
-            localStorage.setItem(
-                getUserCartKey(userId),
-                JSON.stringify(state.items),
-            );
+            if (userId) {
+                localStorage.setItem(
+                    getUserCartKey(userId),
+                    JSON.stringify(state.items),
+                );
+            }
         },
         removeFromCart(state, action) {
             const { userId, itemId } = action.payload;
@@ -55,16 +62,20 @@ const cartSlice = createSlice({
                 (total, item) => total + item.quantity,
                 0,
             );
-            localStorage.setItem(
-                getUserCartKey(userId),
-                JSON.stringify(state.items),
-            );
+            if (userId) {
+                localStorage.setItem(
+                    getUserCartKey(userId),
+                    JSON.stringify(state.items),
+                );
+            }
         },
         clearCart(state, action) {
             const userId = action.payload;
             state.items = [];
             state.totalQuantity = 0;
-            localStorage.removeItem(getUserCartKey(userId));
+            if (userId) {
+                localStorage.removeItem(getUserCartKey(userId));
+            }
         },
     },
 });

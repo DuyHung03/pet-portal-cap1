@@ -26,7 +26,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useAuthStore } from '../../../store/authStore';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadCartFromStorage } from '../../../redux/slice/cartSlice';
+import { clearCart, loadCartFromStorage } from '../../../redux/slice/cartSlice';
 import CartPanel from '../shop-header-cart/shop-header-cart';
 
 function ShopHeader() {
@@ -34,7 +34,7 @@ function ShopHeader() {
     const [isCartOpen, setCartOpen] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { user } = useAuthStore();
+    const { user, logout } = useAuthStore();
 
     const cartItems = useSelector((state) => state.cart.items);
     const cartCount = cartItems.reduce(
@@ -51,7 +51,15 @@ function ShopHeader() {
             navigate(`search?name=${searchValue}`);
         }
     };
-
+    const handleLogout = async () => {
+        try {
+            await logout();
+            // dispatch(clearCart(user.id));
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
+    };
     const handleKeyEnter = (event) => {
         if (event.key === 'Enter') handleSearchClick();
     };
@@ -155,8 +163,10 @@ function ShopHeader() {
                                     </MenuItem>
                                     <MenuItem
                                         leftSection={<Logout color="error" />}
+                                        onClick={handleLogout}
+                                        color="red"
                                     >
-                                        <Link to={'/logout'}>Đăng xuất</Link>
+                                        Đăng xuất
                                     </MenuItem>
                                 </MenuDropdown>
                             </Menu>
