@@ -51,15 +51,6 @@ function ShopDashboardSideBar() {
                 <Divider className="my-4 bg-[#5789cf]" />
 
                 <SidebarLink
-                    to="/shop-dashboard/users"
-                    label="Users"
-                    icon={<People />}
-                    isActive={isActive('/shop-dashboard/users')}
-                />
-
-                <Divider className="my-4 bg-[#5789cf]" />
-
-                <SidebarLink
                     to="/shop-dashboard/reports"
                     label="Reports"
                     icon={<BarChart />}

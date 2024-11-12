@@ -103,7 +103,7 @@ const router = createBrowserRouter(
                 path="/shop-dashboard"
                 element={
                     <ProtectedRoute
-                        allowedRoles={['PetOwner']}
+                        allowedRoles={['Seller']}
                         element={<ShopDashboardLayout />}
                     />
                 }
