@@ -6,14 +6,14 @@ import logo from '../../assets/logo-transparent.png';
 
 function Products() {
     const [currentPage, setCurrentPage] = useState(1);
-    const [skip, setSkip] = useState(1);
+    const [skip, setSkip] = useState(0);
     const [showActionMenu, setShowActionMenu] = useState(null);
     const actionMenuRef = useRef(null);
 
     const params = useMemo(() => ({ limit: 6, skip }), [skip]);
 
     const { data, loading, error } = useFetchData(
-        `/products/panigated`,
+        '/products/panigated',
         params,
     );
 
@@ -44,7 +44,7 @@ function Products() {
     }, []);
 
     return (
-        <div className="px-8 pt-8 pb-5 bg-gray-100 w-full min-h-screen">
+        <div className="px-8 pt-8 pb-5 bg-gray-100 w-full h-[100vh]  max-h-screen ">
             <div className="flex justify-between items-center mb-8 bg-[#FAFAFC] p-6 rounded-xl shadow-md">
                 <div className="flex items-center space-x-4">
                     <img src={logo} alt="Logo" className="w-16" />
@@ -63,77 +63,109 @@ function Products() {
             </div>
 
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr className="bg-gray-100 text-gray-700">
-                            <th className="p-4">ID</th>
-                            <th className="p-4">Tên</th>
-                            <th className="p-4">Category</th>
-                            <th className="p-4">Price</th>
-                            <th className="p-4">Stock</th>
-                            <th className="p-4">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data?.data.map((product, index) => (
-                            <tr
-                                key={product.id}
-                                className={`border-b ${
-                                    index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
-                                } hover:bg-gray-100 transition`}
-                            >
-                                <td className="p-4">{product.id}</td>
-                                <td className="p-4">{product.name}</td>
-                                <td className="p-4">
-                                    {product.Category?.name}
-                                </td>
-                                <td className="p-4">${product.price}</td>
-                                <td className="p-4">
-                                    {product.stock_quantity}
-                                </td>
-                                <td
-                                    className="p-4 relative"
-                                    ref={actionMenuRef}
-                                >
-                                    <button
-                                        onClick={() =>
-                                            toggleActionMenu(product.id)
-                                        }
-                                        className="text-gray-500 hover:text-blue-500"
-                                    >
-                                        <FiSettings className="w-5 h-5" />
-                                    </button>
-                                    {showActionMenu === product.id && (
-                                        <div className="absolute right-0 mt-2 w-32 bg-white shadow-lg rounded-lg z-10">
-                                            <button
-                                                onClick={() =>
-                                                    alert(
-                                                        `Edit ${product.name}`,
-                                                    )
-                                                }
-                                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            >
-                                                <FiEdit className="mr-2" />
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() =>
-                                                    alert(
-                                                        `Delete ${product.name}`,
-                                                    )
-                                                }
-                                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            >
-                                                <FiTrash2 className="mr-2" />
-                                                Delete
-                                            </button>
-                                        </div>
-                                    )}
-                                </td>
+                {loading ? (
+                    <p className="p-4 text-center">Loading...</p>
+                ) : error ? (
+                    <p className="p-4 text-center text-red-500">
+                        Error: {error.message}
+                    </p>
+                ) : (
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-gray-100 text-gray-700">
+                                <th className="p-4">ID</th>
+                                <th className="p-4">Hình Ảnh</th>{' '}
+                                {/* Cột hình ảnh */}
+                                <th className="p-4">Tên</th>
+                                <th className="p-4">Category</th>
+                                <th className="p-4">Price</th>
+                                <th className="p-4">Stock</th>
+                                <th className="p-4">Action</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {data?.data.length > 0 ? (
+                                data.data.map((product, index) => (
+                                    <tr
+                                        key={product.id}
+                                        className={`border-b ${
+                                            index % 2 === 0
+                                                ? 'bg-gray-50'
+                                                : 'bg-white'
+                                        } hover:bg-gray-100 transition`}
+                                    >
+                                        <td className="p-4">{product.id}</td>
+                                        <td className="p-4">
+                                            <img
+                                                src={
+                                                    product.image ||
+                                                    'https://via.placeholder.com/50'
+                                                }
+                                                alt={product.name}
+                                                className="w-12 h-12 object-cover rounded"
+                                            />
+                                        </td>
+                                        <td className="p-4">{product.name}</td>
+                                        <td className="p-4">
+                                            {product.Category?.name}
+                                        </td>
+                                        <td className="p-4">
+                                            ${product.price}
+                                        </td>
+                                        <td className="p-4">
+                                            {product.stock_quantity}
+                                        </td>
+                                        <td
+                                            className="p-4 relative"
+                                            ref={actionMenuRef}
+                                        >
+                                            <button
+                                                onClick={() =>
+                                                    toggleActionMenu(product.id)
+                                                }
+                                                className="text-gray-500 hover:text-blue-500"
+                                            >
+                                                <FiSettings className="w-5 h-5" />
+                                            </button>
+                                            {showActionMenu === product.id && (
+                                                <div className="absolute right-0 mt-2 w-32 bg-white shadow-lg rounded-lg z-10">
+                                                    <button
+                                                        onClick={() =>
+                                                            alert(
+                                                                `Edit ${product.name}`,
+                                                            )
+                                                        }
+                                                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        <FiEdit className="mr-2" />
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            alert(
+                                                                `Delete ${product.name}`,
+                                                            )
+                                                        }
+                                                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        <FiTrash2 className="mr-2" />
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="7" className="p-4 text-center">
+                                        No products found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                )}
             </div>
 
             <div className="flex justify-between items-center mt-5">

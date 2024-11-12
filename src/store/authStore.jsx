@@ -91,8 +91,17 @@ export const useAuthStore = create((set) => {
             set({ isLoading: true, error: null });
             try {
                 await axios.post(`${API_URL}/logout`);
+<<<<<<< HEAD
                 localStorage.clear();
                 localStorage.removeItem('user');
+=======
+                // localStorage.clear();
+                localStorage.removeItem('user');
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('role');
+                localStorage.removeItem('token');
+                localStorage.removeItem('refreshToken');
+>>>>>>> 015e5d2 (update order and category)
 
                 set({
                     user: null,

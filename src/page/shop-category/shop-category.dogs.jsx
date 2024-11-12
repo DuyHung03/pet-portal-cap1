@@ -5,22 +5,30 @@ import ShopNavBar from '../../component/shop/shop-nav/ShopNavBar';
 import CategoryProduct from '../../component/shop/category-product/CategoryProduct';
 import useFetchData from '../../hooks/useFetchData';
 
-function ShopCategory() {
+function ShopCategoryCat() {
     const [skip, setSkip] = useState(0);
     const [categoryProducts, setCategoryProducts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
 
     const params = { limit: 10, skip };
 
-    const { data, loading, error } = useFetchData('/categories/type/', params);
+    const { data, loading, error } = useFetchData(
+        '/categories/type/Product',
+        params,
+    );
 
     useEffect(() => {
         if (data) {
+            const newProducts = data.data.flatMap(
+                (category) => category.CategoryProducts,
+            );
+
             setCategoryProducts((prevProducts) => [
                 ...prevProducts,
-                ...data.data,
+                ...newProducts,
             ]);
-            if (data.data.length < 8) {
+
+            if (newProducts.length < 8) {
                 setHasMore(false);
             }
         }
@@ -34,7 +42,6 @@ function ShopCategory() {
 
     return (
         <Group w={'100%'} gap={0} bg="#f9f9f9">
-            <ShopNavBar />
             <Group
                 w="80%"
                 mx="auto"
@@ -113,4 +120,4 @@ function ShopCategory() {
     );
 }
 
-export default ShopCategory;
+export default ShopCategoryCat;
