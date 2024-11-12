@@ -127,6 +127,8 @@ function DoctorRegister() {
                     cccd_back_image: back_id,
                     certificate_image: certificate,
                     avatar_url: avatar,
+                    date_of_birth: personal_info_form.getValues().birthDate,
+                    phone: personal_info_form.getValues().phoneNumber,
                 },
                 {
                     withCredentials: true,

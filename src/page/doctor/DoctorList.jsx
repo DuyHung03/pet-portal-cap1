@@ -9,6 +9,8 @@ function DoctorList() {
     const { data, loading } = useFetchData('/auth/doctors', params);
     console.log(data?.doctors);
 
+    localStorage.setItem('doctors', JSON.stringify(data?.doctors));
+
     return (
         <Group w={'100%'} justify="center" mb={100}>
             <Group w={1200} p={20}>

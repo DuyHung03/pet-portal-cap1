@@ -1,7 +1,16 @@
-import { Group, Image, Text } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Button, Group, Image, Text } from '@mantine/core';
+import { useAppointment } from '@store/useAppointment';
+import { Link, useNavigate } from 'react-router-dom';
 
 function PetItem({ pet }) {
+    const navigate = useNavigate();
+    const { setPet } = useAppointment();
+
+    const handleMakeAppointment = () => {
+        setPet(pet);
+        navigate('');
+    };
+
     return (
         <Link to={`${pet.id}`} state={pet}>
             <Group
@@ -23,16 +32,27 @@ function PetItem({ pet }) {
                     radius={'12'}
                 />
 
-                <Text w={'100%'}>Tên {pet.name}</Text>
                 <Text w={'100%'}>
-                    {pet.Category.name}: {pet.breed}
+                    <b>Tên:</b> {pet.name}
                 </Text>
-                <Text w={'100%'}>Tuổi: {pet.age}</Text>
-                {/* <Button w={'100%'} bg="#5789cf">
-                    <Link to={'/doctors'} state={pet}>
+                <Text w={'100%'}>
+                    <b>{pet.Category.name}:</b> {pet.breed}
+                </Text>
+                <Text w={'100%'}>
+                    <b>Tuổi:</b> {pet.age}
+                </Text>
+                <Link
+                    to={'/appointment/make-appointment'}
+                    style={{ width: '100%' }}
+                >
+                    <Button
+                        onClick={handleMakeAppointment}
+                        w={'100%'}
+                        bg="#5789cf"
+                    >
                         Đặt lịch khám bệnh
-                    </Link>
-                </Button> */}
+                    </Button>
+                </Link>
             </Group>
         </Link>
     );

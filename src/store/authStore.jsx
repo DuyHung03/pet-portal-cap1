@@ -92,6 +92,7 @@ export const useAuthStore = create((set) => {
             try {
                 await axios.post(`${API_URL}/logout`);
                 localStorage.clear();
+                localStorage.removeItem('user');
 
                 set({
                     user: null,

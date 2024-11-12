@@ -36,9 +36,9 @@ function Appointment({ appointment }) {
                 <Text w={'100%'} ta={'center'} size="lg" fw={500}>
                     {appointment.Pet.PetOwner.username}
                 </Text>
-                <Text w={'100%'} ta={'center'}>
+                {/* <Text w={'100%'} ta={'center'}>
                     {appointment.Service.name}
-                </Text>
+                </Text> */}
                 <Group w={'100%'} justify="space-evenly">
                     <Text size="md">
                         <WatchLater color="action" />{' '}

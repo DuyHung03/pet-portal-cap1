@@ -26,7 +26,6 @@ function Header({ title }) {
     const { user, logout } = useAuthStore();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    console.log(user);
 
     const handleLogout = async () => {
         try {

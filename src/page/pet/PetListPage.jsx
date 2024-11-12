@@ -27,6 +27,10 @@ function PetListPage() {
     );
     console.log(data);
 
+    if (data?.data) {
+        localStorage.setItem('pets', JSON.stringify(data.data));
+    }
+
     console.log(error);
 
     return (

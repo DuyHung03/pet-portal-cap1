@@ -125,28 +125,28 @@ function AppoinmentDetails() {
                                 <Text fs={'italic'} fw={600} c={'dark.3'}>
                                     Tên dịch vụ:
                                 </Text>
-                                <Text fw={600} c={'dark.5'}>
+                                {/* <Text fw={600} c={'dark.5'}>
                                     {appointment.Service.name}
-                                </Text>
+                                </Text> */}
                             </Flex>
 
-                            <Flex align={'center'} gap={10} w={'100%'}>
+                            {/* <Flex align={'center'} gap={10} w={'100%'}>
                                 <Text fs={'italic'} fw={600} c={'dark.3'}>
                                     Mô tả dịch vụ:
                                 </Text>
                                 <Text fw={600} c={'dark.5'}>
                                     {appointment.Service.description}
                                 </Text>
-                            </Flex>
+                            </Flex> */}
 
-                            <Flex align={'center'} gap={10} w={'100%'}>
+                            {/* <Flex align={'center'} gap={10} w={'100%'}>
                                 <Text fs={'italic'} fw={600} c={'dark.3'}>
                                     Giá dịch vụ:
                                 </Text>
                                 <Text fw={600} c={'dark.5'}>
                                     {appointment.Service.price} USD
                                 </Text>
-                            </Flex>
+                            </Flex> */}
 
                             <Flex align={'center'} gap={10} w={'100%'}>
                                 <Text fs={'italic'} fw={600} c={'dark.3'}>

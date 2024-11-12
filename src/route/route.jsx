@@ -20,14 +20,22 @@ import Shop from '../page/shop/Shop';
 
 // trước khi config
 import NoneFooterLayout from '@layout/NoneFooterLayout';
+import ShopDashboardLayout from '@layout/ShopDashboard';
 import AppointmentList from '@pages/appointment/AppointmentsPage';
-import DoctorList from '@pages/appointment/doctor/DoctorList';
+import AppointmentSumary from '@pages/appointment/AppointmentSumary';
 import MakeAppointment from '@pages/appointment/MakeAppointment';
+import Checkout from '@pages/checkout/checkout';
+import DoctorList from '@pages/doctor/DoctorList';
 import AddNewPet from '@pages/pet/AddNewPet';
 import PetDetail from '@pages/pet/PetDetail';
 import DoctorRegister from '@pages/service-register/doctor/DoctorRegister';
 import ServiceRegister from '@pages/service-register/ServiceRegister';
 import ShopRegister from '@pages/service-register/shop/ShopRegister';
+import Orders from '@pages/shop-dashboard/shop-orders';
+import Overview from '@pages/shop-dashboard/shop-overview';
+import Products from '@pages/shop-dashboard/shop-products';
+import Reports from '@pages/shop-dashboard/shop-reports';
+import Users from '@pages/shop-dashboard/shop-users';
 import DoctorDashboardLayout from '../layout/DoctorDashboardLayout';
 import PostLayout from '../layout/PostLayout';
 import Cart from '../page/cart/Cart';
@@ -37,13 +45,6 @@ import PetListPage from '../page/pet/PetListPage';
 import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
-import Checkout from '@pages/checkout/checkout';
-import ShopDashboardLayout from '@layout/ShopDashboard';
-import Overview from '@pages/shop-dashboard/shop-overview';
-import Products from '@pages/shop-dashboard/shop-products';
-import Orders from '@pages/shop-dashboard/shop-orders';
-import Users from '@pages/shop-dashboard/shop-users';
-import Reports from '@pages/shop-dashboard/shop-reports';
 
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
@@ -180,6 +181,10 @@ const router = createBrowserRouter(
             >
                 <Route index element={<AppointmentList />} />
                 <Route path="make-appointment" element={<MakeAppointment />} />
+                <Route
+                    path="make-appointment/confirmation"
+                    element={<AppointmentSumary />}
+                />
             </Route>
 
             <Route
