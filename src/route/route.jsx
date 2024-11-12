@@ -74,6 +74,10 @@ const router = createBrowserRouter(
                 <Route path="search" element={<Search />} />
                 <Route path="cart" element={<Cart />} />
                 <Route path="checkout/:id" element={<Checkout />} />
+                <Route
+                    path="shop-category/:category"
+                    element={<ShopCategory />}
+                />
             </Route>
             <Route path="cart" element={<Cart />} />
 
@@ -99,7 +103,7 @@ const router = createBrowserRouter(
                 path="/shop-dashboard"
                 element={
                     <ProtectedRoute
-                        allowedRoles={['PetOwner']}
+                        allowedRoles={['Seller']}
                         element={<ShopDashboardLayout />}
                     />
                 }

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { removeListener } from 'process';
 import { create } from 'zustand';
 
 const API_URL = 'http://localhost:4000/api/v1/auth';
@@ -92,7 +93,15 @@ export const useAuthStore = create((set) => {
             try {
                 await axios.post(`${API_URL}/logout`);
                 localStorage.clear();
+<<<<<<< HEAD
                 localStorage.removeItem('user');
+=======
+                // localStorage.removeItem('user');
+                // localStorage.removeItem('isAuthenticated');
+                // localStorage.removeItem('role');
+                // localStorage.removeItem('token');
+                // localStorage.removeItem('refreshToken');
+>>>>>>> 966eaa17349e5b1ce47821c02e0575dfe272f69d
 
                 set({
                     user: null,
