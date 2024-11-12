@@ -31,7 +31,6 @@ import PetDetail from '@pages/pet/PetDetail';
 import DoctorRegister from '@pages/service-register/doctor/DoctorRegister';
 import ServiceRegister from '@pages/service-register/ServiceRegister';
 import ShopRegister from '@pages/service-register/shop/ShopRegister';
-import ShopCategory from '@pages/shop-category/shop-category.dogs';
 import Orders from '@pages/shop-dashboard/shop-orders';
 import Overview from '@pages/shop-dashboard/shop-overview';
 import Products from '@pages/shop-dashboard/shop-products';
@@ -46,17 +45,7 @@ import PetListPage from '../page/pet/PetListPage';
 import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
-<<<<<<< HEAD
-=======
-import Checkout from '@pages/checkout/checkout';
-import ShopDashboardLayout from '@layout/ShopDashboard';
-import Overview from '@pages/shop-dashboard/shop-overview';
-import Products from '@pages/shop-dashboard/shop-products';
-import Orders from '@pages/shop-dashboard/shop-orders';
-import Users from '@pages/shop-dashboard/shop-users';
-import Reports from '@pages/shop-dashboard/shop-reports';
 import ShopCategoryCat from '@pages/shop-category/shop-category.dogs';
->>>>>>> 015e5d2 (update order and category)
 
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
