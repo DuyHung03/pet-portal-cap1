@@ -75,7 +75,7 @@ function Product({ product }) {
                 <Group position="center" mt={'xs'}>
                     <Badge color="blue">{product.Category.name}</Badge>
                     <Text c={'red'} fw={700}>
-                        $ {product.price}
+                        {product.price} VND
                     </Text>
                 </Group>
                 <Group position="center" mt={'md'}>

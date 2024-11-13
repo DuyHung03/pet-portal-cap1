@@ -37,7 +37,7 @@ function MakeAppointment() {
         openedDoctorModal,
         { open: openDoctorModal, close: closeDoctorModal },
     ] = useDisclosure(false);
-
+    console.log(doctor);
     const [pets, setPets] = useState([]);
     const [doctors, setDoctors] = useState([]);
 
@@ -65,8 +65,11 @@ function MakeAppointment() {
     });
 
     let timeSlots = [];
-    if (doctor) {
-        timeSlots = generateTimeSlots(doctor.opening_time, doctor.closing_time);
+    if (doctor != null) {
+        timeSlots = generateTimeSlots(
+            doctor?.opening_time,
+            doctor?.closing_time,
+        );
     }
 
     const formattedDate = form.getValues().date

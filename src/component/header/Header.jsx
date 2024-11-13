@@ -16,6 +16,7 @@ import {
     ExpandMore,
     Logout,
     MedicalInformation,
+    Store,
 } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -131,6 +132,18 @@ function Header({ title }) {
                                             target="_blank"
                                         >
                                             Quản lý phòng khám
+                                        </Link>
+                                    </MenuItem>
+                                ) : null}
+                                {user?.role?.includes('Seller') ? (
+                                    <MenuItem
+                                        leftSection={<Store color="action" />}
+                                    >
+                                        <Link
+                                            to={'/shop-dashboard'}
+                                            target="_blank"
+                                        >
+                                            Quản lý cửa hàng
                                         </Link>
                                     </MenuItem>
                                 ) : null}
