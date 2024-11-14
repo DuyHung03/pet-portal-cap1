@@ -23,7 +23,7 @@ import { generateTimeSlots } from '@util/generateTimeSlots';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DoctorItem from './DoctorItem';
 import PetItem from './PetItem';
 
@@ -156,15 +156,28 @@ function MakeAppointment() {
                 <Text w={'100%'} ta={'center'} p={20} fw={500} size="lg">
                     Chọn thú cưng để đặt lịch
                 </Text>
-                <SimpleGrid w={'100%'} cols={2}>
-                    {pets.map((pet, index) => (
-                        <PetItem
-                            key={index}
-                            pet={pet}
-                            closePetModal={closePetModal}
-                        />
-                    ))}
-                </SimpleGrid>
+                {pets?.length > 0 ? (
+                    <SimpleGrid w={'100%'} cols={2}>
+                        {pets.map((pet, index) => (
+                            <PetItem
+                                key={index}
+                                pet={pet}
+                                closePetModal={closePetModal}
+                            />
+                        ))}
+                    </SimpleGrid>
+                ) : (
+                    <Group w={'100%'} justify="center">
+                        <Text fs={'italic'} c={'gray'} w={'100%'} ta={'center'}>
+                            Bạn chưa có thú cưng nào trong danh sách
+                        </Text>
+                        <Link to={'/your-pet/add-new-pet'}>
+                            <Button leftSection={<Add />}>
+                                Thêm thú cưng của bạn
+                            </Button>
+                        </Link>
+                    </Group>
+                )}
             </Modal>
 
             <Modal
@@ -177,15 +190,21 @@ function MakeAppointment() {
                 <Text w={'100%'} ta={'center'} p={20} fw={500} size="lg">
                     Chọn bác sĩ để đặt lịch
                 </Text>
-                <SimpleGrid w={'100%'} cols={2}>
-                    {doctors.map((doctor, index) => (
-                        <DoctorItem
-                            key={index}
-                            doctor={doctor}
-                            closeDoctorModal={closeDoctorModal}
-                        />
-                    ))}
-                </SimpleGrid>
+                {!doctors?.length > 0 ? (
+                    <Text w={'100%'} p={20} ta={'center'} fs={'italic'}>
+                        Không tìm thấy bác sĩ
+                    </Text>
+                ) : (
+                    <SimpleGrid w={'100%'} cols={2}>
+                        {doctors.map((doctor, index) => (
+                            <DoctorItem
+                                key={index}
+                                doctor={doctor}
+                                closeDoctorModal={closeDoctorModal}
+                            />
+                        ))}
+                    </SimpleGrid>
+                )}
             </Modal>
 
             <Group

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
 import useFetchData from '@hooks/useFetchData';
 import {
-    Chart as ChartJS,
     CategoryScale,
+    Chart as ChartJS,
+    Legend,
     LinearScale,
-    PointElement,
     LineElement,
+    PointElement,
     Title,
     Tooltip,
-    Legend,
 } from 'chart.js';
+import { useEffect, useState } from 'react';
+import { Line } from 'react-chartjs-2';
 import { Oval } from 'react-loader-spinner';
 
 ChartJS.register(

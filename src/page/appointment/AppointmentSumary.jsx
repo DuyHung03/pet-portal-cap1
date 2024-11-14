@@ -146,7 +146,7 @@ function AppointmentSummary() {
                     Quay lại
                 </Button>
                 <Button onClick={handleBooking} loading={loading}>
-                    Hoàn tất
+                    Đặt lịch
                 </Button>
             </Group>
         </Group>

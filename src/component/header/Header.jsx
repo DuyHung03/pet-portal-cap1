@@ -9,13 +9,12 @@ import {
     MenuItem,
     MenuTarget,
     Text,
-    UnstyledButton,
 } from '@mantine/core';
 import {
     AccountCircle,
-    ExpandMore,
     Logout,
     MedicalInformation,
+    Store,
 } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -45,10 +44,6 @@ function Header({ title }) {
             pb={15}
             justify="center"
             align="center"
-            style={{
-                boxShadow: 'rgba(33, 35, 38, 0.1) 0px 10px 10px -10px',
-                zIndex: '100',
-            }}
         >
             <Group
                 display={'flex'}
@@ -93,21 +88,20 @@ function Header({ title }) {
                     </Group>
                 ) : (
                     <Group>
-                        <Avatar
-                            size={'lg'}
-                            allowedInitialsColors={'#dfe6e9'}
-                            src={user.avatar_url}
-                            name={user.username}
-                            color="initials"
-                        />
-                        <Text size="lg" fw={600} c={'gray'}>
-                            {user.username}
-                        </Text>
-                        <Menu shadow="sm">
+                        <Menu trigger="hover" shadow="sm">
                             <MenuTarget>
-                                <UnstyledButton>
-                                    <ExpandMore color="action" />
-                                </UnstyledButton>
+                                <Group style={{ cursor: 'pointer' }}>
+                                    <Avatar
+                                        size={'lg'}
+                                        allowedInitialsColors={'#dfe6e9'}
+                                        src={user.avatar_url}
+                                        name={user.username}
+                                        color="initials"
+                                    />
+                                    <Text size="lg" fw={600} c={'gray'}>
+                                        {user.username}
+                                    </Text>
+                                </Group>
                             </MenuTarget>
 
                             <MenuDropdown>
@@ -117,7 +111,7 @@ function Header({ title }) {
                                     }
                                 >
                                     <Link to={'/account'}>
-                                        Thông tin cá nhân
+                                        Quản lý tài khoản
                                     </Link>
                                 </MenuItem>
                                 {user?.role?.includes('Doctor') ? (
@@ -134,6 +128,19 @@ function Header({ title }) {
                                         </Link>
                                     </MenuItem>
                                 ) : null}
+                                {user?.role?.includes('Seller') ? (
+                                    <MenuItem
+                                        leftSection={<Store color="action" />}
+                                    >
+                                        <Link
+                                            to={'/shop-dashboard'}
+                                            target="_blank"
+                                        >
+                                            Quản lý cửa hàng
+                                        </Link>
+                                    </MenuItem>
+                                ) : null}
+                                <Menu.Divider />
                                 <MenuItem
                                     leftSection={<Logout color="error" />}
                                     onClick={handleLogout}

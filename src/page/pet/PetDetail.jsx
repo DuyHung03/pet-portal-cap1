@@ -13,6 +13,7 @@ import {
     Modal,
     NumberInput,
     Select,
+    SimpleGrid,
     Text,
     Textarea,
     TextInput,
@@ -28,9 +29,10 @@ import {
     Settings,
 } from '@mui/icons-material';
 import axiosInstance from '@network/httpRequest';
+import { useAppointment } from '@store/useAppointment';
 import { useMutation } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { uploadImage } from '../../util/firebaseUtils';
 
 function PetDetail() {
@@ -46,6 +48,8 @@ function PetDetail() {
     const navigate = useNavigate();
     const [file, setFile] = useState(null);
     const resetRef = useRef(null);
+    const { setPet } = useAppointment();
+
     let changedFields = {};
     const form = useForm({
         initialValues: {
@@ -141,9 +145,14 @@ function PetDetail() {
         closeLoading();
     };
 
+    const handleMakeAppointment = () => {
+        setPet(pet);
+        navigate('');
+    };
+
     return (
         <Group w={'100%'} justify="center" p={20}>
-            <Group w={1200}>
+            <Group w={800}>
                 <Group w={'100%'} h={'100%'}>
                     <LoadingOverlay
                         visible={visible}
@@ -152,16 +161,17 @@ function PetDetail() {
                         loaderProps={{ color: '#5789cf', type: 'bars' }}
                     />
                 </Group>
+                <Button
+                    radius={'lg'}
+                    onClick={() => navigate(-1)}
+                    variant="subtle"
+                    color={'#5789cf'}
+                    leftSection={<ArrowBackIos />}
+                >
+                    Quay lại
+                </Button>
                 <Group w={'100%'} justify="space-between">
                     <Group align="center">
-                        <Button
-                            radius={'lg'}
-                            onClick={() => navigate(-1)}
-                            variant="subtle"
-                            color={'#5789cf'}
-                        >
-                            <ArrowBackIos />
-                        </Button>
                         <Text fw={500} c={'#5789CF'} size={'26px'}>
                             Thông tin thú cưng
                         </Text>
@@ -195,8 +205,8 @@ function PetDetail() {
                     </Menu>
                 </Group>
                 <Divider w={'100%'} />
-                <Group align="flex-start" gap={60}>
-                    <Group w={380}>
+                <SimpleGrid cols={2} spacing={'xl'}>
+                    <Group w={'100%'}>
                         <Image
                             radius={'xl'}
                             style={{
@@ -212,65 +222,76 @@ function PetDetail() {
                             }
                         />
                     </Group>
-                    <Flex direction={'column'} gap={10}>
-                        <Flex align={'center'} gap={10} w={'100%'}>
-                            <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                Tên thú cưng:
-                            </Text>
-                            <Text fw={600} c={'dark.5'}>
-                                {pet.name}
-                            </Text>
+                    <Group w={'100%'} justify={'space-between'} align="center">
+                        <Flex direction={'column'} w={'100%'} gap={10}>
+                            <Flex align={'center'} gap={10} w={'100%'}>
+                                <Text fs={'italic'} fw={600} c={'dark.3'}>
+                                    Tên thú cưng:
+                                </Text>
+                                <Text fw={600} c={'dark.5'}>
+                                    {pet.name}
+                                </Text>
+                            </Flex>
+                            <Flex align={'center'} gap={10} w={'100%'}>
+                                <Text fs={'italic'} fw={600} c={'dark.3'}>
+                                    Giống:
+                                </Text>
+                                <Text fw={600} c={'dark.5'}>
+                                    {pet.Category.name}
+                                </Text>
+                            </Flex>
+                            <Flex align={'center'} gap={10} w={'100%'}>
+                                <Text fs={'italic'} fw={600} c={'dark.3'}>
+                                    Loài:
+                                </Text>
+                                <Text fw={600} c={'dark.5'}>
+                                    {pet.breed}
+                                </Text>
+                            </Flex>
+                            <Flex align={'center'} gap={10} w={'100%'}>
+                                <Text fs={'italic'} fw={600} c={'dark.3'}>
+                                    Giới tính:
+                                </Text>
+                                <Text fw={600} c={'dark.5'}>
+                                    {pet.gender}
+                                </Text>
+                            </Flex>
+                            <Flex align={'center'} gap={10} w={'100%'}>
+                                <Text fs={'italic'} fw={600} c={'dark.3'}>
+                                    Tuổi:
+                                </Text>
+                                <Text fw={600} c={'dark.5'}>
+                                    {pet.age}
+                                </Text>
+                            </Flex>
+                            <Flex align={'center'} gap={10} w={'100%'}>
+                                <Text fs={'italic'} fw={600} c={'dark.3'}>
+                                    Mô tả:
+                                </Text>
+                                <Text fw={600} c={'dark.5'}>
+                                    {pet.description}
+                                </Text>
+                            </Flex>
+                            <Flex align={'center'} gap={10} w={'100%'}>
+                                <Text fs={'italic'} fw={600} c={'dark.3'}>
+                                    Lịch sử y tế:
+                                </Text>
+                                <Text fw={600} c={'dark.5'}>
+                                    {pet.medical_history}
+                                </Text>
+                            </Flex>
                         </Flex>
-                        <Flex align={'center'} gap={10} w={'100%'}>
-                            <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                Giống:
-                            </Text>
-                            <Text fw={600} c={'dark.5'}>
-                                {pet.Category.name}
-                            </Text>
-                        </Flex>
-                        <Flex align={'center'} gap={10} w={'100%'}>
-                            <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                Loài:
-                            </Text>
-                            <Text fw={600} c={'dark.5'}>
-                                {pet.breed}
-                            </Text>
-                        </Flex>
-                        <Flex align={'center'} gap={10} w={'100%'}>
-                            <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                Giới tính:
-                            </Text>
-                            <Text fw={600} c={'dark.5'}>
-                                {pet.gender}
-                            </Text>
-                        </Flex>
-                        <Flex align={'center'} gap={10} w={'100%'}>
-                            <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                Tuổi:
-                            </Text>
-                            <Text fw={600} c={'dark.5'}>
-                                {pet.age}
-                            </Text>
-                        </Flex>
-                        <Flex align={'center'} gap={10} w={'100%'}>
-                            <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                Mô tả:
-                            </Text>
-                            <Text fw={600} c={'dark.5'}>
-                                {pet.description}
-                            </Text>
-                        </Flex>
-                        <Flex align={'center'} gap={10} w={'100%'}>
-                            <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                Lịch sử y tế:
-                            </Text>
-                            <Text fw={600} c={'dark.5'}>
-                                {pet.medical_history}
-                            </Text>
-                        </Flex>
-                    </Flex>
-                </Group>
+                        <Link to={'/appointment/make-appointment'}>
+                            <Button
+                                onClick={handleMakeAppointment}
+                                w={'100%'}
+                                bg="#5789cf"
+                            >
+                                Đặt lịch khám bệnh
+                            </Button>
+                        </Link>
+                    </Group>
+                </SimpleGrid>
             </Group>
             <Modal
                 opened={opened}
@@ -283,12 +304,12 @@ function PetDetail() {
                     Bạn có chắc muốn xóa <b>{pet.name}</b> khỏi danh sách thú
                     cưng?
                 </Text>
-                <Group w={'100%'} justify="space-evenly">
-                    <Button color="red" onClick={handleDeletePet}>
-                        Xóa
+                <Group mt="lg" justify="flex-end">
+                    <Button onClick={close} variant="default">
+                        Cancel
                     </Button>
-                    <Button color="gray" onClick={close}>
-                        Quay lại
+                    <Button onClick={handleDeletePet} color="red">
+                        Delete
                     </Button>
                 </Group>
             </Modal>

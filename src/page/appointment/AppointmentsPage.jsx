@@ -32,7 +32,7 @@ function AppointmentsPage() {
                     </Text>
                     <Link to={'make-appointment'}>
                         <Button leftSection={<Add />} bg={'#5789CF'}>
-                            Đặt lịch hẹn
+                            Đặt lịch khám
                         </Button>
                     </Link>
                 </Flex>

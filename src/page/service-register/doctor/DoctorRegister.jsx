@@ -19,21 +19,24 @@ import {
 } from '@mantine/core';
 import { DateInput, TimeInput } from '@mantine/dates';
 import { hasLength, useForm } from '@mantine/form';
-import { AddAPhoto } from '@mui/icons-material';
+import { AddAPhoto, ArrowBack } from '@mui/icons-material';
 import axiosInstance from '@network/httpRequest';
 import { useAuthStore } from '@store/authStore';
 import { uploadImage } from '@util/firebaseUtils';
+import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { useRef, useState } from 'react';
 import { IMaskInput } from 'react-imask';
+import { useNavigate } from 'react-router-dom';
 import registeredDocument from '../../../assets/registered-document.png';
 import vet from '../../../assets/vet.png';
 import DetailSummary from './DetailSummary';
 
 function DoctorRegister() {
+    const navigate = useNavigate();
     const [active, setActive] = useState(0);
     const { user } = useAuthStore();
-    const [avatarUrl, setAvatarUrl] = useState(null);
+    const [doctorAvatarUrl, setDoctorAvatarUrl] = useState(null);
     const [certificateUrl, setCertificateUrl] = useState(null);
     const [front_ID, setFront_ID] = useState(null);
     const [back_ID, setBack_ID] = useState(null);
@@ -43,7 +46,11 @@ function DoctorRegister() {
         initialValues: {
             fullName: user.username,
             gender: user.gender,
-            birthDate: user.date_of_birth,
+            birthDate: user.date_of_birth
+                ? dayjs(user.date_of_birth, 'DD/MM/YYYY').isValid()
+                    ? dayjs(user.date_of_birth, 'DD/MM/YYYY').toDate()
+                    : null
+                : null,
             phoneNumber: user.phone,
             email: user.email,
         },
@@ -101,7 +108,7 @@ function DoctorRegister() {
     const handleRegisterDoctor = async () => {
         setLoading(true);
         try {
-            const avatar = await uploadImage(avatarUrl);
+            const doctorAvatar = await uploadImage(doctorAvatarUrl);
             const certificate = await uploadImage(certificateUrl, (process) =>
                 console.log(process),
             );
@@ -116,19 +123,25 @@ function DoctorRegister() {
                 'admin/upgrade-to-doctor',
                 {
                     userId: user.id,
-                    cccd: doctor_info_form.getValues().id_number,
                     clinic_address: doctor_info_form.getValues().clinicAddress,
                     practice_certificate:
                         doctor_info_form.getValues().certification_number,
                     experience_years: doctor_info_form.getValues().experience,
                     opening_time: doctor_info_form.getValues().workingHourOpen,
                     closing_time: doctor_info_form.getValues().workingHourClose,
-                    cccd_front_image: front_id,
-                    cccd_back_image: back_id,
                     certificate_image: certificate,
-                    avatar_url: avatar,
-                    date_of_birth: personal_info_form.getValues().birthDate,
-                    phone: personal_info_form.getValues().phoneNumber,
+                    doctor_avatar: doctorAvatar,
+                    ...(user.cccd
+                        ? {}
+                        : {
+                              cccd: doctor_info_form.getValues().id_number,
+                              cccd_front_image: front_id,
+                              cccd_back_image: back_id,
+                              date_of_birth: dayjs(
+                                  personal_info_form.getValues().birthDate,
+                              ).format('DD/MM/YYYY'),
+                              phone: personal_info_form.getValues().phoneNumber,
+                          }),
                 },
                 {
                     withCredentials: true,
@@ -149,6 +162,32 @@ function DoctorRegister() {
         }
     };
 
+    if (user.doctor_avatar) {
+        return (
+            <Flex
+                direction={'column'}
+                w={'100%'}
+                justify="center"
+                align="center"
+                p={60}
+                gap={20}
+            >
+                <Image src={registeredDocument} w={160} />
+                <Text c={'green'} fw={600} size="28px">
+                    Đã đăng kí
+                </Text>
+                <Text size="lg">
+                    Tài khoản đã được đăng kí dịch vụ <b>Bác sĩ thú y</b>.
+                </Text>
+                <Button
+                    leftSection={<ArrowBack />}
+                    onClick={() => navigate(-1)}
+                >
+                    Quay lại
+                </Button>
+            </Flex>
+        );
+    }
     return (
         <Group w={'100%'} justify="center" mb={80} mt={30}>
             <Group
@@ -169,7 +208,7 @@ function DoctorRegister() {
                     active={active}
                     onStepClick={setActive}
                     w={'100%'}
-                    allowNextStepsSelect={false}
+                    // allowNextStepsSelect={false}
                 >
                     <Stepper.Step
                         label="Thông tin cá nhân"
@@ -195,13 +234,13 @@ function DoctorRegister() {
                                         label="Giới tính"
                                         placeholder="Chọn giới tính"
                                         data={[
-                                            { value: 'male', label: 'Nam' },
+                                            { value: 'Nam', label: 'Nam' },
                                             {
-                                                value: 'female',
+                                                value: 'Nữ',
                                                 label: 'Nữ',
                                             },
                                             {
-                                                value: 'other',
+                                                value: 'Khác',
                                                 label: 'Khác',
                                             },
                                         ]}
@@ -260,11 +299,13 @@ function DoctorRegister() {
                                 justify="center"
                                 align="flex-start"
                             >
-                                {avatarUrl ? (
+                                {doctorAvatarUrl ? (
                                     <Avatar
                                         size={200}
                                         mah={350}
-                                        src={URL.createObjectURL(avatarUrl)}
+                                        src={URL.createObjectURL(
+                                            doctorAvatarUrl,
+                                        )}
                                     />
                                 ) : (
                                     <Text
@@ -279,7 +320,7 @@ function DoctorRegister() {
                                 <FileButton
                                     resetRef={resetRef}
                                     accept="image/png,image/jpeg,image/jpg"
-                                    onChange={setAvatarUrl}
+                                    onChange={setDoctorAvatarUrl}
                                 >
                                     {(props) => (
                                         <Button
@@ -516,8 +557,8 @@ function DoctorRegister() {
                             data={{
                                 personalInfo: personal_info_form.values,
                                 doctorInfo: doctor_info_form.values,
-                                avatarUrl: avatarUrl
-                                    ? URL.createObjectURL(avatarUrl)
+                                doctorAvatarUrl: doctorAvatarUrl
+                                    ? URL.createObjectURL(doctorAvatarUrl)
                                     : null,
                                 certificateUrl: certificateUrl
                                     ? URL.createObjectURL(certificateUrl)
@@ -542,7 +583,7 @@ function DoctorRegister() {
                                 onClick={handleRegisterDoctor}
                                 loading={loading}
                             >
-                                Hoàn tất
+                                Đăng kí
                             </Button>
                         </Group>
                     </Stepper.Step>

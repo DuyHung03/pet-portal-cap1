@@ -7,7 +7,6 @@ function DoctorList() {
     const params = useMemo(() => [], []);
 
     const { data, loading } = useFetchData('/auth/doctors', params);
-    console.log(data?.doctors);
 
     localStorage.setItem('doctors', JSON.stringify(data?.doctors));
 

@@ -1,7 +1,7 @@
 import { Badge, Button, Group, Image, Text } from '@mantine/core';
 import { useAppointment } from '@store/useAppointment';
 import { isOpen } from '@util/checkOpeningHours';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function DoctorItem({ doctor }) {
     const status = isOpen(doctor.opening_time, doctor.closing_time);
@@ -51,7 +51,7 @@ function DoctorItem({ doctor }) {
             </Group>
             <Group>
                 <Button radius={'xl'} w={'100%'} variant="light">
-                    Xem thông tin
+                    <Link to={`${doctor.id}`}>Xem thông tin</Link>
                 </Button>
                 <Button
                     radius={'xl'}

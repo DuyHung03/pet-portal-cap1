@@ -12,7 +12,16 @@ function NavBar() {
     };
 
     return (
-        <Group w={'100%'} justify="center" align="center" bg={'#f5f5f5'}>
+        <Group
+            w={'100%'}
+            justify="center"
+            align="center"
+            bg={'#f5f5f5'}
+            style={{
+                boxShadow: 'rgba(33, 35, 38, 0.1) 0px 10px 10px -10px',
+                zIndex: '100',
+            }}
+        >
             <Group maw={1440}>
                 <Link to={'/'}>
                     <Text
@@ -78,7 +87,7 @@ function NavBar() {
                             isActive('/appointment') ? '#5789cf' : 'transparent'
                         }
                     >
-                        Đặt lịch hẹn
+                        Đặt lịch khám
                     </Text>
                 </Link>
                 <Link to={'/doctors'}>

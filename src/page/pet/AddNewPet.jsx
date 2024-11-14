@@ -1,5 +1,6 @@
 import {
     Button,
+    Divider,
     FileButton,
     Flex,
     Grid,
@@ -81,7 +82,7 @@ function AddNewPet() {
             console.log(err);
         },
         onSuccess: () => {
-            navigate(-1);
+            navigate('/your-pet');
         },
     });
 
@@ -99,6 +100,7 @@ function AddNewPet() {
                     </Text>
                     <Pets htmlColor="#5789cf" fontSize={'large'} />
                 </Group>
+                <Divider w={'100%'} />
                 <Grid justify="center" p={20} gutter={'xl'}>
                     <GridCol span={'auto'}>
                         <form onSubmit={form.onSubmit(handleSubmit)}>

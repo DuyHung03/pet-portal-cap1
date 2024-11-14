@@ -26,6 +26,7 @@ import AppointmentSumary from '@pages/appointment/AppointmentSumary';
 import MakeAppointment from '@pages/appointment/MakeAppointment';
 import Checkout from '@pages/checkout/checkout';
 import DoctorList from '@pages/doctor/DoctorList';
+import DoctorProfile from '@pages/doctor/DoctorProfile';
 import AddNewPet from '@pages/pet/AddNewPet';
 import PetDetail from '@pages/pet/PetDetail';
 import DoctorRegister from '@pages/service-register/doctor/DoctorRegister';
@@ -37,6 +38,7 @@ import Overview from '@pages/shop-dashboard/shop-overview';
 import Products from '@pages/shop-dashboard/shop-products';
 import Reports from '@pages/shop-dashboard/shop-reports';
 import Users from '@pages/shop-dashboard/shop-users';
+import Profile from '@pages/user/Profile';
 import DoctorDashboardLayout from '../layout/DoctorDashboardLayout';
 import PostLayout from '../layout/PostLayout';
 import Cart from '../page/cart/Cart';
@@ -157,6 +159,7 @@ const router = createBrowserRouter(
                 errorElement={<Error404 />}
             >
                 <Route index element={<UserPage />} />
+                <Route path="edit-profile" element={<Profile />} />
             </Route>
 
             <Route
@@ -203,7 +206,7 @@ const router = createBrowserRouter(
                 errorElement={<Error404 />}
             >
                 <Route index element={<DoctorList />} />
-                {/* <Route path="make-appointment" element={<MakeAppointment />} /> */}
+                <Route path=":id" element={<DoctorProfile />} />
             </Route>
 
             <Route path="/login" element={<Login />} />

@@ -1,14 +1,12 @@
 import { Button, Group, Image, Text } from '@mantine/core';
 import { useAppointment } from '@store/useAppointment';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function PetItem({ pet }) {
-    const navigate = useNavigate();
     const { setPet } = useAppointment();
 
     const handleMakeAppointment = () => {
         setPet(pet);
-        navigate('');
     };
 
     return (
@@ -21,16 +19,18 @@ function PetItem({ pet }) {
                     borderRadius: '16px',
                 }}
             >
-                <Image
-                    h={160}
-                    fallbackSrc=""
-                    src={
-                        pet.images
-                            ? pet.images
-                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8MOu_ZPbXm9CeVnuM73D2sbQgohkJrMdD4Q&s'
-                    }
-                    radius={'12'}
-                />
+                <Group justify="center" w={'100%'}>
+                    <Image
+                        h={160}
+                        fallbackSrc=""
+                        src={
+                            pet.images
+                                ? pet.images
+                                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8MOu_ZPbXm9CeVnuM73D2sbQgohkJrMdD4Q&s'
+                        }
+                        radius={'12'}
+                    />
+                </Group>
 
                 <Text w={'100%'}>
                     <b>Tên:</b> {pet.name}
