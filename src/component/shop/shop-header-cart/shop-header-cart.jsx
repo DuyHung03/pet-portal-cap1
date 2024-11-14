@@ -101,7 +101,8 @@ function CartPanel({ onClose, isOpen }) {
                                 <Flex direction="column" ml={10}>
                                     <Text>{item.name}</Text>
                                     <Text>
-                                        ${item.price} x {item.quantity}
+                                        {parseInt(item.price).toLocaleString()}{' '}
+                                        đ x {item.quantity}
                                     </Text>
                                 </Flex>
                                 <IconButton
@@ -124,11 +125,16 @@ function CartPanel({ onClose, isOpen }) {
                         mt="auto"
                         pt={10}
                     >
-                        <Text fw="bold">Total</Text>
-                        <Text fw="bold">${subTotal.toFixed(2)}</Text>
+                        <Text fw="bold">Tổng Tiền :</Text>
+                        <Text fw="bold">
+                            {/* {parseInt(subTotal).toLocaleString()} VND */}
+                            {subTotal.toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND',
+                            })}
+                        </Text>
                     </Flex>
                 </Flex>
-
                 <Flex
                     direction="row"
                     justify="center"
@@ -148,7 +154,7 @@ function CartPanel({ onClose, isOpen }) {
                             }}
                             onClick={onClose}
                         >
-                            VIEW CART
+                            Xem Giỏ Hàng
                         </Button>
                     </Link>
                     <Link to="/checkout">
@@ -159,7 +165,7 @@ function CartPanel({ onClose, isOpen }) {
                                 color: 'white',
                             }}
                         >
-                            CHECKOUT
+                            Thanh Toán
                         </Button>
                     </Link>
                 </Flex>

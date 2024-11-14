@@ -123,7 +123,7 @@ function ShopNavBar() {
                                 width: '150px',
                             }}
                         >
-                            <Link to={'/shop-category/cat'}>
+                            <Link to={'shop-category/cat'}>
                                 <Text
                                     p={10}
                                     c="dark"
@@ -143,7 +143,7 @@ function ShopNavBar() {
                                     Sản phẩm cho mèo
                                 </Text>
                             </Link>
-                            <Link to={'/shop-category/cat'}>
+                            <Link to={'shop-category/dog'}>
                                 <Text
                                     p={10}
                                     c="dark"
@@ -163,7 +163,7 @@ function ShopNavBar() {
                                     Sản phẩm cho chó
                                 </Text>
                             </Link>
-                            <Link to={'/collection/chim'}>
+                            <Link to={'shop-category/bird'}>
                                 <Text
                                     p={10}
                                     c="dark"

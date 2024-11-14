@@ -51,28 +51,8 @@ const Reports = () => {
                 setLoading(false);
             }
         }
-    }, [revenueData, totalOrdersData]); // Re-run effect if data changes
+    }, [revenueData, totalOrdersData]);
 
-    // Error handling
-    if (revenueError || ordersError) {
-        return <div>Error fetching data. Please try again later.</div>;
-    }
-
-    // Loading state - show a loader while data is being fetched
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-full">
-                <Oval color="#00BFFF" height={80} width={80} />
-            </div>
-        );
-    }
-
-    // Error state - handle invalid or missing data
-    if (error) {
-        return <div>{error}</div>;
-    }
-
-    // Chart data for revenue and orders
     const revenueChartData = {
         labels: [
             'Week 1',
@@ -107,7 +87,6 @@ const Reports = () => {
         datasets: [
             {
                 label: 'Orders',
-                data: [reportsData?.orders || 0], // Ensure it's an array for the chart
                 borderColor: 'rgb(153, 102, 255)',
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 fill: true,
@@ -139,7 +118,7 @@ const Reports = () => {
                 beginAtZero: true,
                 ticks: {
                     callback: function (value) {
-                        return `$${value}`; // Format y-axis with $
+                        return `$${value}`;
                     },
                 },
             },
@@ -149,8 +128,6 @@ const Reports = () => {
     return (
         <div className="p-6 bg-gray-100 w-full min-h-screen">
             <h1 className="text-3xl font-bold mb-4">Shop Reports</h1>
-
-            {/* Báo cáo tổng quan doanh thu và đơn hàng */}
             <div className="bg-white rounded-lg shadow p-6 mb-8">
                 <h2 className="text-2xl font-semibold mb-4">
                     Business Overview
@@ -171,13 +148,11 @@ const Reports = () => {
                 </div>
             </div>
 
-            {/* Biểu đồ Doanh thu */}
             <div className="bg-white rounded-lg shadow p-6 mb-8">
                 <h2 className="text-2xl font-semibold mb-4">Weekly Revenue</h2>
                 <Line data={revenueChartData} options={chartOptions} />
             </div>
 
-            {/* Biểu đồ Đơn hàng */}
             <div className="bg-white rounded-lg shadow p-6 mb-8">
                 <h2 className="text-2xl font-semibold mb-4">Weekly Orders</h2>
                 <Line data={ordersChartData} options={chartOptions} />

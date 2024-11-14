@@ -3,7 +3,10 @@ import { useAppointment } from '@store/useAppointment';
 import { isOpen } from '@util/checkOpeningHours';
 
 function DoctorItem({ doctor, closeDoctorModal }) {
-    const status = isOpen(doctor.opening_time, doctor.closing_time);
+    let status;
+    if (doctor) {
+        status = isOpen(doctor?.opening_time, doctor?.closing_time);
+    }
 
     const { setDoctor } = useAppointment();
 

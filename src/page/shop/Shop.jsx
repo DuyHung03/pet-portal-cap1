@@ -1,38 +1,53 @@
-import { useState, useMemo, useEffect } from 'react';
-import { Button, Group, Loader, Text } from '@mantine/core';
-import { ArrowForward } from '@mui/icons-material';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { Group, Loader, Text, Pagination } from '@mantine/core';
 import ShopBanner from '../../component/shop/shop-banner/ShopBanner';
 import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
-
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 function Shop() {
-    const [skip, setSkip] = useState(0);
-    const [allProducts, setAllProducts] = useState([]);
-    const [hasMore, setHasMore] = useState(true);
+    const [page, setPage] = useState(1);
+    const [products, setProducts] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const pageSize = 8;
+    const { search } = useSelector((state) => state.shop);
+    const productSectionRef = useRef(null);
+    const endpoint = search ? '/products/search' : '/products';
+    const params = useMemo(
+        () => ({
+            limit: pageSize,
+            skip: (page - 1) * pageSize + 1,
+            name: search || undefined,
+        }),
+        [page, search],
+    );
 
-    const params = useMemo(() => ({ limit: 10, skip }), [skip]);
-
-    const { data, loading, error } = useFetchData('/products', params);
+    const { data, loading, error } = useFetchData(endpoint, params);
 
     useEffect(() => {
-        if (data) {
-            setAllProducts((prevProducts) => [...prevProducts, ...data.data]);
-            if (data.data.length < 8) {
-                setHasMore(false);
+        if (data && data.data) {
+            setProducts(data.data);
+            if (productSectionRef.current) {
+                productSectionRef.current.scrollIntoView({
+                    behavior: 'smooth',
+                });
+            }
+
+            if (data.data.length < pageSize && page === 1) {
+                setTotalPages(1);
+            } else if (data.data.length === pageSize) {
+                setTotalPages(page + 1);
+            } else {
+                setTotalPages(page);
             }
         }
-    }, [data]);
-
-    const loadMoreProducts = () => {
-        if (hasMore) {
-            setSkip((prevSkip) => prevSkip + 8);
-        }
-    };
+    }, [data, page, pageSize]);
 
     return (
         <Group w={'100%'} gap={0} bg="#f9f9f9">
             <ShopBanner />
             <Group
+                ref={productSectionRef}
                 w="80%"
                 mx="auto"
                 justify="center"
@@ -62,10 +77,12 @@ function Shop() {
                     Đề xuất
                 </Text>
 
-                {loading && allProducts.length === 0 ? (
+                {loading && products.length === 0 ? (
                     <Group mt={20} mb={20} w="100%" justify="center">
                         <Loader type="bars" />
                     </Group>
+                ) : error ? (
+                    <Text color="red">Đã xảy ra lỗi khi tải dữ liệu.</Text>
                 ) : (
                     <Group
                         mt={20}
@@ -81,30 +98,32 @@ function Shop() {
                             width: '100%',
                         }}
                     >
-                        {allProducts.map((product, index) => (
-                            <Product key={index} product={product} />
+                        {products.map((product) => (
+                            <Link
+                                to={{
+                                    pathname: `/product/${product.id}`,
+                                    state: { product },
+                                }}
+                                key={product.id}
+                            >
+                                <Product product={product} />
+                            </Link>
                         ))}
                     </Group>
                 )}
 
-                {hasMore && (
-                    <Button
-                        size="xl"
-                        rightSection={<ArrowForward />}
-                        variant="gradient"
-                        gradient={{ from: 'teal', to: 'lime', deg: 45 }}
-                        radius="xl"
-                        style={{
-                            marginTop: '20px',
-                            paddingLeft: '20px',
-                            paddingRight: '20px',
-                            textTransform: 'uppercase',
-                        }}
-                        onClick={loadMoreProducts}
-                    >
-                        Xem thêm sản phẩm
-                    </Button>
-                )}
+                <Pagination
+                    page={page}
+                    onChange={setPage}
+                    total={totalPages}
+                    size="lg"
+                    radius="xl"
+                    withControls
+                    withEdges
+                    style={{
+                        marginTop: '20px',
+                    }}
+                />
             </Group>
         </Group>
     );

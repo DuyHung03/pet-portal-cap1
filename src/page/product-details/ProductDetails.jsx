@@ -1,16 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar } from '@mantine/core';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { addToCart, loadCartFromStorage } from '../../redux/slice/cartSlice';
 import { useAuthStore } from '@store/authStore';
 
-// login cart
-// login cart => login new cart
-
 function ProductDetails() {
     const location = useLocation();
-    const { product } = location.state;
+    const product = location.state?.product || {};
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [quantity, setQuantity] = useState(1);
@@ -33,13 +30,22 @@ function ProductDetails() {
                 setAddedToCart(true);
                 setTimeout(() => setAddedToCart(false), 2000);
             } catch (error) {
-                console.log(
+                console.error(
                     'Error adding item to API:',
                     error.response?.data || error.message,
                 );
             }
         }
     };
+
+    const averageRating = product.ProductReviews?.length
+        ? (
+              product.ProductReviews.reduce(
+                  (acc, review) => acc + review.rating,
+                  0,
+              ) / product.ProductReviews.length
+          ).toFixed(1)
+        : 0;
 
     return (
         <div className="container mx-auto my-10 p-6 bg-white rounded-lg shadow-lg">
@@ -51,22 +57,28 @@ function ProductDetails() {
             </button>
             <div className="flex flex-row items-start justify-between mb-8 space-x-6">
                 <img
-                    src="https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg"
-                    alt={product.name}
+                    src={
+                        product.imageUrl ||
+                        'https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg'
+                    }
+                    alt={product.name || 'Sản phẩm'}
                     className="w-64 h-64 object-cover rounded-md shadow-md"
                 />
 
                 <div className="flex-1 p-4">
                     <h1 className="text-2xl font-bold text-blue-800 mb-2 uppercase tracking-wide">
-                        {product.name}
+                        {product.name || 'Tên sản phẩm'}
                     </h1>
 
                     <p className="text-lg text-red-600 font-semibold mb-2">
-                        Giá: ${product.price}
+                        Giá:
+                        {parseInt(product.price).toLocaleString() ||
+                            'Liên hệ'}{' '}
+                        VND
                     </p>
 
                     <span className="bg-blue-500 text-white px-2 py-1 rounded-full mb-2">
-                        Danh mục: {product.Category.name}
+                        Danh mục: {product.Category?.name || 'Chưa rõ'}
                     </span>
 
                     <div className="flex items-center mb-2 mt-3">
@@ -78,7 +90,7 @@ function ProductDetails() {
                             type="number"
                             value={quantity}
                             min={1}
-                            max={product.stock_quantity}
+                            max={product.stock_quantity || 1}
                             onChange={(e) =>
                                 setQuantity(Number(e.target.value))
                             }
@@ -90,16 +102,10 @@ function ProductDetails() {
                     <div className="flex items-center mb-2">
                         <span className="font-medium">Đánh giá:</span>
                         <span className="text-yellow-500 ml-2">
-                            {(
-                                product.ProductReviews.reduce(
-                                    (acc, review) => acc + review.rating,
-                                    0,
-                                ) / product.ProductReviews.length
-                            ).toFixed(1)}{' '}
-                            / 5
+                            {averageRating} / 5
                         </span>
                         <span className="text-gray-500 ml-1">
-                            ({product.ProductReviews.length} đánh giá)
+                            ({product.ProductReviews?.length || 0} đánh giá)
                         </span>
                     </div>
 
@@ -117,23 +123,32 @@ function ProductDetails() {
                     )}
                 </div>
             </div>
+
             <hr className="my-8" />
+
             <p className="text-sm text-gray-600 mb-4">
-                <strong>Mô tả:</strong> {product.description}
+                <strong>Mô tả:</strong>{' '}
+                {product.description || 'Không có mô tả'}
             </p>
             <p className="text-sm text-gray-600 mb-2">
-                <strong>SKU:</strong> {product.sku}
+                <strong>SKU:</strong> {product.sku || 'Không có SKU'}
             </p>
             <p className="text-sm text-gray-600 mb-4">
-                <strong>Số lượng trong kho:</strong> {product.stock_quantity}
+                <strong>Số lượng trong kho:</strong>{' '}
+                {product.stock_quantity || 0}
             </p>
+
             <hr className="my-8" />
+
             <h2 className="text-lg font-bold mb-4">Đánh giá của khách hàng</h2>
-            {product.ProductReviews.length > 0 ? (
+            {product.ProductReviews && product.ProductReviews.length > 0 ? (
                 product.ProductReviews.map((review) => (
                     <div className="flex items-center mb-4" key={review.id}>
                         <Avatar
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdhHe79aHGHO5SfYZ01rniGOn7--_yPBXC4HIlynkunrmLLU3rli-La4uyaHQq76-ywBUL6RDQ_qzZ4FxW39LM4ERCN9balNn4FJwRUQ"
+                            src={
+                                review.userAvatar ||
+                                'https://via.placeholder.com/40'
+                            }
                             alt="Avatar"
                             size={40}
                             className="mr-3"
@@ -156,7 +171,7 @@ function ProductDetails() {
 
             <p className="text-sm font-medium text-gray-600 mb-2">
                 Trung tâm bán hàng:{' '}
-                {product.SalesCenter.full_name || 'Chưa có thông tin'}
+                {product.SalesCenter?.full_name || 'Chưa có thông tin'}
             </p>
 
             <h2 className="text-lg font-bold mt-8 mb-4">

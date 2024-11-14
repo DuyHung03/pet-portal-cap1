@@ -32,7 +32,6 @@ import PetDetail from '@pages/pet/PetDetail';
 import DoctorRegister from '@pages/service-register/doctor/DoctorRegister';
 import ServiceRegister from '@pages/service-register/ServiceRegister';
 import ShopRegister from '@pages/service-register/shop/ShopRegister';
-import ShopCategory from '@pages/shop-category/shop-category.dogs';
 import Orders from '@pages/shop-dashboard/shop-orders';
 import Overview from '@pages/shop-dashboard/shop-overview';
 import Products from '@pages/shop-dashboard/shop-products';
@@ -48,6 +47,7 @@ import PetListPage from '../page/pet/PetListPage';
 import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
+import ShopCategoryCat from '@pages/shop-category/shop-category.dogs';
 
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
@@ -77,10 +77,7 @@ const router = createBrowserRouter(
                 <Route path="search" element={<Search />} />
                 <Route path="cart" element={<Cart />} />
                 <Route path="checkout/:id" element={<Checkout />} />
-                <Route
-                    path="shop-category/:category"
-                    element={<ShopCategory />}
-                />
+                <Route path="shop-category/cat" element={<ShopCategoryCat />} />
             </Route>
             <Route path="cart" element={<Cart />} />
 

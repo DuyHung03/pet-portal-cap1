@@ -129,8 +129,8 @@ function AddNewPet() {
                                     label="Giới tính"
                                     placeholder="Chọn giới tính"
                                     data={[
-                                        { value: 'Male', label: 'Đực' },
-                                        { value: 'Female', label: 'Cái' },
+                                        { value: 'Đực', label: 'Đực' },
+                                        { value: 'Cái', label: 'Cái' },
                                     ]}
                                     {...form.getInputProps('gender')}
                                     required

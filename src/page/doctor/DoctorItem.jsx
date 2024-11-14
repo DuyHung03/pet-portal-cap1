@@ -4,7 +4,10 @@ import { isOpen } from '@util/checkOpeningHours';
 import { Link, useNavigate } from 'react-router-dom';
 
 function DoctorItem({ doctor }) {
-    const status = isOpen(doctor.opening_time, doctor.closing_time);
+    let status;
+    if (doctor) {
+        status = isOpen(doctor?.opening_time, doctor?.closing_time);
+    }
     const { setDoctor } = useAppointment();
     const navigate = useNavigate();
     const handleMakeAppointment = () => {
