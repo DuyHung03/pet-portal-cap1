@@ -1,24 +1,37 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Group, Loader, Text, Pagination } from '@mantine/core';
 import ShopBanner from '../../component/shop/shop-banner/ShopBanner';
 import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
-
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 function Shop() {
     const [page, setPage] = useState(1);
     const [products, setProducts] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 8;
+    const { search } = useSelector((state) => state.shop);
+    const productSectionRef = useRef(null);
+    const endpoint = search ? '/products/search' : '/products';
+    const params = useMemo(
+        () => ({
+            limit: pageSize,
+            skip: (page - 1) * pageSize + 1,
+            name: search || undefined,
+        }),
+        [page, search],
+    );
 
-    const params = useMemo(() => {
-        return { limit: pageSize, skip: (page - 1) * pageSize + 1 };
-    }, [page]);
-
-    const { data, loading, error } = useFetchData('/products', params);
+    const { data, loading, error } = useFetchData(endpoint, params);
 
     useEffect(() => {
         if (data && data.data) {
             setProducts(data.data);
+            if (productSectionRef.current) {
+                productSectionRef.current.scrollIntoView({
+                    behavior: 'smooth',
+                });
+            }
 
             if (data.data.length < pageSize && page === 1) {
                 setTotalPages(1);
@@ -34,6 +47,7 @@ function Shop() {
         <Group w={'100%'} gap={0} bg="#f9f9f9">
             <ShopBanner />
             <Group
+                ref={productSectionRef}
                 w="80%"
                 mx="auto"
                 justify="center"
@@ -85,7 +99,15 @@ function Shop() {
                         }}
                     >
                         {products.map((product) => (
-                            <Product key={product.id} product={product} />
+                            <Link
+                                to={{
+                                    pathname: `/product/${product.id}`,
+                                    state: { product },
+                                }}
+                                key={product.id}
+                            >
+                                <Product product={product} />
+                            </Link>
                         ))}
                     </Group>
                 )}

@@ -92,7 +92,7 @@ function Product({ product }) {
                     {parseInt(product.price).toLocaleString()} VND
                 </Text>
 
-                <Group position="center" mt={'md'}>
+                {/* <Group position="center" mt={'md'}>
                     <Rating
                         value={
                             product.ProductReviews.length
@@ -107,7 +107,7 @@ function Product({ product }) {
                     <Text size="xs" color="dimmed">
                         ({product.ProductReviews.length} đánh giá)
                     </Text>
-                </Group>
+                </Group> */}
 
                 {hovered && (
                     <Flex

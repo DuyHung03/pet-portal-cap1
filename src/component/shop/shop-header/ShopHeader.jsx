@@ -27,6 +27,7 @@ import logo from '../../../assets/logo.png';
 import { useAuthStore } from '../../../store/authStore';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart, loadCartFromStorage } from '../../../redux/slice/cartSlice';
+import { setSearchQuery } from '@redux/slice/shopSlice';
 import CartPanel from '../shop-header-cart/shop-header-cart';
 
 function ShopHeader() {
@@ -47,14 +48,11 @@ function ShopHeader() {
     }, [dispatch, user?.id]);
 
     const handleSearchClick = () => {
-        if (searchValue.trim()) {
-            navigate(`search?name=${searchValue}`);
-        }
+        dispatch(setSearchQuery(searchValue.trim() || ''));
     };
     const handleLogout = async () => {
         try {
             await logout();
-            // dispatch(clearCart(user.id));
             navigate('/login');
         } catch (error) {
             console.error('Logout failed', error);
@@ -63,7 +61,6 @@ function ShopHeader() {
     const handleKeyEnter = (event) => {
         if (event.key === 'Enter') handleSearchClick();
     };
-
     const openCartPanel = () => setCartOpen(true);
     const closeCartPanel = () => setCartOpen(false);
 
