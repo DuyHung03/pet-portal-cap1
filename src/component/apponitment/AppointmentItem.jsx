@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 
 function AppointmentItem({ appointment }) {
     const badgeColor =
-        appointment.status === 'Scheduled'
+        appointment.status === 'Đã đặt lịch'
             ? 'green'
-            : appointment.status === 'Completed'
+            : appointment.status === 'Hoàn thành'
               ? 'gray'
               : 'red';
     return (

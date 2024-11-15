@@ -1,9 +1,8 @@
 import { Divider, Flex, Group, Image, SimpleGrid, Text } from '@mantine/core';
-import { useAuthStore } from '@store/authStore';
 
 function ShopSummary({ data }) {
     console.log(data);
-    const { user } = useAuthStore();
+    // const { user } = useAuthStore();
 
     return (
         <Group w={'100%'} p={20} mb={100}>
@@ -148,7 +147,7 @@ function ShopSummary({ data }) {
                     />
                 </Flex>
             </Flex>
-            {user.cccd ? null : (
+            {!data.shopInfo.id_number ? null : (
                 <>
                     <Text fw={700} size="lg">
                         Hình ảnh CCCD
