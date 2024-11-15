@@ -67,7 +67,6 @@ export const useAuthStore = create((set) => {
                 localStorage.setItem('isAuthenticated', JSON.stringify(true));
                 localStorage.setItem('role', role);
                 localStorage.setItem('token', token);
-                localStorage.setItem('refreshToken', refreshToken);
 
                 set({
                     user,

@@ -3,6 +3,7 @@ import NavBar from 'component/header-nav/NavBar';
 import { Outlet } from 'react-router-dom';
 import Footer from '../component/footer/Footer';
 import Header from '../component/header/Header';
+import NavBar from 'component/header-nav/NavBar';
 
 function PostLayout() {
     return (
