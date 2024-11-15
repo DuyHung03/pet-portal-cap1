@@ -208,7 +208,7 @@ function DoctorRegister() {
                     active={active}
                     onStepClick={setActive}
                     w={'100%'}
-                    // allowNextStepsSelect={false}
+                    allowNextStepsSelect={false}
                 >
                     <Stepper.Step
                         label="Thông tin cá nhân"

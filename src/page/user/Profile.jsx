@@ -7,28 +7,100 @@ import {
     Flex,
     Group,
     Input,
+    LoadingOverlay,
+    Modal,
     Radio,
     RadioGroup,
     SimpleGrid,
     Text,
     TextInput,
 } from '@mantine/core';
-import { AddPhotoAlternate, Save } from '@mui/icons-material';
+import { useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
+import { AddPhotoAlternate, CheckCircle, Save } from '@mui/icons-material';
+import axiosInstance from '@network/httpRequest';
 import { useAuthStore } from '@store/authStore';
+import { uploadImage } from '@util/firebaseUtils';
 import { useRef, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 
 function Profile() {
-    const { user } = useAuthStore();
+    const { user, setUserInfo } = useAuthStore();
     console.log(user);
-
-    const [gender, setGender] = useState(user.gender || 'Male');
+    const [gender, setGender] = useState(user.gender || 'Nam');
     const [avatarUrl, setAvatarUrl] = useState(null);
     const resetRef = useRef(null);
+    const [loading, setLoading] = useState(false);
+    const [opened, { open, close }] = useDisclosure(false);
 
-    console.log(gender);
+    const form = useForm({
+        initialValues: {
+            username: user.username,
+            phone: user.phone,
+        },
+        validate: {
+            username: (value) =>
+                value.length < 3
+                    ? 'Username must be at least 3 characters long'
+                    : null,
+            phone: (value) =>
+                /^[0-9]{10}$/.test(value)
+                    ? null
+                    : 'Phone number must be exactly 10 digits',
+        },
+    });
+
+    const onSaveProfile = async () => {
+        setLoading(true);
+        try {
+            let avatar = null;
+            if (avatarUrl) {
+                avatar = await uploadImage(avatarUrl, (process) => {
+                    console.log(process);
+                });
+            }
+            const res = await axiosInstance.put(
+                `auth/users/${user.id}`,
+                {
+                    username: form.getValues().username,
+                    phone: form.getValues().phone,
+                    gender: gender,
+                    avatar_url: avatar,
+                },
+                { withCredentials: true },
+            );
+            if (res.status == 200) {
+                setUserInfo(res.data.user);
+                open();
+                setTimeout(() => {
+                    close();
+                }, 6000);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <Group w={'100%'} justify="center" m={20}>
+            <LoadingOverlay visible={loading} />
+            <ToastContainer style={{ marginTop: '100px' }} />
+            <Modal
+                centered
+                opened={opened}
+                onClose={close}
+                withCloseButton={false}
+            >
+                <Group p={30} w={'100%'} justify="center" align="center">
+                    <CheckCircle htmlColor="success" sx={{ fontSize: 60 }} />
+                    <Text size="lg" fw={500} w={'100%'} ta={'center'}>
+                        Thay đổi thông tin cá nhân thành công
+                    </Text>
+                </Group>
+            </Modal>
             <Group
                 w={800}
                 style={{ boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' }}
@@ -47,12 +119,20 @@ function Profile() {
                         </Flex>
                         <Flex align={'center'} gap={10}>
                             <Input.Label size="md">Họ và tên:</Input.Label>
-                            <TextInput size="md" value={user.username} />
+                            <TextInput
+                                size="md"
+                                key={form.key('username')}
+                                {...form.getInputProps('username')}
+                            />
                         </Flex>
 
                         <Flex align={'center'} gap={10}>
                             <Input.Label size="md">Số điện thoại:</Input.Label>
-                            <TextInput size="md" value={user.phone} />
+                            <TextInput
+                                size="md"
+                                key={form.key('phone')}
+                                {...form.getInputProps('phone')}
+                            />
                         </Flex>
 
                         <Flex align={'center'} gap={10}>
@@ -61,17 +141,17 @@ function Profile() {
                                 <Flex gap={20}>
                                     <Radio
                                         icon={CheckIcon}
-                                        value="Male"
+                                        value="Nam"
                                         label="Nam"
                                     />
                                     <Radio
                                         icon={CheckIcon}
-                                        value="Female"
+                                        value="Nữ"
                                         label="Nữ"
                                     />
                                     <Radio
                                         icon={CheckIcon}
-                                        value="Other"
+                                        value="Khác"
                                         label="Khác"
                                     />
                                 </Flex>
@@ -121,7 +201,11 @@ function Profile() {
                     </Flex>
                 </SimpleGrid>
                 <Group w={'100%'} justify="center">
-                    <Button rightSection={<Save />} bg={'#5789cf'}>
+                    <Button
+                        rightSection={<Save />}
+                        onClick={onSaveProfile}
+                        bg={'#5789cf'}
+                    >
                         Lưu
                     </Button>
                 </Group>

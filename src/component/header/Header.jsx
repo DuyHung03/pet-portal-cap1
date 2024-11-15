@@ -111,7 +111,7 @@ function Header({ title }) {
                                     }
                                 >
                                     <Link to={'/account'}>
-                                        Quản lý tài khoản
+                                        Tài khoản của tôi
                                     </Link>
                                 </MenuItem>
                                 {user?.role?.includes('Doctor') ? (
