@@ -54,7 +54,6 @@ function ShopRegister() {
                 : null,
             phoneNumber: user.phone,
             email: user.email,
-            id_number: user.cccd,
         },
         validate: {
             fullName: (value) => (value ? null : 'Vui lòng nhập họ và tên'),
@@ -66,7 +65,6 @@ function ShopRegister() {
                     : 'Số điện thoại phải có đúng 10 chữ số',
             email: (value) =>
                 /^\S+@\S+$/.test(value) ? null : 'Email không hợp lệ',
-            id_number: hasLength(12, 'Số CCCD không hợp lệ'),
         },
     });
 
@@ -76,6 +74,7 @@ function ShopRegister() {
             store_address: '',
             business_license: '',
             store_description: '',
+            id_number: user.cccd,
         },
         validate: {
             store_name: (value) =>
@@ -86,18 +85,28 @@ function ShopRegister() {
                 value ? null : 'Vui lòng nhập mã giấy phép kinh doanh',
             store_description: (value) =>
                 value ? null : 'Vui lòng nhập mô tả cửa hàng',
+            id_number: hasLength(12, 'Số CCCD không hợp lệ'),
         },
     });
     const nextStep = () => {
         if (active === 0) {
-            if (personal_info_form.validate().hasErrors) return;
+            const validation = personal_info_form.validate();
+            console.log(validation.errors);
+
+            if (validation.hasErrors) return;
         } else if (active === 1) {
             if (shop_info_form.validate().hasErrors) return;
+            if (!storeLogo && !front_ID && !back_ID) {
+                alert('Vui lòng cung cấp đầy đủ hình ảnh chứng từ.');
+                return;
+            }
         }
         setActive((current) => Math.min(current + 1, 3));
     };
 
     const prevStep = () => setActive((current) => Math.max(current - 1, 0));
+
+    console.log(active);
 
     const handleRegisterSeller = async () => {
         setLoading(true);
@@ -130,7 +139,7 @@ function ShopRegister() {
                     ...(user.cccd
                         ? {}
                         : {
-                              cccd: personal_info_form.getValues().id_number,
+                              cccd: shop_info_form.getValues().id_number,
                               cccd_front_image: front_id,
                               cccd_back_image: back_id,
                               date_of_birth: dayjs(
@@ -202,7 +211,7 @@ function ShopRegister() {
                     active={active}
                     onStepClick={setActive}
                     w={'100%'}
-                    // allowNextStepsSelect={false}
+                    allowNextStepsSelect={false}
                 >
                     <Stepper.Step
                         label="Thông tin cá nhân"
@@ -368,7 +377,7 @@ function ShopRegister() {
                                     w={'100%'}
                                     label="Số Căn cước công dân (CCCD)"
                                     placeholder="Nhập số CCCD"
-                                    {...personal_info_form.getInputProps(
+                                    {...shop_info_form.getInputProps(
                                         'id_number',
                                     )}
                                     required
@@ -534,6 +543,12 @@ function ShopRegister() {
                                     : null,
                                 businessLicenseUrl: businessLicenseUrl
                                     ? URL.createObjectURL(businessLicenseUrl)
+                                    : null,
+                                front_ID: front_ID
+                                    ? URL.createObjectURL(front_ID)
+                                    : null,
+                                back_ID: back_ID
+                                    ? URL.createObjectURL(back_ID)
                                     : null,
                             }}
                         />
