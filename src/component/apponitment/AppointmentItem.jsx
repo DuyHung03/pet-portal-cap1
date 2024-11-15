@@ -1,9 +1,9 @@
 import { Avatar, Badge, Button, Group, Text } from '@mantine/core';
 import { CalendarMonth, WatchLater } from '@mui/icons-material';
+import { getDate } from '@util/getTimeFromIsoDate';
 import { Link } from 'react-router-dom';
-import { getDate, getTime } from '../../../util/getTimeFromIsoDate';
 
-function Appointment({ appointment }) {
+function AppointmentItem({ appointment }) {
     const badgeColor =
         appointment.status === 'Scheduled'
             ? 'green'
@@ -11,19 +11,16 @@ function Appointment({ appointment }) {
               ? 'gray'
               : 'red';
     return (
-        <Link
-            to={`/doctor-dashboard/appointment/${appointment.id}`}
-            state={appointment}
-        >
+        <Link state={appointment}>
             <Group
+                h={330}
                 gap={10}
-                w={300}
                 bg={'white'}
                 p={20}
                 style={{
                     borderRadius: '16px',
                     boxShadow:
-                        ' rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px',
+                        'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
                 }}
             >
                 <Group w={'100%'} justify="center">
@@ -36,19 +33,19 @@ function Appointment({ appointment }) {
                 <Text w={'100%'} ta={'center'} size="lg" fw={500}>
                     {appointment.Pet.PetOwner.username}
                 </Text>
-                {/* <Text w={'100%'} ta={'center'}>
-                    {appointment.Service.name}
-                </Text> */}
                 <Group w={'100%'} justify="space-evenly">
                     <Text size="md">
                         <WatchLater color="action" />{' '}
-                        {getTime(appointment.appointment_date)}
+                        {appointment.appointment_time.slice(0, -3)}
                     </Text>
                     <Text size="md">
-                        <CalendarMonth color="action" />{' '}
+                        <CalendarMonth color="action" />
                         {getDate(appointment.appointment_date)}
                     </Text>
                 </Group>
+                <Text w={'100%'} ta={'center'}>
+                    {appointment.notes}
+                </Text>
                 <Group w={'100%'} justify="center">
                     <Badge color={badgeColor}>{appointment.status}</Badge>
                 </Group>
@@ -62,4 +59,4 @@ function Appointment({ appointment }) {
     );
 }
 
-export default Appointment;
+export default AppointmentItem;

@@ -1,21 +1,27 @@
-import { GridCol, Group, Image, Text } from '@mantine/core';
+import { Button, Group, Image, Text } from '@mantine/core';
+import { useAppointment } from '@store/useAppointment';
 import { Link } from 'react-router-dom';
 
 function PetItem({ pet }) {
+    const { setPet } = useAppointment();
+
+    const handleMakeAppointment = () => {
+        setPet(pet);
+    };
+
     return (
         <Link to={`${pet.id}`} state={pet}>
-            <GridCol span={'content'} w={350}>
-                <Group
-                    w={'100%'}
-                    p={20}
-                    style={{
-                        boxShadow: ' rgba(0, 0, 0, 0.16) 0px 1px 4px',
-                        borderRadius: '16px',
-                    }}
-                >
+            <Group
+                w={'100%'}
+                p={20}
+                style={{
+                    boxShadow: ' rgba(0, 0, 0, 0.16) 0px 1px 4px',
+                    borderRadius: '16px',
+                }}
+            >
+                <Group justify="center" w={'100%'}>
                     <Image
-                        w={350}
-                        h={270}
+                        h={160}
                         fallbackSrc=""
                         src={
                             pet.images
@@ -24,14 +30,30 @@ function PetItem({ pet }) {
                         }
                         radius={'12'}
                     />
-
-                    <Text w={'100%'}>Tên {pet.name}</Text>
-                    <Text w={'100%'}>
-                        {pet.Category.name}: {pet.breed}
-                    </Text>
-                    <Text w={'100%'}>Tuổi: {pet.age}</Text>
                 </Group>
-            </GridCol>
+
+                <Text w={'100%'}>
+                    <b>Tên:</b> {pet.name}
+                </Text>
+                <Text w={'100%'}>
+                    <b>{pet.Category.name}:</b> {pet.breed}
+                </Text>
+                <Text w={'100%'}>
+                    <b>Tuổi:</b> {pet.age}
+                </Text>
+                <Link
+                    to={'/appointment/make-appointment'}
+                    style={{ width: '100%' }}
+                >
+                    <Button
+                        onClick={handleMakeAppointment}
+                        w={'100%'}
+                        bg="#5789cf"
+                    >
+                        Đặt lịch khám bệnh
+                    </Button>
+                </Link>
+            </Group>
         </Link>
     );
 }

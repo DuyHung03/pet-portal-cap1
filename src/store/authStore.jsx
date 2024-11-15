@@ -14,16 +14,22 @@ export const useAuthStore = create((set) => {
     const storedToken = localStorage.getItem('token');
     const storedRefreshToken = localStorage.getItem('refreshToken');
 
+    const parsedRole = storedRole ? storedRole.split(',') : [];
+
     return {
         user: storedUser || null,
         isAuthenticated: storedIsAuthenticated || false,
-        role: storedRole || null,
+        role: parsedRole,
         token: storedToken || null,
         refreshToken: storedRefreshToken || null,
         error: null,
         isLoading: false,
         isCheckingAuth: true,
         message: null,
+
+        setUserInfo: async (user) => {
+            localStorage.setItem('user', JSON.stringify(user));
+        },
 
         signup: async (username, email, password) => {
             set({ isLoading: true, error: null });
@@ -84,7 +90,13 @@ export const useAuthStore = create((set) => {
             set({ isLoading: true, error: null });
             try {
                 await axios.post(`${API_URL}/logout`);
-                localStorage.clear();
+
+                // localStorage.clear();
+                localStorage.removeItem('user');
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('role');
+                localStorage.removeItem('token');
+                localStorage.removeItem('refreshToken');
 
                 set({
                     user: null,

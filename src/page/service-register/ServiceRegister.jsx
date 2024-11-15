@@ -1,7 +1,8 @@
 import { Button, Group, Image, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import entrepreneur from '../../assets/entrepreneur.png';
-import registeredDocument from '../../assets/registered-document.png';
+import registration from '../../assets/registration.png';
+
 import vet from '../../assets/vet.png';
 
 function ServiceRegister() {
@@ -9,7 +10,7 @@ function ServiceRegister() {
         <Group w={'100%'} justify="center">
             <Group w={1200} p={20}>
                 <Group w={'100%'} justify="center">
-                    <Image src={registeredDocument} w={150} />
+                    <Image src={registration} w={150} />
                 </Group>
                 <Text
                     fw={500}

@@ -13,6 +13,7 @@ import {
 import {
     Cake,
     CreateOutlined,
+    Edit,
     Email,
     LocationOn,
     Phone,
@@ -54,9 +55,21 @@ function UserPage() {
                         name={user.username}
                         color="initials"
                     />
-                    <Text size="27px" fw={700} c={'dark'}>
-                        {user.username}
-                    </Text>
+                    <Flex gap={30}>
+                        <Text size="27px" fw={700} c={'dark'}>
+                            {user.username}
+                        </Text>
+                        <Link to={'edit-profile'}>
+                            <Button
+                                size="xs"
+                                variant="transparent"
+                                leftSection={<Edit fontSize="small" />}
+                                c={'#5789cf'}
+                            >
+                                Chỉnh sửa thông tin cá nhân
+                            </Button>
+                        </Link>
+                    </Flex>
                 </Flex>
             </Group>
             <Divider w={'100%'} />
@@ -71,14 +84,18 @@ function UserPage() {
                             <Email />
                             {user.email}
                         </Flex>
-                        <Flex align={'center'} gap={10}>
-                            <Cake />
-                            {user.date_of_birth}
-                        </Flex>
-                        <Flex align={'center'} gap={10}>
-                            <LocationOn />
-                            address
-                        </Flex>
+                        {user.date_of_birth ? (
+                            <Flex align={'center'} gap={10}>
+                                <Cake />
+                                {user.date_of_birth}
+                            </Flex>
+                        ) : null}
+                        {user.address ? (
+                            <Flex align={'center'} gap={10}>
+                                <LocationOn />
+                                address
+                            </Flex>
+                        ) : null}
                         <Flex align={'center'} gap={10}>
                             <Phone />
                             {user.phone}

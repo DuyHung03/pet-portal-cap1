@@ -81,11 +81,11 @@ function ShopNavBar() {
                     }}
                     style={{ position: 'relative' }}
                 >
-                    <Link to={'/collection'}>
+                    <Link to={'/shop-category'}>
                         <Text
                             c={
-                                isActive('/collection') ||
-                                hoveredNav === 'collection'
+                                isActive('/shop-category') ||
+                                hoveredNav === 'shop-category'
                                     ? 'white'
                                     : 'dark'
                             }
@@ -95,8 +95,8 @@ function ShopNavBar() {
                             pt={6}
                             pb={6}
                             bg={
-                                isActive('/collection') ||
-                                hoveredNav === 'collection'
+                                isActive('/shop-category') ||
+                                hoveredNav === 'shop-category'
                                     ? '#dfe6e9'
                                     : 'transparent'
                             }
@@ -123,7 +123,7 @@ function ShopNavBar() {
                                 width: '150px',
                             }}
                         >
-                            <Link to={'/collection/meo'}>
+                            <Link to={'shop-category/cat'}>
                                 <Text
                                     p={10}
                                     c="dark"
@@ -143,7 +143,7 @@ function ShopNavBar() {
                                     Sản phẩm cho mèo
                                 </Text>
                             </Link>
-                            <Link to={'/collection/cho'}>
+                            <Link to={'shop-category/dog'}>
                                 <Text
                                     p={10}
                                     c="dark"
@@ -163,7 +163,7 @@ function ShopNavBar() {
                                     Sản phẩm cho chó
                                 </Text>
                             </Link>
-                            <Link to={'/collection/chim'}>
+                            <Link to={'shop-category/bird'}>
                                 <Text
                                     p={10}
                                     c="dark"

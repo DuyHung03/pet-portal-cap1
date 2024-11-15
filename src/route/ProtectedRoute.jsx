@@ -4,7 +4,6 @@ import { useAuthStore } from '../store/authStore';
 const ProtectedRoute = ({ element, allowedRoles }) => {
     const { isAuthenticated, role } = useAuthStore();
     const location = useLocation();
-    console.log('role', role); // Check current role value
 
     const hasAccess =
         isAuthenticated &&

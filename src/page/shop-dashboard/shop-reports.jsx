@@ -1,38 +1,162 @@
-import React from 'react';
+import useFetchData from '@hooks/useFetchData';
+import {
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip,
+} from 'chart.js';
+import { useEffect, useState } from 'react';
+import { Line } from 'react-chartjs-2';
+import { Oval } from 'react-loader-spinner';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+);
 
 const Reports = () => {
-    const salesData = [
-        { id: 1, category: 'Food', revenue: 200 },
-        { id: 2, category: 'Toys', revenue: 150 },
-        { id: 3, category: 'Accessories', revenue: 100 },
-    ];
+    const [reportsData, setReportsData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const totalRevenue = salesData.reduce((sum, item) => sum + item.revenue, 0);
+    const { data: revenueData, error: revenueError } = useFetchData(
+        '/orders/status/Shipped',
+    );
+    const { data: totalOrdersData, error: ordersError } = useFetchData(
+        '/orders/total-orders',
+    );
+
+    useEffect(() => {
+        if (revenueData && totalOrdersData) {
+            try {
+                const revenue = Array.isArray(revenueData)
+                    ? revenueData.map(
+                          (order) => parseFloat(order.total_amount) || 0,
+                      )
+                    : [];
+                const totalOrders = totalOrdersData?.totalOrders || 0;
+                setReportsData({ revenue, orders: totalOrders });
+            } catch (err) {
+                setError('Invalid data structure');
+            } finally {
+                setLoading(false);
+            }
+        }
+    }, [revenueData, totalOrdersData]);
+
+    const revenueChartData = {
+        labels: [
+            'Week 1',
+            'Week 2',
+            'Week 3',
+            'Week 4',
+            'Week 5',
+            'Week 6',
+            'Week 7',
+        ],
+        datasets: [
+            {
+                label: 'Revenue ($)',
+                data: reportsData?.revenue ?? [],
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+            },
+        ],
+    };
+
+    const ordersChartData = {
+        labels: [
+            'Week 1',
+            'Week 2',
+            'Week 3',
+            'Week 4',
+            'Week 5',
+            'Week 6',
+            'Week 7',
+        ],
+        datasets: [
+            {
+                label: 'Orders',
+                borderColor: 'rgb(153, 102, 255)',
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                fill: true,
+            },
+        ],
+    };
+
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Weekly Revenue & Orders',
+            },
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+            },
+        },
+        scales: {
+            x: {
+                ticks: {
+                    autoSkip: true,
+                    maxTicksLimit: 7,
+                },
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function (value) {
+                        return `$${value}`;
+                    },
+                },
+            },
+        },
+    };
 
     return (
-        <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-2xl font-semibold mb-4">Reports</h2>
-
-            <div className="mb-4">
-                <p className="text-gray-700">Total Revenue: ${totalRevenue}</p>
+        <div className="p-6 bg-gray-100 w-full min-h-screen">
+            <h1 className="text-3xl font-bold mb-4">Shop Reports</h1>
+            <div className="bg-white rounded-lg shadow p-6 mb-8">
+                <h2 className="text-2xl font-semibold mb-4">
+                    Business Overview
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="p-4 bg-blue-500 text-white rounded-lg shadow">
+                        <h3 className="text-lg font-semibold">Total Revenue</h3>
+                        <p className="text-2xl">
+                            $
+                            {reportsData?.revenue?.reduce((a, b) => a + b, 0) ||
+                                0}
+                        </p>
+                    </div>
+                    <div className="p-4 bg-green-500 text-white rounded-lg shadow">
+                        <h3 className="text-lg font-semibold">Total Orders</h3>
+                        <p className="text-2xl">{reportsData?.orders || 0}</p>
+                    </div>
+                </div>
             </div>
 
-            <table className="w-full border-collapse">
-                <thead>
-                    <tr>
-                        <th className="border p-2">Category</th>
-                        <th className="border p-2">Revenue</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {salesData.map((data) => (
-                        <tr key={data.id}>
-                            <td className="border p-2">{data.category}</td>
-                            <td className="border p-2">${data.revenue}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className="bg-white rounded-lg shadow p-6 mb-8">
+                <h2 className="text-2xl font-semibold mb-4">Weekly Revenue</h2>
+                <Line data={revenueChartData} options={chartOptions} />
+            </div>
+
+            <div className="bg-white rounded-lg shadow p-6 mb-8">
+                <h2 className="text-2xl font-semibold mb-4">Weekly Orders</h2>
+                <Line data={ordersChartData} options={chartOptions} />
+            </div>
         </div>
     );
 };

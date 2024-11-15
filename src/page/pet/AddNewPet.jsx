@@ -1,12 +1,13 @@
 import {
     Button,
+    Divider,
     FileButton,
     Flex,
     Grid,
     GridCol,
     Group,
     Image,
-    Loader,
+    LoadingOverlay,
     NumberInput,
     Select,
     Text,
@@ -81,7 +82,7 @@ function AddNewPet() {
             console.log(err);
         },
         onSuccess: () => {
-            navigate(-1);
+            navigate('/your-pet');
         },
     });
 
@@ -92,17 +93,14 @@ function AddNewPet() {
     return (
         <Group w={'100%'} justify="center">
             <Group w={1000}>
-                {addPetMutation.isPending ? (
-                    <Group w={'100%'} justify="center" align="center">
-                        <Loader type="bar" />
-                    </Group>
-                ) : null}
+                <LoadingOverlay w={'100%'} visible={addPetMutation.isPending} />
                 <Group w={'100%'} align="center" pt={20} pl={20}>
                     <Text fw={500} c={'#5789CF'} size={'26px'}>
                         Thêm thú cưng
                     </Text>
                     <Pets htmlColor="#5789cf" fontSize={'large'} />
                 </Group>
+                <Divider w={'100%'} />
                 <Grid justify="center" p={20} gutter={'xl'}>
                     <GridCol span={'auto'}>
                         <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -131,8 +129,8 @@ function AddNewPet() {
                                     label="Giới tính"
                                     placeholder="Chọn giới tính"
                                     data={[
-                                        { value: 'Male', label: 'Đực' },
-                                        { value: 'Female', label: 'Cái' },
+                                        { value: 'Đực', label: 'Đực' },
+                                        { value: 'Cái', label: 'Cái' },
                                     ]}
                                     {...form.getInputProps('gender')}
                                     required

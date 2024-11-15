@@ -21,12 +21,12 @@ import axiosInstance from '../../../network/httpRequest';
 import { useAuthStore } from '../../../store/authStore';
 import { uploadImage } from '../../../util/firebaseUtils';
 
-function AddPost() {
+function AddPost({ onPostCreated }) {
     const { user } = useAuthStore();
     const [opened, { open, close }] = useDisclosure(false);
     const [visible, { close: closeLoading, open: showLoading }] =
         useDisclosure(false);
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState('');
     const resetRef = useRef(null);
     const form = useForm({
         initialValues: {
@@ -67,6 +67,7 @@ function AddPost() {
             if (res.status == 201) {
                 form.reset();
                 close();
+                onPostCreated();
             }
         } catch (error) {
             console.log(error);

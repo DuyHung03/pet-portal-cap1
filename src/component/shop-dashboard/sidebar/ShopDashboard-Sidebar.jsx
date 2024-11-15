@@ -16,13 +16,13 @@ function ShopDashboardSideBar() {
     const isActive = (path) => location.pathname.includes(path);
 
     return (
-        <div className="w-64 h-screen bg-gray-900 p-4 shadow-xl flex flex-col items-center">
+        <div className="w-64 h-screen bg-[#FAFAFC] p-4 shadow-xl flex flex-col items-center">
             <Avatar
                 src="https://i.pinimg.com/564x/87/19/bd/8719bd600d09de24784cedb300f758f1.jpg"
                 size={80}
                 className="mb-4 border-4 border-gray-300"
             />
-            <h2 className="text-xl font-semibold text-white mb-6">{`Admin ${user.username}`}</h2>
+            <h2 className="text-xl font-semibold text-[#5789cf] mb-6">{`Admin ${user.username}`}</h2>
 
             <div className="w-full">
                 <SidebarLink
@@ -31,7 +31,7 @@ function ShopDashboardSideBar() {
                     icon={<CalendarMonth />}
                     isActive={isActive('/shop-dashboard/overview')}
                 />
-                <Divider className="my-4 bg-gray-700" />
+                <Divider className="my-4 bg-[#5789cf]" />
 
                 <SidebarLink
                     to="/shop-dashboard/products"
@@ -40,7 +40,7 @@ function ShopDashboardSideBar() {
                     isActive={isActive('/shop-dashboard/products')}
                 />
 
-                <Divider className="my-4 bg-gray-700" />
+                <Divider className="my-4 bg-[#5789cf]" />
 
                 <SidebarLink
                     to="/shop-dashboard/orders"
@@ -48,16 +48,7 @@ function ShopDashboardSideBar() {
                     icon={<CalendarMonth />}
                     isActive={isActive('/shop-dashboard/orders')}
                 />
-                <Divider className="my-4 bg-gray-700" />
-
-                <SidebarLink
-                    to="/shop-dashboard/users"
-                    label="Users"
-                    icon={<People />}
-                    isActive={isActive('/shop-dashboard/users')}
-                />
-
-                <Divider className="my-4 bg-gray-700" />
+                <Divider className="my-4 bg-[#5789cf]" />
 
                 <SidebarLink
                     to="/shop-dashboard/reports"
@@ -85,7 +76,7 @@ const SidebarLink = ({ to, label, icon, isActive }) => (
             className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-4 ${
                 isActive
                     ? 'bg-pink-600 text-white shadow-lg'
-                    : 'text-gray-400 hover:bg-gray-700'
+                    : 'text-gray-400 hover:bg-[#5789cf]'
             }`}
             leftSection={icon}
             style={

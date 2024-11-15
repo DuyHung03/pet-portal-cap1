@@ -1,7 +1,9 @@
 import { Divider, Flex, Group, Image, SimpleGrid, Text } from '@mantine/core';
+import { useAuthStore } from '@store/authStore';
 
-function DetailSummary({ data }) {
+function ShopSummary({ data }) {
     console.log(data);
+    const { user } = useAuthStore();
 
     return (
         <Group w={'100%'} p={20} mb={100}>
@@ -72,61 +74,45 @@ function DetailSummary({ data }) {
                 </Flex>
                 <Flex direction="column" w={'100%'} gap={20}>
                     <Text fw={700} size="lg">
-                        Thông tin bác sĩ
+                        Thông tin cửa hàng
                     </Text>
                     <Flex align={'center'} gap={10} w={'100%'}>
                         <Text fs={'italic'} fw={600} c={'dark.2'}>
-                            Số CCCD:
+                            Tên cửa hàng:
                         </Text>
                         <Text fw={600} c={'dark.5'}>
-                            {data.doctorInfo.id_number}
+                            {data.shopInfo.store_name}
                         </Text>
                     </Flex>
                     <Flex align={'center'} gap={10} w={'100%'}>
                         <Text fs={'italic'} fw={600} c={'dark.2'}>
-                            Địa chỉ phòng khám:
+                            Địa chỉ cửa hàng:
                         </Text>
                         <Text fw={600} c={'dark.5'}>
-                            {data.doctorInfo.clinicAddress}
+                            {data.shopInfo.store_address}
                         </Text>
                     </Flex>
                     <Flex align={'center'} gap={10} w={'100%'}>
                         <Text fs={'italic'} fw={600} c={'dark.2'}>
-                            Chứng chỉ hành nghề:
+                            Mã giấy phép kinh doanh:
                         </Text>
                         <Text fw={600} c={'dark.5'}>
-                            {data.doctorInfo.certification_number}
+                            {data.shopInfo.business_license}
                         </Text>
                     </Flex>
                     <Flex align={'center'} gap={10} w={'100%'}>
                         <Text fs={'italic'} fw={600} c={'dark.2'}>
-                            Kinh nghiệm:
+                            Mô tả cửa hàng:
                         </Text>
                         <Text fw={600} c={'dark.5'}>
-                            {data.doctorInfo.experience} năm
-                        </Text>
-                    </Flex>
-                    <Flex align={'center'} gap={10} w={'100%'}>
-                        <Text fs={'italic'} fw={600} c={'dark.2'}>
-                            Giờ mở cửa:
-                        </Text>
-                        <Text fw={600} c={'dark.5'}>
-                            {data.doctorInfo.workingHourOpen}
-                        </Text>
-                    </Flex>
-                    <Flex align={'center'} gap={10} w={'100%'}>
-                        <Text fs={'italic'} fw={600} c={'dark.2'}>
-                            Giờ đóng cửa:
-                        </Text>
-                        <Text fw={600} c={'dark.5'}>
-                            {data.doctorInfo.workingHourClose}
+                            {data.shopInfo.store_description}
                         </Text>
                     </Flex>
                 </Flex>
             </SimpleGrid>
             {/* Avatar and Certificate Images */}
             <Text fw={700} size="lg">
-                Ảnh đại diện và chứng chỉ
+                Ảnh đại diện và Giấy phép kinh doanh
             </Text>
             <Flex justify={'space-between'} wrap="wrap" w={'100%'}>
                 <Flex
@@ -136,10 +122,10 @@ function DetailSummary({ data }) {
                     maw={'50%'}
                 >
                     <Text fs={'italic'} fw={600} c={'dark.2'}>
-                        Ảnh đại diện
+                        Ảnh đại diện cửa hàng
                     </Text>
                     <Image
-                        src={data.doctorAvatarUrl}
+                        src={data.storeLogo}
                         mah={250}
                         radius="md"
                         w={'450'}
@@ -152,35 +138,49 @@ function DetailSummary({ data }) {
                     maw={'50%'}
                 >
                     <Text fs={'italic'} fw={600} c={'dark.2'}>
-                        Chứng chỉ hành nghề
+                        Giấy phép kinh doanh
                     </Text>
                     <Image
-                        src={data.certificateUrl}
+                        src={data.businessLicenseUrl}
                         w={'450'}
                         mah={250}
                         radius="md"
                     />
                 </Flex>
             </Flex>
-            <Text fw={700} size="lg">
-                Hình ảnh CCCD
-            </Text>
-            <Flex justify={'space-between'} wrap="wrap" w={'100%'}>
-                <Flex align={'center'} direction={'column'} gap={10}>
-                    <Text fs={'italic'} fw={600} c={'dark.2'}>
-                        Mặt trước
+            {user.cccd ? null : (
+                <>
+                    <Text fw={700} size="lg">
+                        Hình ảnh CCCD
                     </Text>
-                    <Image src={data.front_ID} mah={350} radius="md" w={350} />
-                </Flex>
-                <Flex align={'center'} direction={'column'} gap={10}>
-                    <Text fs={'italic'} fw={600} c={'dark.2'}>
-                        Mặt sau
-                    </Text>
-                    <Image src={data.back_ID} w={350} mah={350} radius="md" />
-                </Flex>
-            </Flex>
+                    <Flex justify={'space-between'} wrap="wrap" w={'100%'}>
+                        <Flex align={'center'} direction={'column'} gap={10}>
+                            <Text fs={'italic'} fw={600} c={'dark.2'}>
+                                Mặt trước
+                            </Text>
+                            <Image
+                                src={data.front_ID}
+                                mah={350}
+                                radius="md"
+                                w={350}
+                            />
+                        </Flex>
+                        <Flex align={'center'} direction={'column'} gap={10}>
+                            <Text fs={'italic'} fw={600} c={'dark.2'}>
+                                Mặt sau
+                            </Text>
+                            <Image
+                                src={data.back_ID}
+                                w={350}
+                                mah={350}
+                                radius="md"
+                            />
+                        </Flex>
+                    </Flex>
+                </>
+            )}
         </Group>
     );
 }
 
-export default DetailSummary;
+export default ShopSummary;

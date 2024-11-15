@@ -26,7 +26,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useAuthStore } from '../../../store/authStore';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadCartFromStorage } from '../../../redux/slice/cartSlice';
+import { clearCart, loadCartFromStorage } from '../../../redux/slice/cartSlice';
+import { setSearchQuery } from '@redux/slice/shopSlice';
 import CartPanel from '../shop-header-cart/shop-header-cart';
 
 function ShopHeader() {
@@ -34,7 +35,7 @@ function ShopHeader() {
     const [isCartOpen, setCartOpen] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { user } = useAuthStore();
+    const { user, logout } = useAuthStore();
 
     const cartItems = useSelector((state) => state.cart.items);
     const cartCount = cartItems.reduce(
@@ -47,15 +48,19 @@ function ShopHeader() {
     }, [dispatch, user?.id]);
 
     const handleSearchClick = () => {
-        if (searchValue.trim()) {
-            navigate(`search?name=${searchValue}`);
+        dispatch(setSearchQuery(searchValue.trim() || ''));
+    };
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed', error);
         }
     };
-
     const handleKeyEnter = (event) => {
         if (event.key === 'Enter') handleSearchClick();
     };
-
     const openCartPanel = () => setCartOpen(true);
     const closeCartPanel = () => setCartOpen(false);
 
@@ -155,8 +160,10 @@ function ShopHeader() {
                                     </MenuItem>
                                     <MenuItem
                                         leftSection={<Logout color="error" />}
+                                        onClick={handleLogout}
+                                        color="red"
                                     >
-                                        <Link to={'/logout'}>Đăng xuất</Link>
+                                        Đăng xuất
                                     </MenuItem>
                                 </MenuDropdown>
                             </Menu>
