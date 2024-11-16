@@ -418,13 +418,6 @@ function MakeAppointment() {
                                 />
                             </Group>
                         </Group>
-                        {/* <Flex
-                            w={'100%'}
-                            direction={'column'}
-                            justify="center"
-                            align="flex-start"
-                            gap={20}
-                        > */}
                         <Group w={'100%'} justify="center" align="center">
                             <DatePicker
                                 label="Ngày Hẹn"

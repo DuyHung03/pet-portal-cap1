@@ -13,6 +13,7 @@ import {
     CheckCircle,
     EmailOutlined,
     LocationOnOutlined,
+    Notes,
     PhoneOutlined,
 } from '@mui/icons-material';
 import { getDate } from '@util/getTimeFromIsoDate';
@@ -115,6 +116,12 @@ function AppoitmentDetails() {
                         <Text
                             fw={500}
                         >{`${state?.appointment_time.slice(0, -3)} ${getDate(state?.appointment_date)} `}</Text>
+                    </Flex>
+                    <Flex align="center" gap="sm">
+                        <Notes htmlColor="#5789cf" />
+                        <Text fw={500}>
+                            Ghi chú: {state.notes || 'Không có ghi chú'}
+                        </Text>
                     </Flex>
                 </Group>
             </Group>

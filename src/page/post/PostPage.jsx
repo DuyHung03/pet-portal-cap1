@@ -22,19 +22,8 @@ function PostPage() {
                 </Group>
             ) : null}
 
-            {/* {data ? (
-                <Group w={700}>
-                    {data?.data?.reverse().map((post, index) => (
-                        <PostItem
-                            post={post}
-                            key={index}
-                            onPostDeleted={refetch}
-                        />
-                    ))}
-                </Group>
-            ) : null} */}
             {data?.data?.length > 0 ? (
-                <Group>
+                <Group w={'100%'}>
                     {data.data.reverse().map((post, index) => (
                         <PostItem
                             post={post}

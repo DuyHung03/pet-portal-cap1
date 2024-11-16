@@ -54,7 +54,6 @@ function PostItem({ post, onPostDeleted }) {
                 createdAt: new Date().toISOString(),
             };
             setComments((prev) => [newComment, ...prev]);
-            toast.success('Đã thêm bài viết mới');
         },
         onError: (err, newComment) => {
             setComments((prevComments) =>
