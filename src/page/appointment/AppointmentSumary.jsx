@@ -127,7 +127,7 @@ function AppointmentSummary() {
                             </Text>
                             <Text>
                                 <b>Giờ: </b>
-                                {formData.time}
+                                {formData.time.slice(0, -3)}
                             </Text>
                             <Text>
                                 <b>Ghi chú: </b>

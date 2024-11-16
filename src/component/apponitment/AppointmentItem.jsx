@@ -11,7 +11,7 @@ function AppointmentItem({ appointment }) {
               ? 'gray'
               : 'red';
     return (
-        <Link state={appointment}>
+        <Link to={`${appointment.id}`} state={appointment}>
             <Group
                 h={330}
                 gap={10}
@@ -50,8 +50,8 @@ function AppointmentItem({ appointment }) {
                     <Badge color={badgeColor}>{appointment.status}</Badge>
                 </Group>
                 <Group w={'100%'} justify="center" mt={20}>
-                    <Button bg={'#5789cf'} radius={'xl'}>
-                        Chi tiết
+                    <Button w={'100%'} bg={'#5789cf'}>
+                        Xem chi tiết
                     </Button>
                 </Group>
             </Group>

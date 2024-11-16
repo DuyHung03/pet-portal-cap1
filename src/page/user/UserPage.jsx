@@ -18,8 +18,10 @@ import {
     LocationOn,
     Phone,
 } from '@mui/icons-material';
+import axiosInstance from '@network/httpRequest';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import PostItem from '../../component/post/post-item/PostItem';
 import useFetchData from '../../hooks/useFetchData';
 import { useAuthStore } from '../../store/authStore';
@@ -29,7 +31,7 @@ function UserPage() {
 
     const params = useMemo(() => ({ limit: 8 }), []);
 
-    const { data, loading, error } = useFetchData(
+    const { data, loading, error, refetch } = useFetchData(
         `/posts/pet_owner/${user.id}`,
         params,
     );
@@ -40,12 +42,18 @@ function UserPage() {
 
     console.log(data);
 
-    const handleDeletePost = async () => {
-        console.log('delete');
+    const handleDeletePost = async (postId) => {
+        const res = await axiosInstance.delete(`posts/${postId}`, {
+            withCredentials: true,
+        });
+        if (res.status == 200) {
+            toast.success('Đã xóa bài viết');
+        }
     };
 
     return (
         <Group w={'100%'} p={30}>
+            <ToastContainer style={{ marginTop: '100px' }} />
             <Group>
                 <Flex gap={20} align={'center'}>
                     <Avatar
@@ -117,8 +125,11 @@ function UserPage() {
                             {data.data.reverse().map((post, index) => (
                                 <PostItem
                                     post={post}
-                                    handleDeletePost={handleDeletePost}
+                                    handleDeletePost={() =>
+                                        handleDeletePost(post.id)
+                                    }
                                     key={index}
+                                    onPostDeleted={refetch}
                                 />
                             ))}
                         </Group>

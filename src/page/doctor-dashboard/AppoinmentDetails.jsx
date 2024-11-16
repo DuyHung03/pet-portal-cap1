@@ -130,24 +130,6 @@ function AppoinmentDetails() {
                                 </Text> */}
                             </Flex>
 
-                            {/* <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Mô tả dịch vụ:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {appointment.Service.description}
-                                </Text>
-                            </Flex> */}
-
-                            {/* <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Giá dịch vụ:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {appointment.Service.price} USD
-                                </Text>
-                            </Flex> */}
-
                             <Flex align={'center'} gap={10} w={'100%'}>
                                 <Text fs={'italic'} fw={600} c={'dark.3'}>
                                     Ngày hẹn:

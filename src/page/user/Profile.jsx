@@ -15,12 +15,15 @@ import {
     Text,
     TextInput,
 } from '@mantine/core';
+import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { AddPhotoAlternate, CheckCircle, Save } from '@mui/icons-material';
 import axiosInstance from '@network/httpRequest';
 import { useAuthStore } from '@store/authStore';
 import { uploadImage } from '@util/firebaseUtils';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
 import { useRef, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -37,6 +40,11 @@ function Profile() {
         initialValues: {
             username: user.username,
             phone: user.phone,
+            birthday: user.date_of_birth
+                ? dayjs(user.date_of_birth, 'DD/MM/YYYY').isValid()
+                    ? dayjs(user.date_of_birth, 'DD/MM/YYYY').toDate()
+                    : null
+                : null,
         },
         validate: {
             username: (value) =>
@@ -156,6 +164,17 @@ function Profile() {
                                     />
                                 </Flex>
                             </RadioGroup>
+                        </Flex>
+                        <Flex align={'center'} gap={10}>
+                            <Input.Label size="md">Ngày sinh:</Input.Label>
+                            <DateInput
+                                size="md"
+                                valueFormat="DD/MM/YYYY"
+                                placeholder="Chọn ngày sinh"
+                                {...form.getInputProps('birthday')}
+                                required
+                                locale="vi"
+                            />
                         </Flex>
                         <Flex align={'center'} gap={10}>
                             <Input.Label size="md">Địa chỉ:</Input.Label>

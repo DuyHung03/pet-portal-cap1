@@ -105,40 +105,42 @@ function Header({ title }) {
                             </MenuTarget>
 
                             <MenuDropdown>
-                                <MenuItem
-                                    leftSection={
-                                        <AccountCircle color="action" />
-                                    }
-                                >
-                                    <Link to={'/account'}>
-                                        Tài khoản của tôi
-                                    </Link>
-                                </MenuItem>
-                                {user?.role?.includes('Doctor') ? (
+                                <Link to={'/account'}>
                                     <MenuItem
                                         leftSection={
-                                            <MedicalInformation color="action" />
+                                            <AccountCircle color="action" />
                                         }
                                     >
-                                        <Link
-                                            to={'/doctor-dashboard'}
-                                            target="_blank"
+                                        Tài khoản của tôi
+                                    </MenuItem>
+                                </Link>
+                                {user?.role?.includes('Doctor') ? (
+                                    <Link
+                                        to={'/doctor-dashboard'}
+                                        target="_blank"
+                                    >
+                                        <MenuItem
+                                            leftSection={
+                                                <MedicalInformation color="action" />
+                                            }
                                         >
                                             Quản lý phòng khám
-                                        </Link>
-                                    </MenuItem>
+                                        </MenuItem>
+                                    </Link>
                                 ) : null}
                                 {user?.role?.includes('Seller') ? (
-                                    <MenuItem
-                                        leftSection={<Store color="action" />}
+                                    <Link
+                                        to={'/shop-dashboard'}
+                                        target="_blank"
                                     >
-                                        <Link
-                                            to={'/shop-dashboard'}
-                                            target="_blank"
+                                        <MenuItem
+                                            leftSection={
+                                                <Store color="action" />
+                                            }
                                         >
                                             Quản lý cửa hàng
-                                        </Link>
-                                    </MenuItem>
+                                        </MenuItem>
+                                    </Link>
                                 ) : null}
                                 <Menu.Divider />
                                 <MenuItem

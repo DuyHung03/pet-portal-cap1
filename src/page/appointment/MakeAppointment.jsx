@@ -15,7 +15,7 @@ import {
 import { DatePicker, DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { Add } from '@mui/icons-material';
+import { Add, ScheduleSend } from '@mui/icons-material';
 import axiosInstance from '@network/httpRequest';
 import { useAuthStore } from '@store/authStore';
 import { useAppointment } from '@store/useAppointment';
@@ -439,9 +439,11 @@ function MakeAppointment() {
                     </SimpleGrid>
                     <Group w={'100%'} justify="flex-end" mt="md">
                         <Button
+                            bg={'#5789cf'}
                             w={200}
                             onClick={onSubmitBookingForm}
                             type="submit"
+                            rightSection={<ScheduleSend />}
                         >
                             Tiến hành đặt Lịch
                         </Button>

@@ -107,7 +107,12 @@ function AddPost({ onPostCreated }) {
                     />
                 </Flex>
                 <Flex justify={'flex-end'} w={'100%'}>
-                    <Button onClick={open} leftSection={<Add />} radius={'xl'}>
+                    <Button
+                        onClick={open}
+                        leftSection={<Add />}
+                        radius={'xl'}
+                        bg={'#5789cf'}
+                    >
                         Tạo bài viết mới
                     </Button>
                 </Flex>

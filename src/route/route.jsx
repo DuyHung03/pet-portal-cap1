@@ -23,6 +23,7 @@ import NoneFooterLayout from '@layout/NoneFooterLayout';
 import ShopDashboardLayout from '@layout/ShopDashboard';
 import AppointmentList from '@pages/appointment/AppointmentsPage';
 import AppointmentSumary from '@pages/appointment/AppointmentSumary';
+import AppoitmentDetails from '@pages/appointment/AppoitmentDetails';
 import MakeAppointment from '@pages/appointment/MakeAppointment';
 import Checkout from '@pages/checkout/checkout';
 import DoctorList from '@pages/doctor/DoctorList';
@@ -32,6 +33,7 @@ import PetDetail from '@pages/pet/PetDetail';
 import DoctorRegister from '@pages/service-register/doctor/DoctorRegister';
 import ServiceRegister from '@pages/service-register/ServiceRegister';
 import ShopRegister from '@pages/service-register/shop/ShopRegister';
+import ShopCategoryCat from '@pages/shop-category/shop-category.dogs';
 import Orders from '@pages/shop-dashboard/shop-orders';
 import Overview from '@pages/shop-dashboard/shop-overview';
 import Products from '@pages/shop-dashboard/shop-products';
@@ -47,7 +49,6 @@ import PetListPage from '../page/pet/PetListPage';
 import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
-import ShopCategoryCat from '@pages/shop-category/shop-category.dogs';
 
 // import ProtectedRoute from './ProtectedRoute';
 // import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
@@ -186,6 +187,7 @@ const router = createBrowserRouter(
             >
                 <Route index element={<AppointmentList />} />
                 <Route path="make-appointment" element={<MakeAppointment />} />
+                <Route path=":postId" element={<AppoitmentDetails />} />
                 <Route
                     path="make-appointment/confirmation"
                     element={<AppointmentSumary />}
