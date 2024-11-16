@@ -1,176 +1,196 @@
-import { Button, Divider, Flex, Group, SimpleGrid, Text } from '@mantine/core';
-import { KeyboardBackspace } from '@mui/icons-material';
+import {
+    Avatar,
+    Badge,
+    Button,
+    Card,
+    Divider,
+    Flex,
+    Group,
+    SimpleGrid,
+    Text,
+} from '@mantine/core';
+import {
+    AccessTimeOutlined,
+    CalendarMonthOutlined,
+    EmailOutlined,
+    EventNote,
+    KeyboardBackspace,
+    Notes,
+    PersonOutline,
+    PetsOutlined,
+    PhoneOutlined,
+} from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { vietnameseDate } from '../../util/getDateInVietnamese';
 import { getDate, getTime } from '../../util/getTimeFromIsoDate';
 
-function AppoinmentDetails() {
+function AppointmentDetails() {
     const location = useLocation();
     const appointment = location.state;
     const navigate = useNavigate();
+    console.log(appointment);
 
     return (
-        <Group p={30} w={'100%'}>
-            <Flex
-                justify={'space-between'}
-                w={'100%'}
-                mb={30}
-                align={'center'}
-                bg={'#FAFAFC'}
-                p={20}
-                style={{ borderRadius: '12px' }}
+        <Flex direction="column" align="center" p={30} w="100%">
+            <Card
+                shadow="lg"
+                radius="lg"
+                p="xl"
+                mb="xl"
+                w="100%"
+                maw={900}
+                bg="linear-gradient(135deg, #e3f2fd, #ffffff)"
             >
-                <Text fw={600} c={'#5789cf'} size={'32px'}>
-                    Chi tiết cuộc hẹn{' '}
-                    <Text
-                        fs={'italic'}
-                        c={'gray'}
-                        size="12px"
-                    >{`(ID: ${appointment.id})`}</Text>
-                </Text>
-                <Text c={'gray'} size="lg">
-                    {vietnameseDate}
-                </Text>
-            </Flex>
-            <Button
-                td={'underline'}
-                leftSection={<KeyboardBackspace />}
-                variant="transparent"
-                c={'#5789cf'}
-                onClick={() => navigate(-1)}
-            >
-                Quay lại
-            </Button>
-            <Group
-                p={20}
-                style={{
-                    borderRadius: '12px',
-                }}
-                bg={'#FAFAFC'}
-                w={'100%'}
-            >
-                <Flex align={'center'} gap={10} w={'100%'}>
-                    <Text fs={'italic'} fw={600} size="18px" c={'dark.3'}>
-                        Tên chủ nuôi:
-                    </Text>
-                    <Text fw={600} size="22px" c={'dark.5'}>
-                        {appointment.Pet.PetOwner.username}
-                    </Text>
+                <Flex justify="space-between" align="center">
+                    <div>
+                        <Text fw={700} size="28px" c="#5789cf">
+                            Chi tiết cuộc hẹn
+                        </Text>
+                        <Text mt={8} size="sm" c="dimmed">
+                            Mã cuộc hẹn:{' '}
+                            <Badge color="#5789cf">{appointment.id}</Badge>
+                        </Text>
+                    </div>
+                    <Badge
+                        size="lg"
+                        radius="lg"
+                        color={
+                            appointment.status === 'Đã đặt lịch'
+                                ? 'green'
+                                : appointment.status === 'Đã hủy'
+                                  ? 'red'
+                                  : 'yellow'
+                        }
+                    >
+                        {appointment.status}
+                    </Badge>
                 </Flex>
-                <Flex align={'center'} gap={10} w={'100%'}>
-                    <Text fs={'italic'} fw={600} size="18px" c={'dark.3'}>
-                        Email:
-                    </Text>
-                    <Text fw={600} size="22px" c={'dark.5'}>
-                        {appointment.Pet.PetOwner.email}
-                    </Text>
-                </Flex>
-                <Divider w={'100%'} />
-                <SimpleGrid cols={2} w={'100%'}>
-                    <Flex direction={'column'} align={'flex-start'} gap={20}>
-                        <Group w={'100%'}>
-                            <Text fw={500} size="xl">
-                                Thông tin thú cưng
-                            </Text>
-                            <Divider w={'100%'} />
-                        </Group>
-                        <Flex direction={'column'} gap={20}>
-                            <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Tên thú cưng:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {appointment.Pet.name}
-                                </Text>
-                            </Flex>
+            </Card>
 
-                            <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Giống loài:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {appointment.Pet.Category.name},{' '}
-                                    {appointment.Pet.breed}
-                                </Text>
-                            </Flex>
+            <Group w={'100%'} maw={900} justify="flex-start">
+                <Button
+                    leftSection={<KeyboardBackspace />}
+                    variant="transparent"
+                    color="blue"
+                    onClick={() => navigate(-1)}
+                    mb="xl"
+                >
+                    Quay lại
+                </Button>
+            </Group>
 
-                            <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Tuổi:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {appointment.Pet.age} tuổi
-                                </Text>
-                            </Flex>
-
-                            <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Giới tính:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {appointment.Pet.gender}
-                                </Text>
+            <Card shadow="sm" radius="lg" p="lg" w="100%" maw={900} withBorder>
+                <SimpleGrid cols={2} spacing="lg">
+                    <Flex direction="column" gap="md">
+                        <Text fw={600} size="xl" mb="sm" c="#5789cf">
+                            Thông tin chủ thú cưng
+                        </Text>
+                        <Flex align="flex-start" gap="md">
+                            <Avatar
+                                size="lg"
+                                src={appointment.Pet.PetOwner.avatar || ''}
+                                name={appointment.Pet.PetOwner.username}
+                                color="initials"
+                                radius="xl"
+                                alt="Chủ nuôi"
+                            />
+                            <Flex h={'100%'} gap={10} direction="column">
+                                <Flex align="center" gap="sm">
+                                    <PersonOutline
+                                        fontSize="small"
+                                        htmlColor="#5789cf"
+                                    />
+                                    <Text fw={600} size="md">
+                                        {appointment.Pet.PetOwner.username}
+                                    </Text>
+                                </Flex>
+                                <Flex align="center" gap="sm">
+                                    <EmailOutlined
+                                        fontSize="small"
+                                        htmlColor="#5789cf"
+                                    />
+                                    <Text size="md">
+                                        {appointment.Pet.PetOwner.email}
+                                    </Text>
+                                </Flex>
+                                <Flex align="center" gap="sm">
+                                    <PhoneOutlined
+                                        fontSize="small"
+                                        htmlColor="#5789cf"
+                                    />
+                                    <Text size="md">
+                                        {appointment.Pet.PetOwner.phone ||
+                                            'N/A'}
+                                    </Text>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
-                    <Flex direction={'column'} align={'flex-start'} gap={20}>
-                        <Group w={'100%'}>
-                            <Text fw={500} size="xl">
-                                Cuộc hẹn
-                            </Text>
-                            <Divider w={'100%'} />
-                        </Group>
-                        <Flex direction={'column'} gap={20}>
-                            <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Tên dịch vụ:
-                                </Text>
-                                {/* <Text fw={600} c={'dark.5'}>
-                                    {appointment.Service.name}
-                                </Text> */}
-                            </Flex>
 
-                            <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Ngày hẹn:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {getDate(appointment.appointment_date)}
-                                </Text>
-                            </Flex>
-
-                            <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Thời gian hẹn:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {getTime(appointment.appointment_date)}
-                                </Text>
-                            </Flex>
-
-                            <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Ghi chú:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {appointment.notes || 'Không có ghi chú'}
-                                </Text>
-                            </Flex>
-
-                            <Flex align={'center'} gap={10} w={'100%'}>
-                                <Text fs={'italic'} fw={600} c={'dark.3'}>
-                                    Trạng thái:
-                                </Text>
-                                <Text fw={600} c={'dark.5'}>
-                                    {appointment.status}
-                                </Text>
-                            </Flex>
+                    <Flex direction="column" gap="md">
+                        <Text fw={600} size="xl" mb="sm" c="#5789cf">
+                            Thông tin thú cưng
+                        </Text>
+                        <Flex align="center" gap="sm">
+                            <PetsOutlined
+                                fontSize="small"
+                                htmlColor="#5789cf"
+                            />
+                            <Text fw={500}>Tên: {appointment.Pet.name}</Text>
+                        </Flex>
+                        <Flex align="center" gap="sm">
+                            <Text fw={500}>Giống loài:</Text>
+                            <Text>{appointment.Pet.Category.name}</Text>
+                        </Flex>
+                        <Flex align="center" gap="sm">
+                            <Text fw={500}>Tuổi:</Text>
+                            <Text>{appointment.Pet.age} tuổi</Text>
+                        </Flex>
+                        <Flex align="center" gap="sm">
+                            <Text fw={500}>Giới tính:</Text>
+                            <Text>{appointment.Pet.gender}</Text>
                         </Flex>
                     </Flex>
                 </SimpleGrid>
-            </Group>
-        </Group>
+                <Divider my="lg" />
+
+                <Text fw={600} size="xl" mb="sm" c="#5789cf">
+                    Chi tiết cuộc hẹn
+                </Text>
+                <Flex direction="column" gap="md">
+                    <Flex align="center" gap="sm">
+                        <EventNote fontSize="small" htmlColor="#5789cf" />
+                        <Text fw={500}>
+                            Tên dịch vụ:{' '}
+                            {appointment?.service_name ||
+                                'Khám sức khỏe thú cưng'}
+                        </Text>
+                    </Flex>
+                    <Flex align="center" gap="sm">
+                        <AccessTimeOutlined
+                            fontSize="small"
+                            htmlColor="#5789cf"
+                        />
+                        <Text fw={500}>Thời gian:</Text>
+                        <Text>{getTime(appointment.appointment_date)}</Text>
+                    </Flex>
+                    <Flex align="center" gap="sm">
+                        <CalendarMonthOutlined
+                            fontSize="small"
+                            htmlColor="#5789cf"
+                        />
+                        <Text fw={500}>Ngày hẹn:</Text>
+                        <Text>{getDate(appointment.appointment_date)}</Text>
+                    </Flex>
+                    <Flex align="center" gap="sm">
+                        <Notes fontSize="small" htmlColor="#5789cf" />
+                        <Text fw={500}>
+                            Ghi chú: {appointment.notes || 'Không có ghi chú'}
+                        </Text>
+                    </Flex>
+                </Flex>
+            </Card>
+        </Flex>
     );
 }
 
-export default AppoinmentDetails;
+export default AppointmentDetails;

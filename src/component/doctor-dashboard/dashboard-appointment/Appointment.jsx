@@ -5,9 +5,9 @@ import { getDate, getTime } from '../../../util/getTimeFromIsoDate';
 
 function Appointment({ appointment }) {
     const badgeColor =
-        appointment.status === 'Scheduled'
+        appointment.status === 'Đã đặt lịch'
             ? 'green'
-            : appointment.status === 'Completed'
+            : appointment.status === 'Hoàn thành'
               ? 'gray'
               : 'red';
     return (
