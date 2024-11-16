@@ -21,7 +21,7 @@ import {
     PhoneOutlined,
 } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getDate, getTime } from '../../util/getTimeFromIsoDate';
+import { getDate } from '../../util/getTimeFromIsoDate';
 
 function AppointmentDetails() {
     const location = useLocation();
@@ -171,7 +171,7 @@ function AppointmentDetails() {
                             htmlColor="#5789cf"
                         />
                         <Text fw={500}>Thời gian:</Text>
-                        <Text>{getTime(appointment.appointment_date)}</Text>
+                        <Text>{appointment.appointment_time.slice(0, -3)}</Text>
                     </Flex>
                     <Flex align="center" gap="sm">
                         <CalendarMonthOutlined

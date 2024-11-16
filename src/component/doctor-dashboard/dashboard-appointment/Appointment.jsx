@@ -1,7 +1,7 @@
 import { Avatar, Badge, Button, Group, Text } from '@mantine/core';
 import { CalendarMonth, WatchLater } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { getDate, getTime } from '../../../util/getTimeFromIsoDate';
+import { getDate } from '../../../util/getTimeFromIsoDate';
 
 function Appointment({ appointment }) {
     const badgeColor =
@@ -42,7 +42,7 @@ function Appointment({ appointment }) {
                 <Group w={'100%'} justify="space-evenly">
                     <Text size="md">
                         <WatchLater color="action" />{' '}
-                        {getTime(appointment.appointment_date)}
+                        {appointment.appointment_time.slice(0, -3)}
                     </Text>
                     <Text size="md">
                         <CalendarMonth color="action" />{' '}
