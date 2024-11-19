@@ -63,7 +63,7 @@ export const useAuthStore = create((set) => {
                 const { user, token, refreshToken } = response.data;
                 const role = user.role;
 
-                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('user', user);
                 localStorage.setItem('isAuthenticated', JSON.stringify(true));
                 localStorage.setItem('role', role);
                 localStorage.setItem('token', token);
@@ -89,7 +89,7 @@ export const useAuthStore = create((set) => {
         logout: async () => {
             set({ isLoading: true, error: null });
             try {
-                await axios.post(`${API_URL}/logout`);
+                // await axios.post(`${API_URL}/logout`);
 
                 localStorage.clear();
                 localStorage.removeItem('user');
