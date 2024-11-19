@@ -41,7 +41,7 @@ function AppointmentSummary() {
                     doctor_id: formData.doctor.id,
                     appointment_date: formatDate(formData.date),
                     appointment_time: formData.time,
-                    note: formData.notes || 'Không có ghi chú',
+                    notes: formData.notes || 'Không có ghi chú',
                 },
                 {
                     withCredentials: true,
@@ -127,7 +127,7 @@ function AppointmentSummary() {
                             </Text>
                             <Text>
                                 <b>Giờ: </b>
-                                {formData.time}
+                                {formData.time.slice(0, -3)}
                             </Text>
                             <Text>
                                 <b>Ghi chú: </b>

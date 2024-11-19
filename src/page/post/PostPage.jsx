@@ -1,4 +1,4 @@
-import { Group, Loader, Text } from '@mantine/core';
+import { Group, Image, Loader, Text } from '@mantine/core';
 import { useMemo } from 'react';
 import AddPost from '../../component/post/add-post/AddPost';
 import PostItem from '../../component/post/post-item/PostItem';
@@ -22,14 +22,29 @@ function PostPage() {
                 </Group>
             ) : null}
 
-            {data ? (
-                <Group w={700}>
-                    {data?.data?.reverse().map((post, index) => (
-                        <PostItem post={post} key={index} />
+            {data?.data?.length > 0 ? (
+                <Group w={'100%'}>
+                    {data.data.reverse().map((post, index) => (
+                        <PostItem
+                            post={post}
+                            key={index}
+                            onPostDeleted={refetch}
+                        />
                     ))}
                 </Group>
-            ) : null}
-
+            ) : (
+                <Group w={'100%'} justify="center">
+                    <Image
+                        w={100}
+                        src={
+                            'https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.images.empty_states.dormant_lightmode.png-26-c4532c98034818a0.png'
+                        }
+                    />
+                    <Text w={'100%'} fs={'italic'} ta={'center'} c={'gray'}>
+                        Chưa có bài đăng nào
+                    </Text>
+                </Group>
+            )}
             {error ? (
                 <Text c={'red'} fw={500}>
                     {error.message}

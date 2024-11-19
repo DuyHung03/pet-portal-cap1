@@ -8,9 +8,11 @@ import {
     MenuDropdown,
     MenuItem,
     MenuTarget,
+    Modal,
     Text,
     Textarea,
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
     ChatBubbleOutline,
     Delete,
@@ -26,12 +28,13 @@ import { useAuthStore } from '../../../store/authStore';
 import { timeAgo } from '../../../util/convertTime';
 import PostComment from '../post-comment/PostComment';
 
-function PostItem({ post }) {
+function PostItem({ post, onPostDeleted }) {
     const [commentsVisible, setCommentsVisible] = useState(false);
     const [newComment, setNewComment] = useState('');
     const [comments, setComments] = useState([]);
     const [loadingComments, setLoadingComments] = useState(false);
     const { user } = useAuthStore();
+    const [opened, { open, close }] = useDisclosure(false);
 
     const postComment = async ({ postId, user, content }) => {
         const response = await axiosInstance.post(
@@ -51,7 +54,6 @@ function PostItem({ post }) {
                 createdAt: new Date().toISOString(),
             };
             setComments((prev) => [newComment, ...prev]);
-            toast.success('Đã thêm bài viết mới');
         },
         onError: (err, newComment) => {
             setComments((prevComments) =>
@@ -110,6 +112,9 @@ function PostItem({ post }) {
     const deletePostMutation = useMutation({
         mutationFn: deletePost,
         onMutate: () => {},
+        onSuccess: () => {
+            onPostDeleted();
+        },
     });
 
     const handleDeletePost = async () => {
@@ -121,6 +126,23 @@ function PostItem({ post }) {
     return (
         <>
             <ToastContainer style={{ marginTop: '100px' }} />
+            <Modal
+                opened={opened}
+                onClose={close}
+                centered
+                withCloseButton={false}
+                title="Xóa bài viết"
+            >
+                <Text mb={20}>Bạn có chắc muốn xóa bài viết này?</Text>
+                <Group mt="lg" justify="flex-end">
+                    <Button onClick={close} variant="default">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleDeletePost} color="red">
+                        Delete
+                    </Button>
+                </Group>
+            </Modal>
             <Group
                 w={'100%'}
                 bg={'#f8f8f8'}
@@ -152,7 +174,7 @@ function PostItem({ post }) {
                             {post.petOwner_Id == user.id ? (
                                 <MenuItem
                                     component="button"
-                                    onClick={handleDeletePost}
+                                    onClick={open}
                                     color="red"
                                     leftSection={
                                         <Delete
