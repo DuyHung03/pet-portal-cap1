@@ -26,7 +26,6 @@ function Orders() {
     };
 
     const handleStatusChange = (id, newStatus) => {
-        // API call or state update logic to update status
         console.log(`Cập nhật đơn hàng ${id} trạng thái thành ${newStatus}`);
         setStatusDropdown(null);
     };
@@ -140,8 +139,11 @@ function Orders() {
                                                             {item.Product.name}
                                                         </p>
                                                         <p>
-                                                            {item.quantity} x $
-                                                            {item.unit_price}
+                                                            {item.quantity} x{' '}
+                                                            {parseInt(
+                                                                item.unit_price,
+                                                            ).toLocaleString()}{' '}
+                                                            đ
                                                         </p>
                                                     </div>
                                                 </div>

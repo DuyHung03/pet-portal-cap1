@@ -1,38 +1,69 @@
-import {
-    Flex,
-    Image,
-    Text,
-    Rating,
-    Badge,
-    Group,
-    Tooltip,
-    Button,
-} from '@mantine/core';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+// Product.js
+import { Flex, Image, Text, Badge, Group, Button } from '@mantine/core';
+import { useState, useEffect } from 'react';
+import { IconSearch, IconShoppingCart } from '@tabler/icons-react';
+import { useAuthStore } from '@store/authStore';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addToCart, loadCartFromStorage } from '@redux/slice/cartSlice';
 
 function Product({ product }) {
     const [hovered, setHovered] = useState(false);
+    const [searchButtonHovered, setSearchButtonHovered] = useState(false);
+    const [cartButtonHovered, setCartButtonHovered] = useState(false);
+    const [addedToCart, setAddedToCart] = useState(false);
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { isAuthenticated, user } = useAuthStore();
+
+    useEffect(() => {
+        if (isAuthenticated && user) {
+            dispatch(loadCartFromStorage(user.id));
+        }
+    }, [isAuthenticated, user, dispatch]);
+
+    const handleAddToCart = async () => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        } else {
+            try {
+                const item = { ...product, quantity: 1 };
+                await dispatch(addToCart({ userId: user.id, item }));
+                setAddedToCart(true);
+                setTimeout(() => setAddedToCart(false), 2000);
+            } catch (error) {
+                console.error(
+                    'Error adding item to API:',
+                    error.response?.data || error.message,
+                );
+            }
+        }
+    };
+
+    const handleViewDetails = () => {
+        navigate(`/shop/product/${product.id}`, { state: { product } });
+    };
 
     return (
-        <Link
-            state={{ product }}
-            to={`product/${product.id}`}
-            style={{
-                padding: '10px',
-                borderRadius: '12px',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                display: 'block',
-                textDecoration: 'none',
-                color: 'inherit',
-                '&:hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: '0 6px 16px rgba(0, 0, 0, 0.2)',
-                },
-            }}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-        >
+        <>
+            {addedToCart && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: '0px',
+                        right: '00px',
+                        backgroundColor: '#28a745',
+                        color: 'white',
+                        padding: '15px 20px',
+                        borderRadius: '8px',
+                        // boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                        zIndex: 1000,
+                    }}
+                >
+                    Sản phẩm đã được thêm vào giỏ hàng!
+                </div>
+            )}
             <Flex
                 direction={'column'}
                 w={240}
@@ -43,10 +74,16 @@ function Product({ product }) {
                     borderRadius: '12px',
                     position: 'relative',
                     overflow: 'hidden',
+                    boxShadow: hovered
+                        ? '0px 10px 20px rgba(0, 0, 0, 0.15)'
+                        : 'none',
+                    transform: hovered ? 'scale(1.03)' : 'scale(1)',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 }}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
             >
                 <Image
-                    // src={product.images || 'https://via.placeholder.com/240'}
                     src={
                         'https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg'
                     }
@@ -92,56 +129,59 @@ function Product({ product }) {
                     {parseInt(product.price).toLocaleString()} VND
                 </Text>
 
-                {/* <Group position="center" mt={'md'}>
-                    <Rating
-                        value={
-                            product.ProductReviews.length
-                                ? product.ProductReviews.reduce(
-                                      (acc, review) => acc + review.rating,
-                                      0,
-                                  ) / product.ProductReviews.length
-                                : 0
-                        }
-                        readOnly
-                    />
-                    <Text size="xs" color="dimmed">
-                        ({product.ProductReviews.length} đánh giá)
-                    </Text>
-                </Group> */}
+                <Flex
+                    direction="column"
+                    align="center"
+                    justify="center"
+                    bg="rgba(0, 0, 0, 0.8)"
+                    style={{
+                        position: 'absolute',
+                        bottom: hovered ? '0' : '-100%',
+                        left: 0,
+                        right: 0,
+                        height: '50%',
+                        color: '#fff',
+                        borderRadius: '12px',
+                        padding: '10px',
+                        opacity: hovered ? 1 : 0,
 
-                {hovered && (
-                    <Flex
-                        direction="column"
-                        align="center"
-                        justify="center"
-                        bg="rgba(0, 0, 0, 0.7)"
+                        transition: 'bottom 0.3s ease, opacity 0.3s ease',
+                    }}
+                >
+                    <Button
+                        variant="filled"
+                        color="yellow"
+                        radius="xl"
                         style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            color: '#fff',
-                            borderRadius: '12px',
-                            padding: '15px',
-                            textAlign: 'center',
-                            opacity: 1,
-                            transition: 'opacity 0.3s ease',
+                            backgroundColor: searchButtonHovered
+                                ? 'rgba(255, 200, 0, 0.5)'
+                                : 'rgba(255, 255, 255, 0.2)',
+                            marginBottom: '8px',
                         }}
+                        onMouseEnter={() => setSearchButtonHovered(true)}
+                        onMouseLeave={() => setSearchButtonHovered(false)}
+                        onClick={handleViewDetails}
                     >
-                        <Text fw={700} size="lg">
-                            {product.name}
-                        </Text>
-                        <Text size="sm" mt="xs">
-                            {product.description}
-                        </Text>
-                        <Button mt="md" color="yellow" size="xs">
-                            Xem chi tiết
-                        </Button>
-                    </Flex>
-                )}
+                        <IconSearch size={20} /> | Thông Tin Chi Tiết
+                    </Button>
+                    <Button
+                        variant="filled"
+                        color="yellow"
+                        radius="xl"
+                        style={{
+                            backgroundColor: cartButtonHovered
+                                ? 'rgba(255, 200, 0, 0.5)'
+                                : 'rgba(255, 255, 255, 0.2)',
+                        }}
+                        onMouseEnter={() => setCartButtonHovered(true)}
+                        onMouseLeave={() => setCartButtonHovered(false)}
+                        onClick={handleAddToCart}
+                    >
+                        <IconShoppingCart size={20} /> | Thêm Giỏ Hàng
+                    </Button>
+                </Flex>
             </Flex>
-        </Link>
+        </>
     );
 }
 

@@ -1,31 +1,56 @@
 import useFetchData from '@hooks/useFetchData';
+import { Pagination } from '@mantine/core';
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { FiSettings, FiPlus, FiEdit, FiTrash2 } from 'react-icons/fi';
 import { vietnameseDate } from '../../util/getDateInVietnamese';
 import logo from '../../assets/logo-transparent.png';
+import AddProduct from 'component/shop-dashboard/add-products/AddProducts';
 
 function Products() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [skip, setSkip] = useState(0);
     const [showActionMenu, setShowActionMenu] = useState(null);
+    const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+    const [products, setProducts] = useState([]);
     const actionMenuRef = useRef(null);
-
-    const params = useMemo(() => ({ limit: 6, skip }), [skip]);
+    const [page, setPage] = useState(1);
+    const productSectionRef = useRef(null);
+    const [totalPages, setTotalPages] = useState(1);
+    const pageSize = 6;
+    const params = useMemo(
+        () => ({
+            limit: pageSize,
+            page: page,
+        }),
+        [page],
+    );
 
     const { data, loading, error } = useFetchData(
         '/products/panigated',
         params,
     );
+    useEffect(() => {
+        if (data && data.data) {
+            setProducts(data.data);
+            const totalItems = data.pagination.totalItems;
+            const totalPages = data.pagination.totalPages;
 
-    const totalPages = Math.ceil((data?.pagination?.totalItems || 0) / 6);
+            setTotalPages(totalPages);
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-        setSkip((pageNumber - 1) * 6);
-    };
+            if (productSectionRef.current) {
+                productSectionRef.current.scrollIntoView({
+                    behavior: 'smooth',
+                });
+            }
+        }
+    }, [data, page, pageSize]);
 
     const toggleActionMenu = (id) => {
         setShowActionMenu(showActionMenu === id ? null : id);
+    };
+
+    const handleAddProduct = (productData) => {
+        setProducts((prevProducts) => [productData, ...prevProducts]);
+        setIsAddProductOpen(false);
     };
 
     useEffect(() => {
@@ -44,7 +69,7 @@ function Products() {
     }, []);
 
     return (
-        <div className="px-8 pt-8 pb-5 bg-gray-100 w-full h-[100vh]  max-h-screen ">
+        <div className="px-8 pt-8 pb-5 bg-gray-100 w-full h-[100vh] max-h-screen">
             <div className="flex justify-between items-center mb-8 bg-[#FAFAFC] p-6 rounded-xl shadow-md">
                 <div className="flex items-center space-x-4">
                     <img src={logo} alt="Logo" className="w-16" />
@@ -56,36 +81,45 @@ function Products() {
             </div>
 
             <div className="flex justify-between items-center mb-6">
-                <button className="flex items-center px-5 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                <button
+                    onClick={() => setIsAddProductOpen(true)}
+                    className="flex items-center px-5 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+                >
                     <FiPlus className="mr-2" />
                     Thêm Sản Phẩm
                 </button>
             </div>
 
+            {isAddProductOpen && (
+                <AddProduct
+                    onClose={() => setIsAddProductOpen(false)}
+                    onAddProduct={handleAddProduct}
+                />
+            )}
+
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
                 {loading ? (
-                    <p className="p-4 text-center">Loading...</p>
+                    <p className="p-4 text-center">Đang tải...</p>
                 ) : error ? (
                     <p className="p-4 text-center text-red-500">
-                        Error: {error.message}
+                        Lỗi: {error.message}
                     </p>
                 ) : (
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-gray-100 text-gray-700">
                                 <th className="p-4">ID</th>
-                                <th className="p-4">Hình Ảnh</th>{' '}
-                                {/* Cột hình ảnh */}
+                                <th className="p-4">Hình Ảnh</th>
                                 <th className="p-4">Tên</th>
-                                <th className="p-4">Category</th>
-                                <th className="p-4">Price</th>
-                                <th className="p-4">Stock</th>
-                                <th className="p-4">Action</th>
+                                <th className="p-4">Danh Mục</th>
+                                <th className="p-4">Giá</th>
+                                <th className="p-4">Tồn Kho</th>
+                                <th className="p-4">Thao Tác</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {data?.data.length > 0 ? (
-                                data.data.map((product, index) => (
+                            {products.length > 0 ? (
+                                products.map((product, index) => (
                                     <tr
                                         key={product.id}
                                         className={`border-b ${
@@ -98,7 +132,7 @@ function Products() {
                                         <td className="p-4">
                                             <img
                                                 src={
-                                                    product.image ||
+                                                    product.images ||
                                                     'https://via.placeholder.com/50'
                                                 }
                                                 alt={product.name}
@@ -110,7 +144,10 @@ function Products() {
                                             {product.Category?.name}
                                         </td>
                                         <td className="p-4">
-                                            ${product.price}
+                                            {parseInt(
+                                                product.price,
+                                            ).toLocaleString()}{' '}
+                                            ₫
                                         </td>
                                         <td className="p-4">
                                             {product.stock_quantity}
@@ -132,24 +169,24 @@ function Products() {
                                                     <button
                                                         onClick={() =>
                                                             alert(
-                                                                `Edit ${product.name}`,
+                                                                `Chỉnh sửa ${product.name}`,
                                                             )
                                                         }
                                                         className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                                     >
                                                         <FiEdit className="mr-2" />
-                                                        Edit
+                                                        Chỉnh sửa
                                                     </button>
                                                     <button
                                                         onClick={() =>
                                                             alert(
-                                                                `Delete ${product.name}`,
+                                                                `Xóa ${product.name}`,
                                                             )
                                                         }
                                                         className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                                     >
                                                         <FiTrash2 className="mr-2" />
-                                                        Delete
+                                                        Xóa
                                                     </button>
                                                 </div>
                                             )}
@@ -159,7 +196,7 @@ function Products() {
                             ) : (
                                 <tr>
                                     <td colSpan="7" className="p-4 text-center">
-                                        No products found.
+                                        Không có sản phẩm.
                                     </td>
                                 </tr>
                             )}
@@ -168,27 +205,19 @@ function Products() {
                 )}
             </div>
 
-            <div className="flex justify-between items-center mt-5">
-                <p className="text-gray-600">
-                    Showing {(currentPage - 1) * 6 + 1} -{' '}
-                    {Math.min(currentPage * 6, data?.pagination?.totalItems)} of{' '}
-                    {data?.pagination?.totalItems}
-                </p>
-                <div className="flex space-x-2">
-                    {[...Array(totalPages)].map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handlePageChange(index + 1)}
-                            className={`w-10 h-10 flex items-center justify-center rounded-lg ${
-                                currentPage === index + 1
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-200 hover:bg-blue-500 hover:text-white'
-                            } transition`}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
-                </div>
+            <div className="flex  items-center mt-5">
+                <Pagination
+                    page={page}
+                    onChange={setPage}
+                    total={totalPages}
+                    size="lg"
+                    radius="xl"
+                    withControls
+                    withEdges
+                    style={{
+                        marginTop: '20px',
+                    }}
+                />
             </div>
         </div>
     );

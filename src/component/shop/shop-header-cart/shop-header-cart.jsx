@@ -144,7 +144,7 @@ function CartPanel({ onClose, isOpen }) {
                         backgroundColor: 'white',
                     }}
                 >
-                    <Link to="/cart">
+                    <Link to="/shop/cart">
                         <Button
                             variant="default"
                             style={{

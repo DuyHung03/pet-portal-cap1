@@ -7,8 +7,8 @@ import ShopBanner from '../../component/shop/shop-banner/ShopBanner';
 import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
 function Shop() {
-    const [page, setPage] = useState(1);
     const [products, setProducts] = useState([]);
+    const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 8;
     const { search } = useSelector((state) => state.shop);
@@ -17,7 +17,7 @@ function Shop() {
     const params = useMemo(
         () => ({
             limit: pageSize,
-            skip: (page - 1) * pageSize + 1,
+            page: page,
             name: search || undefined,
         }),
         [page, search],
@@ -79,7 +79,7 @@ function Shop() {
                         borderBottom: '2px solid #003594',
                     }}
                 >
-                    Đề xuất
+                    Sản Phẩm Đang Bán
                 </Text>
 
                 {loading && products.length === 0 ? (
@@ -104,13 +104,7 @@ function Shop() {
                         }}
                     >
                         {products.map((product) => (
-                            <Link
-                                to={{
-                                    pathname: `/product/${product.id}`,
-                                    state: { product },
-                                }}
-                                key={product.id}
-                            >
+                            <Link>
                                 <Product product={product} />
                             </Link>
                         ))}
