@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { getDate } from '../../../util/getTimeFromIsoDate';
 
 function Appointment({ appointment }) {
+    console.log(appointment);
+
     const badgeColor =
         appointment.status === 'Đã đặt lịch'
             ? 'green'

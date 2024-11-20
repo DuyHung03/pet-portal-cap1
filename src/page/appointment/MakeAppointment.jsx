@@ -23,6 +23,7 @@ import { generateTimeSlots } from '@util/generateTimeSlots';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
 import DoctorItem from './DoctorItem';
 import PetItem from './PetItem';
@@ -149,6 +150,10 @@ function MakeAppointment() {
 
     return (
         <Group w={'100%'} justify="center" mb={100}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Đặt lịch khám - Cổng dịch vụ thú cưng</title>
+            </Helmet>
             <Modal
                 size={800}
                 opened={openedPetModal}

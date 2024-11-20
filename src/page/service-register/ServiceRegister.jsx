@@ -3,11 +3,16 @@ import { Link } from 'react-router-dom';
 import entrepreneur from '../../assets/entrepreneur.png';
 import registration from '../../assets/registration.png';
 
+import { Helmet } from 'react-helmet';
 import vet from '../../assets/vet.png';
 
 function ServiceRegister() {
     return (
         <Group w={'100%'} justify="center">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Đăng kí dịch vụ - Cổng dịch vụ thú cưng</title>
+            </Helmet>
             <Group w={1200} p={20}>
                 <Group w={'100%'} justify="center">
                     <Image src={registration} w={150} />

@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
-import { Group, Loader, Text, Pagination } from '@mantine/core';
+import { Group, Loader, Pagination, Text } from '@mantine/core';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import ShopBanner from '../../component/shop/shop-banner/ShopBanner';
 import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 function Shop() {
     const [page, setPage] = useState(1);
     const [products, setProducts] = useState([]);
@@ -45,6 +46,10 @@ function Shop() {
 
     return (
         <Group w={'100%'} gap={0} bg="#f9f9f9">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Cửa hàng - Cổng dịch vụ thú cưng</title>
+            </Helmet>
             <ShopBanner />
             <Group
                 ref={productSectionRef}
