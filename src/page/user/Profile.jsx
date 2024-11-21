@@ -18,13 +18,19 @@ import {
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { AddPhotoAlternate, CheckCircle, Save } from '@mui/icons-material';
+import {
+    AddPhotoAlternate,
+    ArrowBack,
+    CheckCircle,
+    Save,
+} from '@mui/icons-material';
 import axiosInstance from '@network/httpRequest';
 import { useAuthStore } from '@store/authStore';
 import { uploadImage } from '@util/firebaseUtils';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 
 function Profile() {
@@ -35,6 +41,7 @@ function Profile() {
     const resetRef = useRef(null);
     const [loading, setLoading] = useState(false);
     const [opened, { open, close }] = useDisclosure(false);
+    const navigate = useNavigate();
 
     const form = useForm({
         initialValues: {
@@ -114,6 +121,17 @@ function Profile() {
                 style={{ boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' }}
                 p={20}
             >
+                <Group w={'100%'}>
+                    <Button
+                        leftSection={<ArrowBack />}
+                        variant="transparent"
+                        onClick={() => navigate(-1)}
+                        c={'#5789cf'}
+                    >
+                        Quay lại
+                    </Button>
+                    {/* <Divider w={'100%'} /> */}
+                </Group>
                 <Text fw={600} size="xl" c={'#5789cf'}>
                     Thông tin cá nhân
                 </Text>

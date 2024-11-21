@@ -15,6 +15,7 @@ import {
     WcOutlined,
 } from '@mui/icons-material';
 import { useAppointment } from '@store/useAppointment';
+import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function DoctorProfile() {
@@ -29,6 +30,10 @@ function DoctorProfile() {
 
     return (
         <Group w={'100%'} justify="center">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>{`BS.${state?.username}`}</title>
+            </Helmet>
             <Group
                 w={700}
                 p={20}

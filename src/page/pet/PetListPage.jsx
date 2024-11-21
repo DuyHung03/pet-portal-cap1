@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { Add } from '@mui/icons-material';
 import { useMemo } from 'react';
+import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import petFood from '../../assets/pet-food.png';
 import PetItem from '../../component/pet/PetItem';
@@ -35,6 +36,10 @@ function PetListPage() {
 
     return (
         <Group w={'100%'} justify="center">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Quản lý thú cưng - Cổng dịch vụ thú cưng</title>
+            </Helmet>
             <Group w={1200} p={20}>
                 <Flex justify={'space-between'} w={'100%'} align={'center'}>
                     <Text fw={500} c={'#5789CF'} size={'26px'}>

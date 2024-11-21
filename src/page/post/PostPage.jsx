@@ -1,5 +1,6 @@
 import { Group, Image, Loader, Text } from '@mantine/core';
 import { useMemo } from 'react';
+import { Helmet } from 'react-helmet';
 import AddPost from '../../component/post/add-post/AddPost';
 import PostItem from '../../component/post/post-item/PostItem';
 import useFetchData from '../../hooks/useFetchData';
@@ -14,6 +15,10 @@ function PostPage() {
 
     return (
         <Group w={700} justify="center" m={20}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Diễn đàn - Cổng dịch vụ thú cưng</title>
+            </Helmet>
             <AddPost onPostCreated={refetch} />
 
             {loading ? (

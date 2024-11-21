@@ -1,13 +1,14 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
-import { Group, Loader, Text, Pagination } from '@mantine/core';
+import { Group, Loader, Pagination, Text } from '@mantine/core';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import ShopBanner from '../../component/shop/shop-banner/ShopBanner';
 import Product from '../../component/shop/shop-product/Product';
 import useFetchData from '../../hooks/useFetchData';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 function Shop() {
-    const [page, setPage] = useState(1);
     const [products, setProducts] = useState([]);
+    const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 8;
     const { search } = useSelector((state) => state.shop);
@@ -16,7 +17,7 @@ function Shop() {
     const params = useMemo(
         () => ({
             limit: pageSize,
-            skip: (page - 1) * pageSize + 1,
+            page: page,
             name: search || undefined,
         }),
         [page, search],
@@ -45,6 +46,10 @@ function Shop() {
 
     return (
         <Group w={'100%'} gap={0} bg="#f9f9f9">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Cửa hàng - Cổng dịch vụ thú cưng</title>
+            </Helmet>
             <ShopBanner />
             <Group
                 ref={productSectionRef}
@@ -74,7 +79,7 @@ function Shop() {
                         borderBottom: '2px solid #003594',
                     }}
                 >
-                    Đề xuất
+                    Sản Phẩm Đang Bán
                 </Text>
 
                 {loading && products.length === 0 ? (
@@ -99,15 +104,14 @@ function Shop() {
                         }}
                     >
                         {products.map((product) => (
-                            <Link
-                                to={{
-                                    pathname: `/product/${product.id}`,
-                                    state: { product },
-                                }}
+                            <div
                                 key={product.id}
+                                style={{
+                                    cursor: 'pointer',
+                                }}
                             >
                                 <Product product={product} />
-                            </Link>
+                            </div>
                         ))}
                     </Group>
                 )}

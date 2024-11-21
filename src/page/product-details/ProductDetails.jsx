@@ -58,7 +58,7 @@ function ProductDetails() {
             <div className="flex flex-row items-start justify-between mb-8 space-x-6">
                 <img
                     src={
-                        product.imageUrl ||
+                        // product.images ||
                         'https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg'
                     }
                     alt={product.name || 'Sản phẩm'}
@@ -142,8 +142,8 @@ function ProductDetails() {
 
             <h2 className="text-lg font-bold mb-4">Đánh giá của khách hàng</h2>
             {product.ProductReviews && product.ProductReviews.length > 0 ? (
-                product.ProductReviews.map((review) => (
-                    <div className="flex items-center mb-4" key={review.id}>
+                product.ProductReviews.map((review, index) => (
+                    <div className="flex items-center mb-4" key={index}>
                         <Avatar
                             src={
                                 review.userAvatar ||
@@ -178,10 +178,12 @@ function ProductDetails() {
                 Sản phẩm khác có thể bạn thích
             </h2>
             <div className="flex flex-wrap justify-between mt-2">
-                <div className="p-2 text-gray-700">Sản phẩm 1</div>
-                <div className="p-2 text-gray-700">Sản phẩm 2</div>
-                <div className="p-2 text-gray-700">Sản phẩm 3</div>
-                <div className="p-2 text-gray-700">Sản phẩm 4</div>
+                {/* Display related products here */}
+                {product.Category && (
+                    <div className="p-2 text-gray-700">
+                        Sản phẩm trong danh mục: {product.Category.name}
+                    </div>
+                )}
             </div>
         </div>
     );

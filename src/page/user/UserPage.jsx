@@ -11,12 +11,12 @@ import {
     Text,
 } from '@mantine/core';
 import {
-    Cake,
+    CakeOutlined,
     CreateOutlined,
     Edit,
     Email,
-    LocationOn,
-    Phone,
+    LocationOnOutlined,
+    PhoneOutlined,
 } from '@mui/icons-material';
 import axiosInstance from '@network/httpRequest';
 import { useMemo } from 'react';
@@ -90,23 +90,31 @@ function UserPage() {
                     <Flex direction={'column'} gap={20} pt={20} c={'#5789CF'}>
                         <Flex align={'center'} gap={10}>
                             <Email />
-                            {user.email}
+                            <Text fw={500} c={'gray'}>
+                                {user.email}
+                            </Text>
                         </Flex>
                         {user.date_of_birth ? (
                             <Flex align={'center'} gap={10}>
-                                <Cake />
-                                {user.date_of_birth}
+                                <CakeOutlined />
+                                <Text fw={500} c={'gray'}>
+                                    {user.date_of_birth}
+                                </Text>
                             </Flex>
                         ) : null}
                         {user.address ? (
                             <Flex align={'center'} gap={10}>
-                                <LocationOn />
-                                address
+                                <LocationOnOutlined />
+                                <Text fw={500} c={'gray'}>
+                                    address
+                                </Text>
                             </Flex>
                         ) : null}
                         <Flex align={'center'} gap={10}>
-                            <Phone />
-                            {user.phone}
+                            <PhoneOutlined />
+                            <Text fw={500} c={'gray'}>
+                                {user.phone}
+                            </Text>
                         </Flex>
                     </Flex>
                 </GridCol>
