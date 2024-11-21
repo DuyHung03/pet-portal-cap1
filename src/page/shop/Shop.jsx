@@ -104,9 +104,14 @@ function Shop() {
                         }}
                     >
                         {products.map((product) => (
-                            <Link>
+                            <div
+                                key={product.id}
+                                style={{
+                                    cursor: 'pointer',
+                                }}
+                            >
                                 <Product product={product} />
-                            </Link>
+                            </div>
                         ))}
                     </Group>
                 )}

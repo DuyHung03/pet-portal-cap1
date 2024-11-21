@@ -50,7 +50,6 @@ import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
 
-import ShopCategoryCat from '@pages/shop-category/shop-category.dogs';
 import ShopStore from '@pages/shop-store/shop-store';
 
 // import ProtectedRoute from './ProtectedRoute';
@@ -82,9 +81,9 @@ const router = createBrowserRouter(
                 <Route path="cart" element={<Cart />} />
                 <Route path="checkout/:id" element={<Checkout />} />
                 <Route path="shop-category/cat" element={<ShopCategoryCat />} />
+                <Route path="shop-store" element={<ShopStore />} />
             </Route>
             {/* <Route path="cart" element={<Cart />} /> */}
-            <Route path="shop-store" element={<ShopStore />} />
 
             <Route
                 path="/doctor-dashboard"
