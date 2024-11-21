@@ -211,10 +211,10 @@ function ShopNavBar() {
                         Phụ Kiện
                     </Text>
                 </Link>
-                <Link to={'/lien-he'}>
+                <Link to={'contact'}>
                     <Text
                         c={
-                            isActive('/lien-he') || hoveredNav === 'contact'
+                            isActive('contact') || hoveredNav === 'contact'
                                 ? 'white'
                                 : 'dark'
                         }
@@ -224,7 +224,7 @@ function ShopNavBar() {
                         pt={6}
                         pb={6}
                         bg={
-                            isActive('/lien-he') || hoveredNav === 'contact'
+                            isActive('contact') || hoveredNav === 'contact'
                                 ? '#dfe6e9'
                                 : 'transparent'
                         }
@@ -236,10 +236,10 @@ function ShopNavBar() {
                     </Text>
                 </Link>
 
-                <Link to={'/gioi-thieu'}>
+                <Link to={'about'}>
                     <Text
                         c={
-                            isActive('/gioi-thieu') || hoveredNav === 'about'
+                            isActive('about') || hoveredNav === 'about'
                                 ? 'white'
                                 : 'dark'
                         }
@@ -249,7 +249,7 @@ function ShopNavBar() {
                         pt={6}
                         pb={6}
                         bg={
-                            isActive('/gioi-thieu') || hoveredNav === 'about'
+                            isActive('about') || hoveredNav === 'about'
                                 ? '#dfe6e9'
                                 : 'transparent'
                         }

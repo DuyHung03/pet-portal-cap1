@@ -1,6 +1,6 @@
 import { Group } from '@mantine/core';
+import Footer from 'component/shop/shop-footer/shop-footer';
 import { Outlet } from 'react-router-dom';
-import Footer from '../component/footer/Footer';
 import ShopHeader from '../component/shop/shop-header/ShopHeader';
 import ShopNavBar from '../component/shop/shop-nav/ShopNavBar';
 
