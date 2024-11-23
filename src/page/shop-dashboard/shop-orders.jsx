@@ -1,37 +1,120 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import useFetchData from '@hooks/useFetchData';
 import { vietnameseDate } from '../../util/getDateInVietnamese';
 import logo from '../../assets/logo-transparent.png';
+import { Pagination } from '@mantine/core';
+import axiosInstance from '@network/httpRequest';
+import SettingsIcon from '@mui/icons-material/Settings';
+import CloseIcon from '@mui/icons-material/Close';
+import Modal from 'react-modal';
 
 function Orders() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [skip, setSkip] = useState(0);
     const [statusDropdown, setStatusDropdown] = useState(null);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [orders, setOrders] = useState([]);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [orderToDelete, setOrderToDelete] = useState(null);
 
-    const ROWS_PER_PAGE = 10;
-    const params = useMemo(() => ({ limit: ROWS_PER_PAGE, skip }), [skip]);
-    const { data, loading, error } = useFetchData(`/orders`, params);
+    const productSectionRef = useRef(null);
+    const pageSize = 5;
 
-    const totalPages = useMemo(() => {
-        return Math.ceil((data?.pagination?.totalItems || 0) / ROWS_PER_PAGE);
-    }, [data]);
+    const params = useMemo(
+        () => ({
+            limit: pageSize,
+            page: page,
+        }),
+        [page],
+    );
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-        setSkip((pageNumber - 1) * ROWS_PER_PAGE);
-    };
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const response = await axiosInstance.get('/orders/paniagated', {
+                    params: params,
+                });
+                setOrders(response.data.data);
+                setTotalPages(response.data.totalPages);
+            } catch (error) {
+                console.error('Lỗi khi tải đơn hàng:', error);
+            }
+        };
+
+        fetchOrders();
+    }, [params]);
+
+    useEffect(() => {
+        if (orders && orders.length > 0 && productSectionRef.current) {
+            productSectionRef.current.scrollIntoView({
+                behavior: 'smooth',
+            });
+        }
+    }, [orders, page]);
 
     const toggleStatusDropdown = (id) => {
         setStatusDropdown(statusDropdown === id ? null : id);
     };
 
-    const handleStatusChange = (id, newStatus) => {
-        console.log(`Cập nhật đơn hàng ${id} trạng thái thành ${newStatus}`);
-        setStatusDropdown(null);
+    const updateOrderStatus = async (orderId, newStatus) => {
+        try {
+            const response = await axiosInstance.put(`/orders/${orderId}`, {
+                status: newStatus,
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái:', error);
+            throw error;
+        }
+    };
+
+    const handleStatusChange = async (id, newStatus) => {
+        try {
+            const updatedOrder = await updateOrderStatus(id, newStatus);
+
+            if (updatedOrder) {
+                setOrders((prevOrders) =>
+                    prevOrders.map((order) =>
+                        order.id === id
+                            ? { ...order, status: newStatus }
+                            : order,
+                    ),
+                );
+                console.log(
+                    `Cập nhật đơn hàng ${id} trạng thái thành ${newStatus}`,
+                );
+            }
+
+            setStatusDropdown(null);
+        } catch (error) {
+            alert('Cập nhật trạng thái thất bại. Vui lòng thử lại!');
+        }
+    };
+
+    const deleteOrder = async (orderId) => {
+        try {
+            const response = await axiosInstance.delete(`/orders/${orderId}`);
+            setOrders((prevOrders) =>
+                prevOrders.filter((order) => order.id !== orderId),
+            );
+            setDeleteModalOpen(false); // Close the modal after deletion
+        } catch (error) {
+            console.error('Lỗi khi xóa đơn hàng:', error);
+            alert('Xóa đơn hàng thất bại. Vui lòng thử lại!');
+        }
+    };
+
+    const openDeleteModal = (orderId) => {
+        setOrderToDelete(orderId);
+        setDeleteModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        setDeleteModalOpen(false);
+        setOrderToDelete(null);
     };
 
     return (
-        <div className="px-8 pt-8 pb-5 bg-gray-100 w-full h-[100vh]  max-h-screen flex flex-col">
+        <div className="px-8 pt-2 pb-1 bg-white w-full h-[100vh] min-h-screen flex flex-col">
             <div className="flex justify-between items-center mb-8 bg-[#FAFAFC] p-6 rounded-xl shadow-md">
                 <div className="flex items-center space-x-4">
                     <img src={logo} alt="Logo" className="w-16" />
@@ -42,36 +125,52 @@ function Orders() {
                 <p className="text-gray-600 text-lg">{vietnameseDate}</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow overflow-hidden flex-1">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden flex-1">
                 <div className="overflow-x-auto">
-                    <table className="w-full table-fixed">
+                    <table className="w-full z-1 table-fixed">
                         <thead>
-                            <tr className="bg-gray-100 text-left">
-                                <th className="p-4">Mã Đơn Hàng</th>
-                                <th className="p-4">Tổng Tiền</th>
-                                <th className="p-4">Ngày</th>
-                                <th className="p-4">Trạng Thái</th>
-                                <th className="p-4">Sản Phẩm Đã Đặt</th>
+                            <tr className="bg-gray-100 text-left border-b-2">
+                                <th className="p-4 text-sm text-gray-600 font-medium">
+                                    Mã Đơn Hàng
+                                </th>
+                                <th className="p-4 text-sm text-gray-600 font-medium">
+                                    Tổng Tiền
+                                </th>
+                                <th className="p-4 text-sm text-gray-600 font-medium">
+                                    Ngày
+                                </th>
+                                <th className="p-4 text-sm text-gray-600 font-medium">
+                                    Trạng Thái
+                                </th>
+                                <th className="p-4 text-sm text-gray-600 font-medium">
+                                    Sản Phẩm Đã Đặt
+                                </th>
+                                <th className="p-4 text-sm text-gray-600 font-medium">
+                                    <SettingsIcon />
+                                </th>
                             </tr>
                         </thead>
                     </table>
 
                     <div className="max-h-[400px] overflow-y-auto">
-                        <table className="w-full table-fixed">
+                        <table className="w-full  table-fixed">
                             <tbody>
-                                {data?.data.map((order, index) => (
+                                {orders?.map((order, index) => (
                                     <tr
                                         key={order.id}
-                                        className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}
+                                        className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-all duration-300`}
                                     >
                                         <td className="p-4">{order.id}</td>
                                         <td className="p-4">
-                                            ${order.total_amount}
+                                            {parseInt(
+                                                order.total_amount,
+                                            ).toLocaleString()}{' '}
+                                            đ
                                         </td>
                                         <td className="p-4">
                                             {new Date(
                                                 order.createdAt,
-                                            ).toLocaleDateString()}
+                                            ).toLocaleDateString('vi-VN')}
                                         </td>
                                         <td className="p-4 relative">
                                             <button
@@ -81,27 +180,38 @@ function Orders() {
                                                     )
                                                 }
                                                 className={`px-2 py-1 rounded-full text-white text-sm ${
-                                                    order.status === 'Pending'
-                                                        ? 'bg-red-500'
+                                                    order.status ===
+                                                    'Đang xử lý'
+                                                        ? 'bg-blue-500'
                                                         : order.status ===
-                                                            'Processing'
-                                                          ? 'bg-blue-500'
-                                                          : 'bg-green-500'
+                                                            'Chờ thanh toán'
+                                                          ? 'bg-yellow-500'
+                                                          : order.status ===
+                                                              'Hoàn thành'
+                                                            ? 'bg-green-500'
+                                                            : order.status ===
+                                                                'Hủy'
+                                                              ? 'bg-red-500'
+                                                              : order.status ===
+                                                                  'Đã giao'
+                                                                ? 'bg-purple-500'
+                                                                : order.status ===
+                                                                    'Đang vận chuyển'
+                                                                  ? 'bg-orange-500'
+                                                                  : 'bg-gray-500'
                                                 }`}
                                             >
-                                                {order.status === 'Pending'
-                                                    ? 'Chờ Xử Lý'
-                                                    : order.status ===
-                                                        'Processing'
-                                                      ? 'Đang Xử Lý'
-                                                      : 'Hoàn Thành'}
+                                                {order.status}
                                             </button>
                                             {statusDropdown === order.id && (
-                                                <div className="absolute mt-2 w-32 bg-white shadow-lg rounded-lg z-10">
+                                                <div className="absolute mt-2 w-40 bg-white shadow-lg rounded-lg z-50">
                                                     {[
-                                                        'Chờ Xử Lý',
-                                                        'Đang Xử Lý',
-                                                        'Hoàn Thành',
+                                                        'Đang xử lý',
+                                                        'Chờ thanh toán',
+                                                        'Hoàn thành',
+                                                        'Hủy',
+                                                        'Đã giao',
+                                                        'Đang vận chuyển',
                                                     ].map((status) => (
                                                         <button
                                                             key={status}
@@ -149,39 +259,67 @@ function Orders() {
                                                 </div>
                                             ))}
                                         </td>
+                                        <td className="p-4 text-center">
+                                            <button
+                                                onClick={() =>
+                                                    openDeleteModal(order.id)
+                                                }
+                                                className="text-red-500 hover:text-red-700 flex items-center"
+                                            >
+                                                <CloseIcon />
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
+
+                    <Pagination
+                        total={totalPages}
+                        page={page}
+                        onChange={setPage}
+                        className="mt-2 flex justify-center"
+                    />
                 </div>
             </div>
 
-            <div className="flex justify-between items-center mt-5">
-                <p className="text-gray-600">
-                    Hiển thị {(currentPage - 1) * ROWS_PER_PAGE + 1} -{' '}
-                    {Math.min(
-                        currentPage * ROWS_PER_PAGE,
-                        data?.pagination?.totalItems,
-                    )}{' '}
-                    trong số {data?.pagination?.totalItems} đơn hàng
-                </p>
-                <div className="flex space-x-2">
-                    {[...Array(totalPages)].map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handlePageChange(index + 1)}
-                            className={`w-10 h-10 flex items-center justify-center rounded-lg ${
-                                currentPage === index + 1
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-200 hover:bg-blue-500 hover:text-white'
-                            } transition`}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
+            <Modal
+                isOpen={deleteModalOpen}
+                onRequestClose={closeDeleteModal}
+                contentLabel="Delete Order Modal"
+                className="modal"
+                overlayClassName="overlay"
+            >
+                <div className="flex justify-between items-center">
+                    <h2 className="text-lg font-medium">
+                        Xác nhận xóa đơn hàng?
+                    </h2>
+                    <button
+                        onClick={closeDeleteModal}
+                        className="text-xl text-gray-700"
+                    >
+                        <CloseIcon />
+                    </button>
                 </div>
-            </div>
+                <div className="mt-4">
+                    <p>Bạn chắc chắn muốn xóa đơn hàng này?</p>
+                    <div className="flex justify-end space-x-4 mt-4">
+                        <button
+                            onClick={closeDeleteModal}
+                            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg"
+                        >
+                            Hủy
+                        </button>
+                        <button
+                            onClick={() => deleteOrder(orderToDelete)}
+                            className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                        >
+                            Xóa
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 }

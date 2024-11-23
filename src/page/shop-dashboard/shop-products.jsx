@@ -15,7 +15,7 @@ function Products() {
     const [page, setPage] = useState(1);
     const productSectionRef = useRef(null);
     const [totalPages, setTotalPages] = useState(1);
-    const pageSize = 6;
+    const pageSize = 5;
     const params = useMemo(
         () => ({
             limit: pageSize,
@@ -69,7 +69,7 @@ function Products() {
     }, []);
 
     return (
-        <div className="px-8 pt-8 pb-5 bg-gray-100 w-full h-[100vh] max-h-screen">
+        <div className="px-8 pt-5 pb-5 bg-white w-full h-[110vh] min-h-screen">
             <div className="flex justify-between items-center mb-8 bg-[#FAFAFC] p-6 rounded-xl shadow-md">
                 <div className="flex items-center space-x-4">
                     <img src={logo} alt="Logo" className="w-16" />
@@ -203,20 +203,11 @@ function Products() {
                         </tbody>
                     </table>
                 )}
-            </div>
-
-            <div className="flex  items-center mt-5">
                 <Pagination
                     page={page}
                     onChange={setPage}
                     total={totalPages}
-                    size="lg"
-                    radius="xl"
-                    withControls
-                    withEdges
-                    style={{
-                        marginTop: '20px',
-                    }}
+                    className="mt-2 flex justify-center"
                 />
             </div>
         </div>

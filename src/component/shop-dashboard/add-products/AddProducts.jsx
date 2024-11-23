@@ -1,6 +1,6 @@
 import axiosInstance from '@network/httpRequest';
 import { useAuthStore } from '@store/authStore';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiUpload, FiX } from 'react-icons/fi';
 import { uploadImage } from '../../../util/firebaseUtils';
 import { toast } from 'react-toastify';
@@ -16,9 +16,25 @@ function AddProduct({ onClose, onAddProduct }) {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [error, setError] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-
+    const [categories, setCategories] = useState([]);
     const { user } = useAuthStore();
 
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axiosInstance.get('/categories'); // Gọi API
+                if (response.status === 200) {
+                    const { data } = response.data;
+                    setCategories(data);
+                }
+            } catch (err) {
+                console.error('Lỗi khi lấy danh mục:', err);
+                toast.error('Không thể tải danh mục sản phẩm.');
+            }
+        };
+
+        fetchCategories();
+    }, []);
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         setImage(file);
@@ -45,9 +61,9 @@ function AddProduct({ onClose, onAddProduct }) {
     };
 
     const handlePriceChange = (e) => {
-        let value = e.target.value.replace(/\D/g, ''); // Loại bỏ ký tự không phải là số
+        let value = e.target.value.replace(/\D/g, '');
         if (value) {
-            value = parseInt(value).toLocaleString(); // Định dạng tiền tệ
+            value = parseInt(value).toLocaleString();
         }
         setPrice(value);
     };
@@ -75,7 +91,7 @@ function AddProduct({ onClose, onAddProduct }) {
             sales_center_id: user.id,
             name: productName,
             category_id: category,
-            price: parseFloat(price.replace(/,/g, '')), // Xóa dấu phẩy trước khi lưu vào cơ sở dữ liệu
+            price: parseFloat(price.replace(/,/g, '')),
             stock_quantity: parseInt(stock, 10),
             sku: `PRD${Date.now()}`,
             images: imageUrl,
@@ -89,7 +105,6 @@ function AddProduct({ onClose, onAddProduct }) {
                 onAddProduct(response.data);
                 onClose();
 
-                // Hiển thị thông báo thành công
                 toast.success('Sản phẩm đã được thêm thành công!', {
                     position: 'top-right',
                     autoClose: 5000,
@@ -141,12 +156,18 @@ function AddProduct({ onClose, onAddProduct }) {
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        className={`w-full p-2 mb-2 border rounded ${error.category ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`w-full p-2 mb-2 border rounded ${
+                            error.category
+                                ? 'border-red-500'
+                                : 'border-gray-300'
+                        }`}
                     >
                         <option value="">Chọn danh mục</option>
-                        <option value="1">Thức ăn</option>
-                        <option value="2">Sản phẩm</option>
-                        <option value="3">Phụ kiện</option>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                            </option>
+                        ))}
                     </select>
                     {error.category && (
                         <p className="text-red-500 mb-2">{error.category}</p>
