@@ -13,7 +13,7 @@ function Shop() {
     const pageSize = 8;
     const { search } = useSelector((state) => state.shop);
     const productSectionRef = useRef(null);
-    const endpoint = search ? '/products/search' : '/products/panigated';
+    const endpoint = search ? '/products/search' : '/products/paginated';
     const params = useMemo(
         () => ({
             limit: pageSize,

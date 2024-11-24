@@ -115,7 +115,7 @@ function Product({ product }) {
 
                 <Group position="center" mt={'xs'}>
                     <Badge color="blue">
-                        {product.Category?.name || 'N/A'}
+                        {product.Category?.name || product.name || 'N/A'}
                     </Badge>
                 </Group>
 

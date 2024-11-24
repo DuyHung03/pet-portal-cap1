@@ -81,11 +81,10 @@ function ShopNavBar() {
                     }}
                     style={{ position: 'relative' }}
                 >
-                    <Link to={'/shop-category'}>
+                    <Link to={'produce'}>
                         <Text
                             c={
-                                isActive('/shop-category') ||
-                                hoveredNav === 'shop-category'
+                                isActive('produce') || hoveredNav === 'produce'
                                     ? 'white'
                                     : 'dark'
                             }
@@ -95,8 +94,7 @@ function ShopNavBar() {
                             pt={6}
                             pb={6}
                             bg={
-                                isActive('/shop-category') ||
-                                hoveredNav === 'shop-category'
+                                isActive('produce') || hoveredNav === 'produce'
                                     ? '#dfe6e9'
                                     : 'transparent'
                             }
@@ -105,92 +103,12 @@ function ShopNavBar() {
                             Sản Phẩm
                         </Text>
                     </Link>
-
-                    {showSubNav && (
-                        <Group
-                            direction="column"
-                            spacing={0}
-                            style={{
-                                position: 'absolute',
-                                top: '100%',
-                                left: 0,
-                                backgroundColor: '#ffffff',
-                                border: '1px solid #dfe6e9',
-                                borderRadius: '8px',
-                                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.15)',
-                                zIndex: 1000,
-                                padding: '8px 0',
-                                width: '150px',
-                            }}
-                        >
-                            <Link to={'shop-category/cat'}>
-                                <Text
-                                    p={10}
-                                    c="dark"
-                                    size="sm"
-                                    style={{
-                                        transition: 'background-color 0.3s',
-                                    }}
-                                    onMouseEnter={(e) =>
-                                        (e.target.style.backgroundColor =
-                                            '#dfe6e9')
-                                    }
-                                    onMouseLeave={(e) =>
-                                        (e.target.style.backgroundColor =
-                                            'transparent')
-                                    }
-                                >
-                                    Sản phẩm cho mèo
-                                </Text>
-                            </Link>
-                            <Link to={'shop-category/dog'}>
-                                <Text
-                                    p={10}
-                                    c="dark"
-                                    size="sm"
-                                    style={{
-                                        transition: 'background-color 0.3s',
-                                    }}
-                                    onMouseEnter={(e) =>
-                                        (e.target.style.backgroundColor =
-                                            '#dfe6e9')
-                                    }
-                                    onMouseLeave={(e) =>
-                                        (e.target.style.backgroundColor =
-                                            'transparent')
-                                    }
-                                >
-                                    Sản phẩm cho chó
-                                </Text>
-                            </Link>
-                            <Link to={'shop-category/bird'}>
-                                <Text
-                                    p={10}
-                                    c="dark"
-                                    size="sm"
-                                    style={{
-                                        transition: 'background-color 0.3s',
-                                    }}
-                                    onMouseEnter={(e) =>
-                                        (e.target.style.backgroundColor =
-                                            '#dfe6e9')
-                                    }
-                                    onMouseLeave={(e) =>
-                                        (e.target.style.backgroundColor =
-                                            'transparent')
-                                    }
-                                >
-                                    Sản phẩm cho chim
-                                </Text>
-                            </Link>
-                        </Group>
-                    )}
                 </div>
 
-                <Link to={'/phu-kien'}>
+                <Link to={'pet'}>
                     <Text
                         c={
-                            isActive('/phu-kien') || hoveredNav === 'phukien'
+                            isActive('pet') || hoveredNav === 'pet'
                                 ? 'white'
                                 : 'dark'
                         }
@@ -200,15 +118,15 @@ function ShopNavBar() {
                         pt={6}
                         pb={6}
                         bg={
-                            isActive('/phu-kien') || hoveredNav === 'phukien'
+                            isActive('pet') || hoveredNav === 'pet'
                                 ? '#dfe6e9'
                                 : 'transparent'
                         }
-                        onMouseEnter={() => setHoveredNav('phukien')}
+                        onMouseEnter={() => setHoveredNav('pet')}
                         onMouseLeave={() => setHoveredNav(null)}
                         style={{ transition: 'background-color 0.3s' }}
                     >
-                        Phụ Kiện
+                        Thú Cưng
                     </Text>
                 </Link>
                 <Link to={'contact'}>
