@@ -1,6 +1,5 @@
 @import '@mantine/core/styles.css';
 @import 'react-toastify/dist/ReactToastify.css';
-@import '@mantine/dates/styles.css';
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+HU:wght@100..400&display=swap');
 @import 'react-responsive-carousel/lib/styles/carousel.min.css';

@@ -34,34 +34,66 @@ function PostItem({ post, onPostDeleted }) {
     const [comments, setComments] = useState([]);
     const [loadingComments, setLoadingComments] = useState(false);
     const { user } = useAuthStore();
-    const [opened, { open, close }] = useDisclosure(false);
+    const [modalOpened, { open: openModal, close: closeModal }] =
+        useDisclosure(false);
 
-    const postComment = async ({ postId, user, content }) => {
-        const response = await axiosInstance.post(
-            '/comments',
-            { post_id: postId, petOwner_Id: user.id, content },
-            { withCredentials: true },
-        );
-        return response.data;
-    };
-
+    // Post comment mutation
     const commentMutation = useMutation({
-        mutationFn: postComment,
+        mutationFn: async ({ postId, user, content }) => {
+            const response = await axiosInstance.post(
+                '/comments',
+                { post_id: postId, petOwner_Id: user.id, content },
+                { withCredentials: true },
+            );
+            return response.data;
+        },
         onMutate: (newCommentData) => {
-            const newComment = {
+            const optimisticComment = {
                 content: newCommentData.content,
                 CommentUser: user,
                 createdAt: new Date().toISOString(),
             };
-            setComments((prev) => [newComment, ...prev]);
+            setComments((prev) => [optimisticComment, ...prev]);
         },
-        onError: (err, newComment) => {
-            setComments((prevComments) =>
-                prevComments.filter(
-                    (comment) => comment.content !== newComment.content,
-                ),
+        onError: (error, newComment) => {
+            setComments((prev) =>
+                prev.filter((c) => c.content !== newComment.content),
             );
-            toast.error('An error occurred');
+            toast.error('An error occurred while posting the comment.');
+        },
+    });
+
+    // Comment deletion mutation
+    const deleteCommentMutation = useMutation({
+        mutationFn: async ({ commentId }) => {
+            const response = await axiosInstance.delete(
+                `/comments/${commentId}`,
+                {
+                    withCredentials: true,
+                },
+            );
+            return response.data;
+        },
+        onSuccess: (_, { commentId }) => {
+            setComments((prev) =>
+                prev.filter((comment) => comment.id !== commentId),
+            );
+        },
+        onError: () => {
+            toast.error('An error occurred while deleting the comment.');
+        },
+    });
+
+    // Post deletion mutation
+    const deletePostMutation = useMutation({
+        mutationFn: async () => {
+            const response = await axiosInstance.delete(`/posts/${post.id}`, {
+                withCredentials: true,
+            });
+            return response.data;
+        },
+        onSuccess: () => {
+            onPostDeleted();
         },
     });
 
@@ -70,11 +102,15 @@ function PostItem({ post, onPostDeleted }) {
         if (newComment.trim()) {
             commentMutation.mutate({
                 postId: post.id,
-                user: user,
+                user,
                 content: newComment,
             });
             setNewComment('');
         }
+    };
+
+    const handleDeleteComment = (commentId) => {
+        deleteCommentMutation.mutate({ commentId });
     };
 
     const toggleComments = async () => {
@@ -94,48 +130,35 @@ function PostItem({ post, onPostDeleted }) {
                 );
                 setComments(response.data.data);
             } catch (error) {
-                console.error('Error fetching comments:', error);
+                console.log(error);
+                toast.error('Error fetching comments.');
             } finally {
                 setLoadingComments(false);
             }
         }
     };
 
-    const deletePost = async () => {
-        const response = await axiosInstance.delete(`posts/${post.id}`, {
-            withCredentials: true,
-        });
-
-        return response.data;
-    };
-
-    const deletePostMutation = useMutation({
-        mutationFn: deletePost,
-        onMutate: () => {},
-        onSuccess: () => {
-            onPostDeleted();
-        },
-    });
-
-    const handleDeletePost = async () => {
+    const handleDeletePost = () => {
         deletePostMutation.mutate();
     };
 
-    const handleLike = async () => {};
-
     return (
         <>
-            <ToastContainer style={{ marginTop: '100px' }} />
+            <ToastContainer
+                style={{ marginTop: '100px' }}
+                limit={1}
+                newestOnTop
+            />
             <Modal
-                opened={opened}
-                onClose={close}
+                opened={modalOpened}
+                onClose={closeModal}
                 centered
                 withCloseButton={false}
-                title="Xóa bài viết"
+                title="Delete Post"
             >
-                <Text mb={20}>Bạn có chắc muốn xóa bài viết này?</Text>
+                <Text mb={20}>Are you sure you want to delete this post?</Text>
                 <Group mt="lg" justify="flex-end">
-                    <Button onClick={close} variant="default">
+                    <Button onClick={closeModal} variant="default">
                         Cancel
                     </Button>
                     <Button onClick={handleDeletePost} color="red">
@@ -149,14 +172,10 @@ function PostItem({ post, onPostDeleted }) {
                 p={20}
                 style={{ borderRadius: '24px' }}
             >
-                {/* Post content */}
+                {/* Header */}
                 <Flex w={'100%'} justify={'space-between'}>
                     <Flex gap={20}>
-                        <Avatar
-                            size={'lg'}
-                            name={post.PostOwner.username}
-                            color="initials"
-                        />
+                        <Avatar size={'lg'} name={post.PostOwner.username} />
                         <Flex direction={'column'}>
                             <Text fw={600} size="lg">
                                 {post.PostOwner.username}
@@ -164,17 +183,17 @@ function PostItem({ post, onPostDeleted }) {
                             <Text c={'gray'}>{timeAgo(post.createdAt)}</Text>
                         </Flex>
                     </Flex>
-                    <Menu shadow="sm" zIndex={0}>
-                        <MenuTarget>
-                            <Button variant="transparent" c={'#626262'}>
-                                <MoreHoriz />
-                            </Button>
-                        </MenuTarget>
-                        <MenuDropdown>
-                            {post.petOwner_Id == user.id ? (
+                    {post.petOwner_Id === user.id && (
+                        <Menu shadow="sm" zIndex={0}>
+                            <MenuTarget>
+                                <Button variant="transparent" c={'#626262'}>
+                                    <MoreHoriz />
+                                </Button>
+                            </MenuTarget>
+                            <MenuDropdown>
                                 <MenuItem
                                     component="button"
-                                    onClick={open}
+                                    onClick={openModal}
                                     color="red"
                                     leftSection={
                                         <Delete
@@ -183,13 +202,14 @@ function PostItem({ post, onPostDeleted }) {
                                         />
                                     }
                                 >
-                                    Delete
+                                    Delete Post
                                 </MenuItem>
-                            ) : null}
-                        </MenuDropdown>
-                    </Menu>
+                            </MenuDropdown>
+                        </Menu>
+                    )}
                 </Flex>
 
+                {/* Post content */}
                 <Group w={'100%'}>
                     <Text fw={500} size="lg" w={'100%'}>
                         {post.title}
@@ -199,18 +219,19 @@ function PostItem({ post, onPostDeleted }) {
                     </Text>
                 </Group>
 
-                {post.image_url ? (
+                {post.image_url && (
                     <Group w={'100%'} justify="center">
                         <LazyLoadImage
                             src={post.image_url}
                             style={{ maxHeight: '460px', borderRadius: '12px' }}
-                            alt="img"
+                            alt="Post image"
                         />
                     </Group>
-                ) : null}
+                )}
 
+                {/* Actions */}
                 <Flex>
-                    <Button variant="subtle" radius={'xl'} onClick={handleLike}>
+                    <Button variant="subtle" radius={'xl'}>
                         <FavoriteBorderOutlined />
                         <Text ml={10}>{post.likeCount ?? 0}</Text>
                     </Button>
@@ -224,21 +245,17 @@ function PostItem({ post, onPostDeleted }) {
                     </Button>
                 </Flex>
 
+                {/* Comments Section */}
                 {commentsVisible && (
                     <Flex direction={'column'} w={'100%'}>
-                        <Flex
-                            w={'100%'}
-                            direction={'row'}
-                            align={'center'}
-                            gap={10}
-                        >
-                            <Avatar name={user.username} color="initials" />
+                        <Flex w={'100%'} align={'center'} gap={10}>
+                            <Avatar name={user.username} />
                             <Textarea
                                 value={newComment}
                                 radius={'xl'}
                                 autosize
                                 maxRows={3}
-                                placeholder="Thêm bình luận"
+                                placeholder="Add a comment"
                                 onChange={(e) => setNewComment(e.target.value)}
                                 style={{ flexGrow: '1' }}
                             />
@@ -247,7 +264,7 @@ function PostItem({ post, onPostDeleted }) {
                                 onClick={handleAddComment}
                                 disabled={commentMutation.isLoading}
                             >
-                                Gửi
+                                Submit
                             </Button>
                         </Flex>
 
@@ -261,18 +278,21 @@ function PostItem({ post, onPostDeleted }) {
                                 <Loader type="bars" size="sm" />
                             </Group>
                         )}
+
                         <Group mt={20} gap={20}>
                             {comments.length > 0 ? (
-                                comments.map((comment, index) => (
+                                comments.map((comment) => (
                                     <PostComment
+                                        key={comment.id}
                                         comment={comment}
-                                        key={index}
+                                        onDeleteComment={() =>
+                                            handleDeleteComment(comment.id)
+                                        }
                                     />
                                 ))
                             ) : (
                                 <Text ta={'center'} w={'100%'} c={'gray'}>
-                                    Hãy là người bình luận đầu tiên cho bài viết
-                                    này
+                                    Be the first to comment on this post!
                                 </Text>
                             )}
                         </Group>
