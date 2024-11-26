@@ -1,7 +1,8 @@
 // Product.js
 import { Flex, Image, Text, Badge, Group, Button } from '@mantine/core';
 import { useState, useEffect } from 'react';
-import { IconSearch, IconShoppingCart } from '@tabler/icons-react';
+import SearchIcon from '@mui/icons-material/Search';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useAuthStore } from '@store/authStore';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -162,7 +163,7 @@ function Product({ product }) {
                         onMouseLeave={() => setSearchButtonHovered(false)}
                         onClick={handleViewDetails}
                     >
-                        <IconSearch size={20} /> | Thông Tin Chi Tiết
+                        <SearchIcon size={20} /> | Thông Tin Chi Tiết
                     </Button>
                     <Button
                         variant="filled"
@@ -177,7 +178,7 @@ function Product({ product }) {
                         onMouseLeave={() => setCartButtonHovered(false)}
                         onClick={handleAddToCart}
                     >
-                        <IconShoppingCart size={20} /> | Thêm Giỏ Hàng
+                        <ShoppingCartIcon size={20} /> | Thêm Giỏ Hàng
                     </Button>
                 </Flex>
             </Flex>

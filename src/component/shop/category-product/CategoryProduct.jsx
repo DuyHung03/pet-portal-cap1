@@ -1,7 +1,7 @@
-// Product.js
 import { Flex, Image, Text, Badge, Group, Button } from '@mantine/core';
 import { useState, useEffect } from 'react';
-import { IconSearch, IconShoppingCart } from '@tabler/icons-react';
+import SearchIcon from '@mui/icons-material/Search';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useAuthStore } from '@store/authStore';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -44,7 +44,6 @@ function CategoryPet({ product }) {
     const handleViewDetails = () => {
         navigate(`/shop/product/${product.id}`, { state: { product } });
     };
-    console.log(product.name);
 
     return (
         <>
@@ -53,12 +52,11 @@ function CategoryPet({ product }) {
                     style={{
                         position: 'fixed',
                         top: '0px',
-                        right: '00px',
+                        right: '0px',
                         backgroundColor: '#28a745',
                         color: 'white',
                         padding: '15px 20px',
                         borderRadius: '8px',
-                        // boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
                         zIndex: 1000,
                     }}
                 >
@@ -145,7 +143,6 @@ function CategoryPet({ product }) {
                         borderRadius: '12px',
                         padding: '10px',
                         opacity: hovered ? 1 : 0,
-
                         transition: 'bottom 0.3s ease, opacity 0.3s ease',
                     }}
                 >
@@ -163,7 +160,8 @@ function CategoryPet({ product }) {
                         onMouseLeave={() => setSearchButtonHovered(false)}
                         onClick={handleViewDetails}
                     >
-                        <IconSearch size={20} /> | Thông Tin Chi Tiết
+                        <SearchIcon style={{ marginRight: '8px' }} />
+                        Thông Tin Chi Tiết
                     </Button>
                     <Button
                         variant="filled"
@@ -178,7 +176,8 @@ function CategoryPet({ product }) {
                         onMouseLeave={() => setCartButtonHovered(false)}
                         onClick={handleAddToCart}
                     >
-                        <IconShoppingCart size={20} /> | Thêm Giỏ Hàng
+                        <ShoppingCartIcon style={{ marginRight: '8px' }} />
+                        Thêm Giỏ Hàng
                     </Button>
                 </Flex>
             </Flex>

@@ -1,12 +1,11 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
 
 const Footer = () => {
     return (
         <footer className="bg-gray-100 py-10">
             <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-10">
-                {/* Pet Shop Information */}
                 <div>
                     <h2 className="text-2xl font-bold text-blue-600 flex items-center">
                         Pet Shop<span className="text-blue-500 ml-1">®</span>
@@ -20,25 +19,17 @@ const Footer = () => {
                     </p>
                     <div className="mt-4 text-gray-700">
                         <div className="flex items-center mb-2">
-                            <FontAwesomeIcon
-                                icon={faPhone}
-                                className="text-green-500 mr-2"
-                            />
+                            <PhoneIcon className="text-green-500 mr-2" />
                             0937.809.123
                         </div>
                         <div className="flex items-center">
-                            <FontAwesomeIcon
-                                icon={faEnvelope}
-                                className="text-green-500 mr-2"
-                            />
+                            <EmailIcon className="text-green-500 mr-2" />
                             kinhdoanh@petshop.vn
                         </div>
                     </div>
                 </div>
 
-                {/* Customer Support and Policies */}
                 <div className="grid grid-cols-2 gap-8">
-                    {/* Customer Support */}
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">
                             Chăm Sóc Khách Hàng
@@ -50,7 +41,6 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Policies */}
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">
                             Chính Sách
@@ -62,7 +52,6 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Newsletter Signup */}
                 <div>
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">
                         Đăng Ký Nhận Tin

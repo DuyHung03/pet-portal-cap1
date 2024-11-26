@@ -1,10 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faPhone,
-    faEnvelope,
-    faMapMarkerAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
 
 const Contact = () => {
     return (
@@ -23,20 +20,14 @@ const Contact = () => {
                     </p>
                     <ul className="space-y-4">
                         <li className="flex items-start text-gray-700">
-                            <FontAwesomeIcon
-                                icon={faMapMarkerAlt}
-                                className="text-red-500 mr-3 mt-1"
-                            />
+                            <LocationOnIcon className="text-red-500 mr-3 mt-1" />
                             <div>
                                 <span className="font-semibold">Địa chỉ:</span>{' '}
                                 62/4 Trần Bình Trọng, Phường 8, TP. Vũng Tàu
                             </div>
                         </li>
                         <li className="flex items-start text-gray-700">
-                            <FontAwesomeIcon
-                                icon={faPhone}
-                                className="text-green-500 mr-3 mt-1"
-                            />
+                            <PhoneIcon className="text-green-500 mr-3 mt-1" />
                             <div>
                                 <span className="font-semibold">
                                     Điện thoại:
@@ -45,10 +36,7 @@ const Contact = () => {
                             </div>
                         </li>
                         <li className="flex items-start text-gray-700">
-                            <FontAwesomeIcon
-                                icon={faEnvelope}
-                                className="text-red-500 mr-3 mt-1"
-                            />
+                            <EmailIcon className="text-red-500 mr-3 mt-1" />
                             <div>
                                 <span className="font-semibold">Email:</span>{' '}
                                 kinhdoanh@petshop.vn
