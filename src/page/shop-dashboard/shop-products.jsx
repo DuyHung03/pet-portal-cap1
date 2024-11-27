@@ -25,7 +25,7 @@ function Products() {
     );
 
     const { data, loading, error } = useFetchData(
-        '/products/panigated',
+        '/products/paginated',
         params,
     );
     useEffect(() => {

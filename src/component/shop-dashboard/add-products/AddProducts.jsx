@@ -17,6 +17,10 @@ function AddProduct({ onClose, onAddProduct }) {
     const [error, setError] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [newCategoryName, setNewCategoryName] = useState('');
+    const [newCategoryType, setNewCategoryType] = useState('Product');
+    const [description, setDescription] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const { user } = useAuthStore();
 
     useEffect(() => {
@@ -35,6 +39,7 @@ function AddProduct({ onClose, onAddProduct }) {
 
         fetchCategories();
     }, []);
+
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         setImage(file);
@@ -91,6 +96,7 @@ function AddProduct({ onClose, onAddProduct }) {
             sales_center_id: user.id,
             name: productName,
             category_id: category,
+            description: description,
             price: parseFloat(price.replace(/,/g, '')),
             stock_quantity: parseInt(stock, 10),
             sku: `PRD${Date.now()}`,
@@ -133,6 +139,31 @@ function AddProduct({ onClose, onAddProduct }) {
         }
     };
 
+    const handleAddCategory = async () => {
+        if (!newCategoryName || !newCategoryType) {
+            toast.error('Vui lòng nhập tên và loại danh mục mới.');
+            return;
+        }
+
+        try {
+            const response = await axiosInstance.post('/categories', {
+                name: newCategoryName,
+                type: newCategoryType,
+            });
+            if (response.status === 200) {
+                setCategories([...categories, response.data.data]);
+                setCategory(response.data.data.id);
+                setNewCategoryName('');
+                setNewCategoryType('Product');
+                setIsModalOpen(false);
+                toast.success('Danh mục đã được thêm thành công!');
+            }
+        } catch (err) {
+            console.error('Lỗi khi thêm danh mục:', err);
+            toast.error('Không thể thêm danh mục.');
+        }
+    };
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
@@ -172,7 +203,25 @@ function AddProduct({ onClose, onAddProduct }) {
                     {error.category && (
                         <p className="text-red-500 mb-2">{error.category}</p>
                     )}
-
+                    <button
+                        type="button"
+                        onClick={() => setIsModalOpen(true)}
+                        className="text-blue-600 underline my-2"
+                    >
+                        + Thêm danh mục mới
+                    </button>
+                    <label className="block mb-1 font-medium">
+                        Mô tả sản phẩm
+                    </label>
+                    <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className={`w-full p-2 mb-2 border rounded ${error.description ? 'border-red-500' : 'border-gray-300'}`}
+                        placeholder="Nhập mô tả sản phẩm"
+                    />
+                    {error.description && (
+                        <p className="text-red-500 mb-2">{error.description}</p>
+                    )}
                     <label className="block mb-1 font-medium">Giá (VND)</label>
                     <input
                         type="text"
@@ -207,15 +256,12 @@ function AddProduct({ onClose, onAddProduct }) {
                         onChange={handleImageChange}
                         className="w-full mb-2"
                     />
-                    {uploadProgress > 0 && uploadProgress < 100 && (
-                        <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                    {uploadProgress > 0 && (
+                        <div className="mb-2">
                             <div
-                                className="bg-blue-500 h-2 rounded-full"
+                                className="bg-blue-600 h-2 rounded-full"
                                 style={{ width: `${uploadProgress}%` }}
-                            />
-                            <p className="text-xs text-gray-600">
-                                Đang tải lên... {uploadProgress}%
-                            </p>
+                            ></div>
                         </div>
                     )}
                     {error.images && (
@@ -223,40 +269,84 @@ function AddProduct({ onClose, onAddProduct }) {
                     )}
 
                     {imageUrl && (
-                        <div className="relative mb-4 border rounded overflow-hidden">
+                        <div className="mb-2">
                             <img
                                 src={imageUrl}
-                                alt="Preview"
-                                className="w-full h-32 object-cover"
+                                alt="Ảnh sản phẩm"
+                                className="w-32 h-32 object-cover rounded-lg"
                             />
                             <button
                                 type="button"
                                 onClick={handleCancelImage}
-                                className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
-                                title="Hủy bỏ hình ảnh"
+                                className="absolute top-0 right-0 p-1 bg-red-500 rounded-full text-white"
                             >
                                 <FiX />
                             </button>
                         </div>
                     )}
 
-                    <div className="flex justify-end mt-4">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="mr-4 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                        >
-                            Hủy
-                        </button>
+                    <div className="flex ">
                         <button
                             type="submit"
-                            className={`px-4 py-2 rounded ${isLoading ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
                             disabled={isLoading}
+                            className="w-full p-3 bg-blue-600 text-white rounded-lg disabled:bg-gray-300"
                         >
-                            {isLoading ? 'Đang thêm...' : 'Thêm sản phẩm'}
+                            {isLoading
+                                ? 'Đang thêm sản phẩm...'
+                                : 'Thêm sản phẩm'}
+                        </button>
+                        <button
+                            type="cancel"
+                            onClick={onClose}
+                            className="w-20 ml-5 p-3 bg-[#008B8B] text-white rounded-lg "
+                        >
+                            Huỷ
                         </button>
                     </div>
                 </form>
+
+                {isModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                            <h3 className="text-xl font-semibold mb-4">
+                                Thêm danh mục mới
+                            </h3>
+                            <input
+                                type="text"
+                                value={newCategoryName}
+                                onChange={(e) =>
+                                    setNewCategoryName(e.target.value)
+                                }
+                                className="w-full p-2 mb-4 border rounded"
+                                placeholder="Nhập tên danh mục"
+                            />
+
+                            <select
+                                value={newCategoryType}
+                                onChange={(e) =>
+                                    setNewCategoryType(e.target.value)
+                                }
+                                className="w-full p-2 mb-4 border rounded"
+                            >
+                                <option value="Product">Sản phẩm</option>
+                                <option value="Service">Dịch vụ</option>
+                                <option value="Pet">Thú cưng</option>
+                            </select>
+                            <button
+                                onClick={handleAddCategory}
+                                className="w-full p-2 bg-green-600 text-white rounded-lg"
+                            >
+                                Thêm danh mục
+                            </button>
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="w-full p-2 mt-2 bg-gray-300 rounded-lg"
+                            >
+                                Hủy
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
