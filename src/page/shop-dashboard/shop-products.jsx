@@ -1,19 +1,26 @@
-import useFetchData from '@hooks/useFetchData';
-import { Pagination } from '@mantine/core';
+// Products.jsx
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import axiosInstance from '@network/httpRequest';
 import { FiSettings, FiPlus, FiEdit, FiTrash2 } from 'react-icons/fi';
+import { Pagination } from '@mantine/core';
+import AddProduct from 'component/shop-dashboard/add-products/AddProducts';
+import EditProduct from 'component/shop-dashboard/edit-products/EditProduct';
 import { vietnameseDate } from '../../util/getDateInVietnamese';
 import logo from '../../assets/logo-transparent.png';
-import AddProduct from 'component/shop-dashboard/add-products/AddProducts';
-
+import useFetchData from '@hooks/useFetchData';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Modal from 'react-modal';
 function Products() {
     const [showActionMenu, setShowActionMenu] = useState(null);
     const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+    const [editingProduct, setEditingProduct] = useState(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false); // State để mở/đóng modal xóa
+    const [productToDelete, setProductToDelete] = useState(null);
     const [products, setProducts] = useState([]);
     const actionMenuRef = useRef(null);
     const [page, setPage] = useState(1);
-    const productSectionRef = useRef(null);
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 5;
     const params = useMemo(
@@ -28,6 +35,7 @@ function Products() {
         '/products/paginated',
         params,
     );
+
     useEffect(() => {
         if (data && data.data) {
             setProducts(data.data);
@@ -35,14 +43,8 @@ function Products() {
             const totalPages = data.pagination.totalPages;
 
             setTotalPages(totalPages);
-
-            if (productSectionRef.current) {
-                productSectionRef.current.scrollIntoView({
-                    behavior: 'smooth',
-                });
-            }
         }
-    }, [data, page, pageSize]);
+    }, [data, page]);
 
     const toggleActionMenu = (id) => {
         setShowActionMenu(showActionMenu === id ? null : id);
@@ -53,21 +55,78 @@ function Products() {
         setIsAddProductOpen(false);
     };
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                actionMenuRef.current &&
-                !actionMenuRef.current.contains(event.target)
-            ) {
-                setShowActionMenu(null);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    const editProduct = (product) => {
+        setShowActionMenu(null);
+        setEditingProduct(product);
+    };
 
+    const updateProduct = async (updatedProduct) => {
+        try {
+            const response = await axiosInstance.put(
+                `/products/${updatedProduct.id}`,
+                updatedProduct,
+            );
+            if (response.status === 200) {
+                setEditingProduct(null);
+
+                const refreshedData = await axiosInstance.get(
+                    '/products/paginated',
+                    {
+                        params: {
+                            limit: pageSize,
+                            page: page,
+                        },
+                    },
+                );
+                setProducts(refreshedData.data.data);
+                setTotalPages(refreshedData.data.pagination.totalPages);
+
+                toast.success('Sản phẩm đã được chỉnh sửa thành công!', {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        } catch (error) {
+            console.error('Lỗi khi cập nhật sản phẩm:', error);
+            alert('Chỉnh sửa sản phẩm thất bại. Vui lòng thử lại.');
+        }
+    };
+    const deleteProduct = async (id) => {
+        try {
+            const response = await axiosInstance.delete(`/products/${id}`);
+            if (response.status === 200) {
+                setProducts(products.filter((product) => product.id !== id));
+                setDeleteModalOpen(false);
+                toast.success('Sản phẩm đã được xóa thành công!', {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        } catch (error) {
+            console.error('Lỗi khi xóa sản phẩm:', error);
+            alert('Xóa sản phẩm thất bại. Vui lòng thử lại.');
+        }
+    };
+
+    const openDeleteModal = (product) => {
+        setProductToDelete(product);
+        setDeleteModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        setDeleteModalOpen(false);
+        setProductToDelete(null);
+    };
     return (
         <div className="px-8 pt-5 pb-5 bg-white w-full h-[110vh] min-h-screen">
             <div className="flex justify-between items-center mb-8 bg-[#FAFAFC] p-6 rounded-xl shadow-md">
@@ -79,7 +138,6 @@ function Products() {
                 </div>
                 <p className="text-gray-600 text-lg">{vietnameseDate}</p>
             </div>
-
             <div className="flex justify-between items-center mb-6">
                 <button
                     onClick={() => setIsAddProductOpen(true)}
@@ -89,14 +147,19 @@ function Products() {
                     Thêm Sản Phẩm
                 </button>
             </div>
-
             {isAddProductOpen && (
                 <AddProduct
                     onClose={() => setIsAddProductOpen(false)}
                     onAddProduct={handleAddProduct}
                 />
             )}
-
+            {editingProduct && (
+                <EditProduct
+                    onClose={() => setEditingProduct(null)}
+                    onUpdateProduct={updateProduct}
+                    product={editingProduct}
+                />
+            )}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
                 {loading ? (
                     <p className="p-4 text-center">Đang tải...</p>
@@ -121,7 +184,7 @@ function Products() {
                             {products.length > 0 ? (
                                 products.map((product, index) => (
                                     <tr
-                                        key={product.id}
+                                        key={product.id || index}
                                         className={`border-b ${
                                             index % 2 === 0
                                                 ? 'bg-gray-50'
@@ -168,9 +231,7 @@ function Products() {
                                                 <div className="absolute right-0 mt-2 w-32 bg-white shadow-lg rounded-lg z-10">
                                                     <button
                                                         onClick={() =>
-                                                            alert(
-                                                                `Chỉnh sửa ${product.name}`,
-                                                            )
+                                                            editProduct(product)
                                                         }
                                                         className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                                     >
@@ -179,8 +240,8 @@ function Products() {
                                                     </button>
                                                     <button
                                                         onClick={() =>
-                                                            alert(
-                                                                `Xóa ${product.name}`,
+                                                            openDeleteModal(
+                                                                product,
                                                             )
                                                         }
                                                         className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -203,6 +264,7 @@ function Products() {
                         </tbody>
                     </table>
                 )}
+
                 <Pagination
                     page={page}
                     onChange={setPage}
@@ -210,6 +272,41 @@ function Products() {
                     className="mt-2 flex justify-center"
                 />
             </div>
+            <Modal
+                isOpen={deleteModalOpen}
+                onRequestClose={closeDeleteModal}
+                contentLabel="Xác nhận xóa"
+                ariaHideApp={false}
+                className="fixed inset-0 flex items-center justify-center"
+                overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+            >
+                <div className="bg-white rounded-lg shadow-lg p-6 w-80">
+                    <h2 className="text-lg font-semibold text-center text-gray-800 mb-4">
+                        Xác nhận xóa sản phẩm
+                    </h2>
+                    <p className="text-sm text-center text-gray-600">
+                        Bạn có chắc chắn muốn xóa sản phẩm{' '}
+                        <span className="font-medium text-red-600">
+                            {productToDelete?.name}
+                        </span>
+                        ?
+                    </p>
+                    <div className="mt-6 flex justify-center space-x-4">
+                        <button
+                            onClick={() => deleteProduct(productToDelete.id)}
+                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                        >
+                            Xóa
+                        </button>
+                        <button
+                            onClick={closeDeleteModal}
+                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
+                        >
+                            Hủy
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 }
