@@ -8,6 +8,7 @@ import { removeFromCart } from '../../../redux/slice/cartSlice';
 import { IconButton } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useAuthStore } from '../../../store/authStore';
+import axiosInstance from '@network/httpRequest';
 
 const slideIn = keyframes`
   from {
@@ -36,6 +37,10 @@ function CartPanel({ onClose, isOpen }) {
         (acc, item) => acc + item.price * item.quantity,
         0,
     );
+    const totalQuantity = cartItems.reduce(
+        (total, item) => total + item.quantity,
+        0,
+    );
 
     const handleDelete = (itemId) => {
         dispatch(removeFromCart({ userId: user?.id, itemId }));
@@ -46,6 +51,42 @@ function CartPanel({ onClose, isOpen }) {
         return () => (document.body.style.overflow = '');
     }, [isOpen]);
 
+    const handleSaveOrder = async () => {
+        if (totalQuantity === 0) {
+            alert(
+                'Giỏ hàng của bạn đang trống! Vui lòng thêm sản phẩm trước khi thanh toán.',
+            );
+            return;
+        }
+
+        const orderData = {
+            petOwner_id: user.id,
+            items: cartItems.map((item) => ({
+                productId: item.id,
+                quantity: item.quantity,
+                price: parseFloat(item.price),
+            })),
+        };
+
+        try {
+            const orderResponse = await axiosInstance.post(
+                '/orders/products',
+                orderData,
+            );
+
+            const { orderId } = orderResponse.data;
+
+            const paymentResponse = await axiosInstance.post('/payments', {
+                orderId,
+            });
+
+            const { url } = paymentResponse.data;
+            window.location.href = url;
+        } catch (error) {
+            console.error('Lỗi khi lưu đơn hàng:', error);
+            alert('Không thể lưu đơn hàng. Vui lòng thử lại!');
+        }
+    };
     return (
         <>
             {isOpen && (
@@ -157,17 +198,18 @@ function CartPanel({ onClose, isOpen }) {
                             Xem Giỏ Hàng
                         </Button>
                     </Link>
-                    <Link to="/checkout">
-                        <Button
-                            variant="filled"
-                            style={{
-                                backgroundColor: '#2d2d2d',
-                                color: 'white',
-                            }}
-                        >
-                            Thanh Toán
-                        </Button>
-                    </Link>
+                    {/* <Link to="/checkout"> */}
+                    <Button
+                        variant="filled"
+                        style={{
+                            backgroundColor: '#2d2d2d',
+                            color: 'white',
+                        }}
+                        onClick={handleSaveOrder}
+                    >
+                        Thanh Toán
+                    </Button>
+                    {/* </Link> */}
                 </Flex>
             </Flex>
         </>
