@@ -4,25 +4,54 @@ import {
     Divider,
     Flex,
     Group,
+    Modal,
     SimpleGrid,
     Text,
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
     ArrowBack,
     CalendarMonthOutlined,
+    Cancel,
     CheckCircle,
     EmailOutlined,
+    EventBusy,
     LocationOnOutlined,
     Notes,
     PhoneOutlined,
 } from '@mui/icons-material';
+import axiosInstance from '@network/httpRequest';
 import { getDate } from '@util/getTimeFromIsoDate';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 function AppoitmentDetails() {
     const { state } = useLocation();
-    const navigate = useNavigate();
     console.log(state);
+    const [modalOpened, { open: openModal, close: closeModal }] =
+        useDisclosure(false);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleCancelSchedule = async () => {
+        setLoading(true);
+        try {
+            await axiosInstance.put(`appointments/${state.id}`, {
+                status: 'Đã hủy',
+            });
+            closeModal();
+            toast.success('Đã hủy lịch hẹn khám');
+            setTimeout(() => {
+                navigate(-1);
+            }, 3000);
+        } catch (error) {
+            console.log(error);
+            toast.error('Đã xảy ra lỗi');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <Group w={'100%'} justify="center">
@@ -36,6 +65,32 @@ function AppoitmentDetails() {
                     borderRadius: '12px',
                 }}
             >
+                <ToastContainer />
+                <Modal
+                    opened={modalOpened}
+                    onClose={loading ? () => {} : closeModal}
+                    centered
+                    withCloseButton={false}
+                    title="Hủy lịch hẹn khám"
+                >
+                    <Text mb={20}>Bạn muốn hủy lịch hẹn khám?</Text>
+                    <Group mt="lg" justify="flex-end">
+                        <Button
+                            onClick={closeModal}
+                            variant="default"
+                            disabled={loading}
+                        >
+                            Quay lại
+                        </Button>
+                        <Button
+                            onClick={handleCancelSchedule}
+                            color="red"
+                            loading={loading}
+                        >
+                            Hủy
+                        </Button>
+                    </Group>
+                </Modal>
                 <Group w={'100%'}>
                     <Button
                         leftSection={<ArrowBack />}
@@ -47,15 +102,39 @@ function AppoitmentDetails() {
                     </Button>
                     {/* <Divider w={'100%'} /> */}
                 </Group>
-                <Group w={'100%'} align="center">
-                    <CheckCircle sx={{ fontSize: 40 }} htmlColor="#40C057" />
-                    <Text fw={500} size="lg" c={'green'}>
-                        {state.status}
-                    </Text>
-                    <Text c={'gray'} fs={'italic'}>
-                        {`(ID: ${state?.id})`}
-                    </Text>
-                </Group>
+                <Flex w={'100%'} justify={'space-between'} align={'center'}>
+                    <Group align="center">
+                        {state.status == 'Đã hủy' ? (
+                            <Cancel sx={{ fontSize: 40 }} htmlColor="red" />
+                        ) : (
+                            <CheckCircle
+                                sx={{ fontSize: 40 }}
+                                htmlColor="#40C057"
+                            />
+                        )}
+                        <Text
+                            fw={500}
+                            size="lg"
+                            c={state.status == 'Đã hủy' ? 'red' : 'green'}
+                        >
+                            {state.status}
+                        </Text>
+                        <Text c={'gray'} fs={'italic'}>
+                            {`(ID: ${state?.id})`}
+                        </Text>
+                    </Group>
+                    {state.status == 'Đã đặt lịch' ? (
+                        <Button
+                            size="xs"
+                            variant="subtle"
+                            leftSection={<EventBusy />}
+                            color="red.5"
+                            onClick={openModal}
+                        >
+                            Hủy cuộc hẹn
+                        </Button>
+                    ) : null}
+                </Flex>
                 <Divider w={'100%'} align="flex-start" />
                 <SimpleGrid w={'100%'} cols={2}>
                     <Group w={'100%'} pl={10} pr={10} align="flex-start">

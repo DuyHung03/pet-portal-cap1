@@ -154,15 +154,15 @@ function PostItem({ post, onPostDeleted }) {
                 onClose={closeModal}
                 centered
                 withCloseButton={false}
-                title="Delete Post"
+                title="Xóa bài viết"
             >
-                <Text mb={20}>Are you sure you want to delete this post?</Text>
+                <Text mb={20}>Bạn có muốn xóa bài viết này?</Text>
                 <Group mt="lg" justify="flex-end">
                     <Button onClick={closeModal} variant="default">
-                        Cancel
+                        Hủy
                     </Button>
                     <Button onClick={handleDeletePost} color="red">
-                        Delete
+                        Xóa
                     </Button>
                 </Group>
             </Modal>
@@ -202,7 +202,7 @@ function PostItem({ post, onPostDeleted }) {
                                         />
                                     }
                                 >
-                                    Delete Post
+                                    Xóa bài viết
                                 </MenuItem>
                             </MenuDropdown>
                         </Menu>
@@ -260,6 +260,7 @@ function PostItem({ post, onPostDeleted }) {
                                 style={{ flexGrow: '1' }}
                             />
                             <Button
+                                bg={'#5789cf'}
                                 radius={'30px'}
                                 onClick={handleAddComment}
                                 disabled={commentMutation.isLoading}
@@ -291,8 +292,14 @@ function PostItem({ post, onPostDeleted }) {
                                     />
                                 ))
                             ) : (
-                                <Text ta={'center'} w={'100%'} c={'gray'}>
-                                    Be the first to comment on this post!
+                                <Text
+                                    ta={'center'}
+                                    fs={'italic'}
+                                    w={'100%'}
+                                    c={'gray'}
+                                >
+                                    Hãy là người đầu tiên bình luận cho bài viết
+                                    này!
                                 </Text>
                             )}
                         </Group>

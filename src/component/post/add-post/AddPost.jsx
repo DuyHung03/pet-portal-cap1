@@ -131,7 +131,7 @@ function AddPost({ onPostCreated }) {
                     overlayProps={{ radius: 'sm', blur: 2 }}
                     loaderProps={{ color: 'pink', type: 'bars' }}
                 />
-                <Text ta={'center'} size="24px" c={'#5a5f64'} fw={500}>
+                <Text ta={'center'} size="24px" c={'#5789cf'} fw={500}>
                     Tạo bài viết
                 </Text>
                 <Group p={20}>
@@ -205,7 +205,7 @@ function AddPost({ onPostCreated }) {
                                 )}
                             </FileButton>
                         </Flex>
-                        <Button type="submit" w={'100%'}>
+                        <Button bg={'#5789cf'} type="submit" w={'100%'}>
                             Tạo bài viết
                         </Button>
                     </form>

@@ -4,14 +4,13 @@ import { Link } from 'react-router-dom';
 import { getDate } from '../../../util/getTimeFromIsoDate';
 
 function Appointment({ appointment }) {
-    console.log(appointment);
-
     const badgeColor =
         appointment.status === 'Đã đặt lịch'
             ? 'green'
             : appointment.status === 'Hoàn thành'
               ? 'gray'
               : 'red';
+
     return (
         <Link
             to={`/doctor-dashboard/appointment/${appointment.id}`}
@@ -24,8 +23,7 @@ function Appointment({ appointment }) {
                 p={20}
                 style={{
                     borderRadius: '16px',
-                    boxShadow:
-                        ' rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px',
+                    boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px',
                 }}
             >
                 <Group w={'100%'} justify="center">
@@ -38,9 +36,6 @@ function Appointment({ appointment }) {
                 <Text w={'100%'} ta={'center'} size="lg" fw={500}>
                     {appointment.Pet.PetOwner.username}
                 </Text>
-                {/* <Text w={'100%'} ta={'center'}>
-                    {appointment.Service.name}
-                </Text> */}
                 <Group w={'100%'} justify="space-evenly">
                     <Text size="md">
                         <WatchLater color="action" />{' '}

@@ -19,8 +19,7 @@ function AppointmentItem({ appointment }) {
                 p={20}
                 style={{
                     borderRadius: '16px',
-                    boxShadow:
-                        'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                    boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px',
                 }}
             >
                 <Group w={'100%'} justify="center">
@@ -43,13 +42,13 @@ function AppointmentItem({ appointment }) {
                         {getDate(appointment.appointment_date)}
                     </Text>
                 </Group>
-                <Text w={'100%'} ta={'center'}>
+                <Text w={'100%'} ta={'center'} fs={'italic'}>
                     {appointment.notes}
                 </Text>
                 <Group w={'100%'} justify="center">
                     <Badge color={badgeColor}>{appointment.status}</Badge>
                 </Group>
-                <Group w={'100%'} justify="center" mt={20}>
+                <Group w={'100%'} justify="center">
                     <Button w={'100%'} bg={'#5789cf'}>
                         Xem chi tiết
                     </Button>

@@ -7,6 +7,7 @@ import {
     SimpleGrid,
     Text,
 } from '@mantine/core';
+import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import logo from '../../assets/logo-transparent.png';
 import banner from '../../assets/ong-nghe.png';
@@ -23,6 +24,12 @@ function CalendarPage() {
     const { data, loading, error } = useFetchData(
         `/appointments/doctor/${user.id}`,
         params,
+    );
+
+    const today = dayjs().startOf('day');
+
+    const appointmentsToday = data?.data?.filter((appointment) =>
+        dayjs(appointment.appointment_date).isAfter(today),
     );
 
     if (error) return <Text>Error: {error.message}</Text>;
@@ -54,7 +61,8 @@ function CalendarPage() {
                         Xin chào Bs. {user.username}!
                     </Text>
                     <Text size="xl">
-                        Bạn có <b>{data?.data?.length || 0}</b> cuộc hẹn hôm nay
+                        Bạn có <b>{appointmentsToday?.length || 0}</b> cuộc hẹn
+                        hôm nay
                     </Text>
                 </Flex>
                 <Image src={banner} h={140} />
@@ -68,7 +76,7 @@ function CalendarPage() {
                 w={'100%'}
             >
                 <Text fw={600} size="md" w={'100%'} mb={10}>
-                    Lịch hẹn khám hôm nay: {data?.data?.length}
+                    Lịch hẹn khám hôm nay: {appointmentsToday?.length}
                 </Text>
                 {loading ? (
                     <Group w={'100%'} justify={'center'}>
@@ -76,9 +84,14 @@ function CalendarPage() {
                     </Group>
                 ) : null}
                 <ScrollArea w={'100%'} h={500}>
-                    <SimpleGrid w={'100%'} p={20} cols={3}>
-                        {data?.data?.length > 0 ? (
-                            data.data.map((app, index) => (
+                    <SimpleGrid
+                        w={'100%'}
+                        p={20}
+                        cols={3}
+                        verticalSpacing={'sm'}
+                    >
+                        {appointmentsToday?.length > 0 ? (
+                            appointmentsToday.map((app, index) => (
                                 <Appointment appointment={app} key={index} />
                             ))
                         ) : (

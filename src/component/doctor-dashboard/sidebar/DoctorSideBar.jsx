@@ -1,5 +1,5 @@
 import { Avatar, Button, Divider, Flex, Group, Text } from '@mantine/core';
-import { CalendarMonth, Logout } from '@mui/icons-material';
+import { CalendarMonth, EqualizerOutlined, Logout } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../../store/authStore';
 
@@ -53,20 +53,20 @@ function DoctorSideBar() {
                         Lịch khám bệnh
                     </Button>
                 </Link>
-                <Link to={'calendar'} style={{ width: '100%' }}>
+                <Link to={'statistics'} style={{ width: '100%' }}>
                     <Button
                         radius={0}
                         w={'100%'}
                         variant="transparent"
-                        c={isActive('appointment') ? '#5789cf' : 'dark.2'}
-                        leftSection={<CalendarMonth />}
+                        c={isActive('statistics') ? '#5789cf' : 'dark.2'}
+                        leftSection={<EqualizerOutlined />}
                         style={
-                            isActive('appointment')
+                            isActive('statistics')
                                 ? { borderRight: '3px solid #5789cf' }
                                 : null
                         }
                     >
-                        Lịch khám bệnh
+                        Thống kê
                     </Button>
                 </Link>
             </Group>
@@ -77,7 +77,7 @@ function DoctorSideBar() {
                     c={'red'}
                     leftSection={<Logout />}
                 >
-                    Sign out
+                    Đăng xuất
                 </Button>
             </Group>
         </Flex>

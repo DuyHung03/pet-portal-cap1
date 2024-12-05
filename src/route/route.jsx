@@ -33,7 +33,6 @@ import PetDetail from '@pages/pet/PetDetail';
 import DoctorRegister from '@pages/service-register/doctor/DoctorRegister';
 import ServiceRegister from '@pages/service-register/ServiceRegister';
 import ShopRegister from '@pages/service-register/shop/ShopRegister';
-import ShopCategoryCat from '@pages/shop-category/shop-produce';
 import Orders from '@pages/shop-dashboard/shop-orders';
 import Overview from '@pages/shop-dashboard/shop-overview';
 import Products from '@pages/shop-dashboard/shop-products';
@@ -50,16 +49,12 @@ import SignUp from '../page/SignUpPage/SignUpPage';
 import UserPage from '../page/user/UserPage';
 import ProtectedRoute from './ProtectedRoute';
 
-import ShopStore from '@pages/shop-store/shop-store';
-import Contact from '@pages/Contact/Contact';
 import AboutShop from '@pages/About/AboutShop';
-import ShopProduce from '@pages/shop-category/shop-produce';
+import Contact from '@pages/Contact/Contact';
+import Statistics from '@pages/doctor-dashboard/Statistics';
 import ShopPet from '@pages/shop-category/shop-pet';
-
-// import ProtectedRoute from './ProtectedRoute';
-// import MedicalPortal from '@pages/doctor/MedicalPortal/MedicalPortal';
-
-// sau khi config
+import ShopProduce from '@pages/shop-category/shop-produce';
+import ShopStore from '@pages/shop-store/shop-store';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -70,9 +65,6 @@ const router = createBrowserRouter(
                 errorElement={<Error404 />}
             >
                 <Route index element={<Home />} />
-                {/* <Route path="your-pet" element={<PetListPage />} />
-                <Route path="your-pet/:petId" element={<PetDetail />} />
-                <Route path="your-pet/add-new-pet" element={<AddNewPet />} /> */}
             </Route>
             <Route
                 path="/shop"
@@ -103,6 +95,7 @@ const router = createBrowserRouter(
             >
                 <Route index element={<Navigate to={'calendar'} />} />
                 <Route path="calendar" element={<CalendarPage />} />
+                <Route path="statistics" element={<Statistics />} />
                 <Route
                     path="appointment/:appointmentId"
                     element={<AppoinmentDetails />}
