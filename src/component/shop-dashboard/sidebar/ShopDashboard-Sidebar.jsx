@@ -16,7 +16,14 @@ function ShopDashboardSideBar() {
     const isActive = (path) => location.pathname.includes(path);
 
     return (
-        <div className="w-64  min-h-screen bg-[#FAFAFC] p-4 shadow-xl flex flex-col items-center">
+        <div
+            className="w-64  min-h-screen bg-[#FAFAFC] p-4 shadow-xl flex flex-col items-center"
+            style={{
+                position: 'sticky',
+                top: 0,
+                height: '100vh',
+            }}
+        >
             <Avatar
                 src="https://i.pinimg.com/564x/87/19/bd/8719bd600d09de24784cedb300f758f1.jpg"
                 size={80}
