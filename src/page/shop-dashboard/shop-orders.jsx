@@ -187,11 +187,12 @@ function Orders() {
                                         </td>
                                         <td className="p-4 relative">
                                             <button
-                                                onClick={() =>
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
                                                     toggleStatusDropdown(
                                                         order.id,
-                                                    )
-                                                }
+                                                    );
+                                                }}
                                                 className={`px-2 py-1 rounded-full text-white text-sm ${
                                                     order.status ===
                                                     'Đang xử lý'
@@ -210,6 +211,55 @@ function Orders() {
                                             >
                                                 {order.status}
                                             </button>
+
+                                            {statusDropdown === order.id && (
+                                                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md z-10">
+                                                    <button
+                                                        onClick={() =>
+                                                            handleStatusChange(
+                                                                order.id,
+                                                                'Đang xử lý',
+                                                            )
+                                                        }
+                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Đang xử lý
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleStatusChange(
+                                                                order.id,
+                                                                'Chờ thanh toán',
+                                                            )
+                                                        }
+                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Chờ thanh toán
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleStatusChange(
+                                                                order.id,
+                                                                'Hoàn thành',
+                                                            )
+                                                        }
+                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Hoàn thành
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleStatusChange(
+                                                                order.id,
+                                                                'Hủy',
+                                                            )
+                                                        }
+                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Hủy
+                                                    </button>
+                                                </div>
+                                            )}
                                         </td>
                                         <td className="p-4 flex flex-col space-y-2">
                                             {order.OrderItems.map((item) => (

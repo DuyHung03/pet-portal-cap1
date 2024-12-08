@@ -1,4 +1,4 @@
-import useFetchData from '@hooks/useFetchData';
+import axiosInstance from '@network/httpRequest';
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -6,90 +6,82 @@ import {
     LinearScale,
     LineElement,
     PointElement,
+    BarElement,
     Title,
     Tooltip,
 } from 'chart.js';
 import { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
-import { Oval } from 'react-loader-spinner';
+import { Line, Bar } from 'react-chartjs-2';
 
 ChartJS.register(
     CategoryScale,
     LinearScale,
     PointElement,
     LineElement,
+    BarElement,
     Title,
     Tooltip,
     Legend,
 );
 
 const Reports = () => {
-    const [reportsData, setReportsData] = useState(null);
+    const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const { data: revenueData, error: revenueError } = useFetchData(
-        '/orders/status/Shipped',
-    );
-    const { data: totalOrdersData, error: ordersError } = useFetchData(
-        '/orders/total-orders',
-    );
-
     useEffect(() => {
-        if (revenueData && totalOrdersData) {
+        const fetchData = async () => {
+            setLoading(true);
             try {
-                const revenue = Array.isArray(revenueData)
-                    ? revenueData.map(
-                          (order) => parseFloat(order.total_amount) || 0,
-                      )
-                    : [];
-                const totalOrders = totalOrdersData?.totalOrders || 0;
-                setReportsData({ revenue, orders: totalOrders });
+                const [totalOrdersRes, totalRevenueRes] = await Promise.all([
+                    axiosInstance.get('/orders/total-orders'),
+                    axiosInstance.get('/orders/total-revenue'),
+                ]);
+
+                const totalOrders = totalOrdersRes.data?.totalOrders || 0;
+                const totalRevenue = totalRevenueRes.data?.data || 0;
+
+                setData({
+                    totalOrders,
+                    totalRevenue,
+                });
             } catch (err) {
-                setError('Invalid data structure');
+                console.error(err);
+                setError('Không thể tải dữ liệu từ máy chủ');
             } finally {
                 setLoading(false);
             }
-        }
-    }, [revenueData, totalOrdersData]);
+        };
 
-    const revenueChartData = {
+        fetchData();
+    }, []);
+
+    const chartData = {
         labels: [
-            'Week 1',
-            'Week 2',
-            'Week 3',
-            'Week 4',
-            'Week 5',
-            'Week 6',
-            'Week 7',
+            'Tuần 1',
+            'Tuần 2',
+            'Tuần 3',
+            'Tuần 4',
+            'Tuần 5',
+            'Tuần 6',
+            'Tuần 7',
         ],
         datasets: [
             {
-                label: 'Revenue ($)',
-                data: reportsData?.revenue ?? [],
+                label: 'Doanh thu (VND)',
+                data: Array(7).fill(data?.totalRevenue || 0),
                 borderColor: 'rgb(75, 192, 192)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                type: 'line',
                 fill: true,
             },
-        ],
-    };
-
-    const ordersChartData = {
-        labels: [
-            'Week 1',
-            'Week 2',
-            'Week 3',
-            'Week 4',
-            'Week 5',
-            'Week 6',
-            'Week 7',
-        ],
-        datasets: [
             {
-                label: 'Orders',
-                borderColor: 'rgb(153, 102, 255)',
-                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                fill: true,
+                label: 'Tổng số đơn hàng',
+                data: Array(7).fill(data?.totalOrders || 0),
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderColor: 'rgb(255, 159, 64)',
+                borderWidth: 1,
+                type: 'bar',
             },
         ],
     };
@@ -100,7 +92,7 @@ const Reports = () => {
         plugins: {
             title: {
                 display: true,
-                text: 'Weekly Revenue & Orders',
+                text: 'Báo cáo doanh thu và đơn hàng hàng tuần',
             },
             tooltip: {
                 mode: 'index',
@@ -116,46 +108,49 @@ const Reports = () => {
             },
             y: {
                 beginAtZero: true,
-                ticks: {
-                    callback: function (value) {
-                        return `$${value}`;
-                    },
-                },
             },
         },
     };
 
+    if (loading)
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-lg text-blue-600">Đang tải...</div>
+            </div>
+        );
+
+    if (error)
+        return (
+            <div className="text-center text-red-500 mt-10">
+                <h2 className="text-2xl font-bold">Lỗi khi tải dữ liệu</h2>
+                <p>{error}</p>
+            </div>
+        );
+
     return (
         <div className="p-6 bg-gray-100 w-full min-h-screen">
-            <h1 className="text-3xl font-bold mb-4">Shop Reports</h1>
-            <div className="bg-white rounded-lg shadow p-6 mb-8">
-                <h2 className="text-2xl font-semibold mb-4">
-                    Business Overview
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="p-4 bg-blue-500 text-white rounded-lg shadow">
-                        <h3 className="text-lg font-semibold">Total Revenue</h3>
-                        <p className="text-2xl">
-                            $
-                            {reportsData?.revenue?.reduce((a, b) => a + b, 0) ||
-                                0}
-                        </p>
-                    </div>
-                    <div className="p-4 bg-green-500 text-white rounded-lg shadow">
-                        <h3 className="text-lg font-semibold">Total Orders</h3>
-                        <p className="text-2xl">{reportsData?.orders || 0}</p>
-                    </div>
+            <h1 className="text-3xl font-bold mb-4">Báo cáo cửa hàng</h1>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-8">
+                <div className="p-4 bg-blue-500 text-white rounded-lg shadow flex flex-col items-center">
+                    <h3 className="text-lg font-semibold">Tổng doanh thu</h3>
+                    <p className="text-2xl">
+                        {parseInt(data?.totalRevenue || 0).toLocaleString()} VND
+                    </p>
+                </div>
+                <div className="p-4 bg-green-500 text-white rounded-lg shadow flex flex-col items-center">
+                    <h3 className="text-lg font-semibold">Tổng đơn hàng</h3>
+                    <p className="text-2xl">{data?.totalOrders || 0}</p>
                 </div>
             </div>
 
             <div className="bg-white rounded-lg shadow p-6 mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Weekly Revenue</h2>
-                <Line data={revenueChartData} options={chartOptions} />
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6 mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Weekly Orders</h2>
-                <Line data={ordersChartData} options={chartOptions} />
+                <h2 className="text-2xl font-semibold mb-4">
+                    Doanh thu và đơn hàng theo tuần
+                </h2>
+                <div className="h-64">
+                    <Line data={chartData} options={chartOptions} />
+                </div>
             </div>
         </div>
     );
