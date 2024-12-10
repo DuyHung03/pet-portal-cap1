@@ -57,10 +57,7 @@ function ProductDetails() {
             </button>
             <div className="flex flex-row items-start justify-between mb-8 space-x-6">
                 <img
-                    src={
-                        // product.images ||
-                        'https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg'
-                    }
+                    src={product.images}
                     alt={product.name || 'Sản phẩm'}
                     className="w-64 h-64 object-cover rounded-md shadow-md"
                 />
@@ -178,7 +175,6 @@ function ProductDetails() {
                 Sản phẩm khác có thể bạn thích
             </h2>
             <div className="flex flex-wrap justify-between mt-2">
-                {/* Display related products here */}
                 {product.Category && (
                     <div className="p-2 text-gray-700">
                         Sản phẩm trong danh mục: {product.Category.name}

@@ -7,6 +7,9 @@ const cartSlice = createSlice({
     initialState: {
         items: [],
         totalQuantity: 0,
+        discountCode: null,
+        discountAmount: 0,
+        totalPriceWithDiscount: 0,
     },
     reducers: {
         loadCartFromStorage(state, action) {
@@ -37,6 +40,13 @@ const cartSlice = createSlice({
                     JSON.stringify(state.items),
                 );
             }
+        },
+        updateCartPrices: (state, action) => {
+            state.items = action.payload.items;
+            state.totalPriceWithDiscount = state.items.reduce(
+                (total, item) => total + item.price * item.quantity,
+                0,
+            );
         },
         updateItemQuantity(state, action) {
             const { userId, itemId, quantity } = action.payload;
@@ -77,14 +87,35 @@ const cartSlice = createSlice({
                 localStorage.removeItem(getUserCartKey(userId));
             }
         },
+        applyDiscountCode(state, action) {
+            const { code, discountAmount } = action.payload;
+
+            state.discountCode = code;
+            state.discountAmount = discountAmount;
+
+            const totalPrice = state.items.reduce(
+                (total, item) => total + item.price * item.quantity,
+                0,
+            );
+            state.totalPriceWithDiscount = totalPrice - discountAmount;
+
+            if (action.payload.userId) {
+                localStorage.setItem(
+                    getUserCartKey(action.payload.userId),
+                    JSON.stringify(state.items),
+                );
+            }
+        },
     },
 });
 
 export const {
     loadCartFromStorage,
     addToCart,
+    updateCartPrices,
     updateItemQuantity,
     removeFromCart,
     clearCart,
+    applyDiscountCode,
 } = cartSlice.actions;
 export default cartSlice.reducer;

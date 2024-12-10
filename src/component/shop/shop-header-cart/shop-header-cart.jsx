@@ -128,10 +128,7 @@ function CartPanel({ onClose, isOpen }) {
                                 mb={10}
                             >
                                 <Image
-                                    // src={item.image}
-                                    src={
-                                        'https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg'
-                                    }
+                                    src={item.images}
                                     style={{
                                         objectFit: 'cover',
                                         maxWidth: '50px',

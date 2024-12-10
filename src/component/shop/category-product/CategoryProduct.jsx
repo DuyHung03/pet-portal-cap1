@@ -83,9 +83,7 @@ function CategoryPet({ product }) {
                 onMouseLeave={() => setHovered(false)}
             >
                 <Image
-                    src={
-                        'https://product.hstatic.net/200000263355/product/z4431095005129_5ae326bc61106bba8c85799a3e176128_f58eeb18c4fb45898b2283344b1c7cf5_master.jpg'
-                    }
+                    src={product.images}
                     alt={product.name}
                     style={{
                         borderRadius: '8px',
@@ -117,16 +115,6 @@ function CategoryPet({ product }) {
                         {product.Category?.name || product.name || 'N/A'}
                     </Badge>
                 </Group>
-
-                <Text
-                    ta="center"
-                    fw={700}
-                    c="red"
-                    mt="xs"
-                    style={{ fontSize: '18px', lineHeight: '1.2' }}
-                >
-                    {parseInt(product.price).toLocaleString()} VND
-                </Text>
 
                 <Flex
                     direction="column"
