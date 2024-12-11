@@ -15,15 +15,15 @@ function ShopPet() {
                 const response = await axiosInstance.get(
                     '/categories/search?type=Thú cưng',
                 );
-                console.log(response.data); // Kiểm tra dữ liệu trả về từ API
+                console.log(response.data);
                 const allProducts = response.data.data.flatMap(
                     (category) => category.CategoryPets,
                 );
-                console.log(allProducts); // Kiểm tra các sản phẩm thú cưng
+                console.log(allProducts);
 
                 setCategoryPets(allProducts);
             } catch (err) {
-                console.error(err); // In ra lỗi nếu có
+                console.error(err);
                 setError(err.message);
             } finally {
                 setLoading(false);

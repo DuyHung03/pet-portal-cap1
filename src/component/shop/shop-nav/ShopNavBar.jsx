@@ -70,40 +70,30 @@ function ShopNavBar() {
                     </Text>
                 </Link>
 
-                <div
-                    onMouseEnter={() => {
-                        setShowSubNav(true);
-                        setHoveredNav('collection');
-                    }}
-                    onMouseLeave={() => {
-                        setShowSubNav(false);
-                        setHoveredNav(null);
-                    }}
-                    style={{ position: 'relative' }}
-                >
-                    <Link to={'produce'}>
-                        <Text
-                            c={
-                                isActive('produce') || hoveredNav === 'produce'
-                                    ? 'white'
-                                    : 'dark'
-                            }
-                            size="md"
-                            pr={12}
-                            pl={12}
-                            pt={6}
-                            pb={6}
-                            bg={
-                                isActive('produce') || hoveredNav === 'produce'
-                                    ? '#dfe6e9'
-                                    : 'transparent'
-                            }
-                            style={{ transition: 'background-color 0.3s' }}
-                        >
-                            Sản Phẩm
-                        </Text>
-                    </Link>
-                </div>
+                <Link to={'produce'}>
+                    <Text
+                        c={
+                            isActive('produce') || hoveredNav === 'produce'
+                                ? 'white'
+                                : 'dark'
+                        }
+                        size="md"
+                        pr={12}
+                        pl={12}
+                        pt={6}
+                        pb={6}
+                        bg={
+                            isActive('produce') || hoveredNav === 'produce'
+                                ? '#dfe6e9'
+                                : 'transparent'
+                        }
+                        onMouseEnter={() => setHoveredNav('produce')}
+                        onMouseLeave={() => setHoveredNav(null)}
+                        style={{ transition: 'background-color 0.3s' }}
+                    >
+                        Sản Phẩm
+                    </Text>
+                </Link>
 
                 <Link to={'pet'}>
                     <Text

@@ -2,6 +2,7 @@ import { Flex, Image, Text, Badge, Group, Button } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import PetsIcon from '@mui/icons-material/Pets';
 import { useAuthStore } from '@store/authStore';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -58,9 +59,10 @@ function CategoryPet({ product }) {
                         padding: '15px 20px',
                         borderRadius: '8px',
                         zIndex: 1000,
+                        boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.2)',
                     }}
                 >
-                    Sản phẩm đã được thêm vào giỏ hàng!
+                    🐾 Sản phẩm đã được thêm vào giỏ hàng!
                 </div>
             )}
             <Flex
@@ -82,8 +84,22 @@ function CategoryPet({ product }) {
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
+                {/* Biểu tượng chân thú cưng */}
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: '10px',
+                        left: '10px',
+                        color: '#f59e0b',
+                        fontSize: '30px',
+                        opacity: 0.7,
+                    }}
+                >
+                    <PetsIcon />
+                </div>
+
                 <Image
-                    src={product.images}
+                    src={product.image || 'https://via.placeholder.com/150'}
                     alt={product.name}
                     style={{
                         borderRadius: '8px',
@@ -111,8 +127,16 @@ function CategoryPet({ product }) {
                 </Text>
 
                 <Group position="center" mt={'xs'}>
-                    <Badge color="blue">
-                        {product.Category?.name || product.name || 'N/A'}
+                    <Badge
+                        style={{
+                            backgroundColor: '#f59e0b',
+                            color: '#fff',
+                            borderRadius: '12px',
+                            padding: '5px 10px',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        {product.Category?.name || 'Thú cưng'}
                     </Badge>
                 </Group>
 
@@ -143,13 +167,14 @@ function CategoryPet({ product }) {
                                 ? 'rgba(255, 200, 0, 0.5)'
                                 : 'rgba(255, 255, 255, 0.2)',
                             marginBottom: '8px',
+                            fontWeight: 'bold',
                         }}
                         onMouseEnter={() => setSearchButtonHovered(true)}
                         onMouseLeave={() => setSearchButtonHovered(false)}
                         onClick={handleViewDetails}
                     >
                         <SearchIcon style={{ marginRight: '8px' }} />
-                        Thông Tin Chi Tiết
+                        Xem Chi Tiết
                     </Button>
                     <Button
                         variant="filled"
@@ -159,13 +184,14 @@ function CategoryPet({ product }) {
                             backgroundColor: cartButtonHovered
                                 ? 'rgba(255, 200, 0, 0.5)'
                                 : 'rgba(255, 255, 255, 0.2)',
+                            fontWeight: 'bold',
                         }}
                         onMouseEnter={() => setCartButtonHovered(true)}
                         onMouseLeave={() => setCartButtonHovered(false)}
                         onClick={handleAddToCart}
                     >
                         <ShoppingCartIcon style={{ marginRight: '8px' }} />
-                        Thêm Giỏ Hàng
+                        Thêm Vào Giỏ
                     </Button>
                 </Flex>
             </Flex>
