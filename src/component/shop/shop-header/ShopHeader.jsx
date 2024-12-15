@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
     Avatar,
     Button,
@@ -12,7 +13,11 @@ import {
     MenuTarget,
     Text,
     UnstyledButton,
+    Card,
+    Divider,
+    ScrollArea,
 } from '@mantine/core';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import {
     AccountCircle,
     ExpandMore,
@@ -21,7 +26,6 @@ import {
     ShoppingCart,
 } from '@mui/icons-material';
 import { Badge } from '@mui/material';
-import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useAuthStore } from '../../../store/authStore';
@@ -33,6 +37,7 @@ import CartPanel from '../shop-header-cart/shop-header-cart';
 function ShopHeader() {
     const [searchValue, setSearchValue] = useState('');
     const [isCartOpen, setCartOpen] = useState(false);
+    const [isOrdersOpen, setOrdersOpen] = useState(false); // State dropdown đơn hàng
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user, logout } = useAuthStore();
@@ -42,6 +47,24 @@ function ShopHeader() {
         (total, item) => total + item.quantity,
         0,
     );
+
+    // Giả lập dữ liệu đơn hàng
+    const orders = [
+        {
+            id: '001',
+            date: '2024-12-15',
+            image: 'https://via.placeholder.com/50',
+            description: 'Sản phẩm 1 ',
+            total: 300000,
+        },
+        {
+            id: '002',
+            date: '2024-12-14',
+            image: 'https://via.placeholder.com/50',
+            description: 'Sản phẩm 2 ',
+            total: 500000,
+        },
+    ];
 
     useEffect(() => {
         dispatch(loadCartFromStorage(user?.id || 0));
@@ -61,8 +84,8 @@ function ShopHeader() {
     const handleKeyEnter = (event) => {
         if (event.key === 'Enter') handleSearchClick();
     };
-    const openCartPanel = () => setCartOpen(true);
-    const closeCartPanel = () => setCartOpen(false);
+
+    const toggleOrdersDropdown = () => setOrdersOpen((prev) => !prev);
 
     return (
         <Group pt={10} pb={10} justify="center" align="center" mx={20}>
@@ -122,14 +145,143 @@ function ShopHeader() {
                 />
 
                 <Group>
+                    <div style={{ position: 'relative' }}>
+                        <div
+                            style={{
+                                cursor: 'pointer',
+                                padding: '8px 12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                            onClick={toggleOrdersDropdown}
+                        >
+                            <LocalShippingIcon
+                                color="primary"
+                                fontSize="large"
+                            />
+
+                            <Badge
+                                color="error"
+                                badgeContent={orders.length}
+                                style={{ bottom: 15 }}
+                            />
+                        </div>
+
+                        {isOrdersOpen && (
+                            <Card
+                                shadow="sm"
+                                padding="md"
+                                style={{
+                                    position: 'absolute',
+                                    top: '45px',
+                                    right: 0,
+                                    zIndex: 1000,
+                                    width: '400px',
+                                    backgroundColor: 'white',
+                                }}
+                            >
+                                <Text
+                                    fw="bold"
+                                    size="lg"
+                                    align="center"
+                                    mb="sm"
+                                >
+                                    Đơn hàng của bạn
+                                </Text>
+                                <Divider my="xs" />
+                                <ScrollArea style={{ height: 250 }}>
+                                    {orders.length > 0 ? (
+                                        orders.map((order) => (
+                                            <Flex
+                                                key={order.id}
+                                                justify="space-between"
+                                                align="center"
+                                                mb="xs"
+                                                style={{
+                                                    border: '1px solid #f0f0f0',
+                                                    padding: '10px',
+                                                    borderRadius: '8px',
+                                                    boxShadow:
+                                                        '0 2px 5px rgba(0,0,0,0.1)',
+                                                    transition: 'all 0.3s',
+                                                }}
+                                            >
+                                                <Image
+                                                    src={order.image}
+                                                    alt={order.description}
+                                                    width={50}
+                                                    height={50}
+                                                    radius="md"
+                                                    style={{ flexShrink: 0 }}
+                                                />
+
+                                                <div
+                                                    style={{
+                                                        flex: 1,
+                                                        marginLeft: '10px',
+                                                    }}
+                                                >
+                                                    <Text
+                                                        size="sm"
+                                                        fw="bold"
+                                                        c="blue"
+                                                    >
+                                                        {order.description}
+                                                    </Text>
+                                                    <Text
+                                                        size="xs"
+                                                        color="gray"
+                                                        mt="4px"
+                                                    >
+                                                        Ngày đặt: {order.date}
+                                                    </Text>
+                                                    <Text
+                                                        size="xs"
+                                                        color="green"
+                                                        mt="4px"
+                                                    >
+                                                        Trạng thái: Đang giao
+                                                    </Text>
+                                                    <Text
+                                                        size="xs"
+                                                        color="black"
+                                                        mt="4px"
+                                                    >
+                                                        Số sản phẩm: 2
+                                                    </Text>
+                                                </div>
+
+                                                <Text
+                                                    size="sm"
+                                                    fw="bold"
+                                                    style={{
+                                                        textAlign: 'right',
+                                                    }}
+                                                >
+                                                    {order.total.toLocaleString()}
+                                                    đ
+                                                </Text>
+                                            </Flex>
+                                        ))
+                                    ) : (
+                                        <Text align="center" color="gray">
+                                            Không có đơn hàng nào
+                                        </Text>
+                                    )}
+                                </ScrollArea>
+                            </Card>
+                        )}
+                    </div>
+
                     <Badge color="error" badgeContent={cartCount}>
                         <ShoppingCart
                             color="primary"
                             fontSize="large"
-                            onClick={openCartPanel}
+                            onClick={() => setCartOpen(true)}
                             style={{ cursor: 'pointer' }}
                         />
                     </Badge>
+
                     {!user ? (
                         <Link to="/login">
                             <Button variant="filled" radius={'md'} size="md">
@@ -171,8 +323,12 @@ function ShopHeader() {
                     )}
                 </Group>
 
+                {/* Cart Panel */}
                 {isCartOpen && (
-                    <CartPanel isOpen={isCartOpen} onClose={closeCartPanel} />
+                    <CartPanel
+                        isOpen={isCartOpen}
+                        onClose={() => setCartOpen(false)}
+                    />
                 )}
             </Group>
         </Group>
