@@ -1,3 +1,4 @@
+import emailjs from '@emailjs/browser';
 import {
     Avatar,
     Button,
@@ -49,6 +50,26 @@ function AppointmentSummary() {
             );
             if (res.status == 201) {
                 console.log(res);
+                const templateParams = {
+                    pet_owner: formData.ownerName,
+                    time: formData.time.slice(0, -3),
+                    date: formData.date,
+                    to_email: formData.doctor.email,
+                    doctor_name: formData.doctor.username,
+                    clinic_address: formData.doctor.clinic_address,
+                    note: formData.notes,
+                };
+                emailjs
+                    .send('service_ubdnywu', 'template_qr6lqdi', templateParams)
+                    .then(
+                        () => {
+                            // saveOptToServer(code)
+                            console.log('Send email successfully');
+                        },
+                        (error) => {
+                            console.log(error);
+                        },
+                    );
                 toast.success('Đặt lịch thành công');
                 navigate('/appointment');
             }

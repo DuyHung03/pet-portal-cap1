@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+// import emailjs from '@emailjs/browser';
 import axiosInstance from '@network/httpRequest';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { clearCart } from '../../redux/slice/cartSlice';
 
 function Checkout() {
@@ -9,6 +10,8 @@ function Checkout() {
     const [orderData, setOrderData] = useState(null);
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
+    console.log(orderData);
+
     console.log(orderId);
     useEffect(() => {
         const fetchOrderData = async () => {
@@ -31,6 +34,20 @@ function Checkout() {
             const response = await axiosInstance.post(`/payments/${orderId}`);
             if (response.status === 200) {
                 alert('Thanh toán thành công!');
+                // const templateParams = {
+                //     customer_name: user.username,
+                // };
+                // emailjs
+                //     .send('service_ubdnywu', 'template_qtbkviq', templateParams)
+                //     .then(
+                //         () => {
+                //             // saveOptToServer(code)
+                //             console.log('Send email successfully');
+                //         },
+                //         (error) => {
+                //             console.log(error);
+                //         },
+                //     );
                 dispatch(clearCart());
             }
         } catch (error) {
