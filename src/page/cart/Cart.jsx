@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import axiosInstance from '@network/httpRequest';
+import { useAuthStore } from '@store/authStore';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
+    applyDiscountCode,
+    loadCartFromStorage,
     removeFromCart,
     updateItemQuantity,
-    loadCartFromStorage,
-    applyDiscountCode,
 } from '../../redux/slice/cartSlice';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@store/authStore';
-import axiosInstance from '@network/httpRequest';
 
 function Cart() {
     const [discountCode, setDiscountCode] = useState('');
