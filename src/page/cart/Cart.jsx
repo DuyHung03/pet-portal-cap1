@@ -158,6 +158,7 @@ function Cart() {
                 orderId,
             });
             console.log(orderData);
+            console.log(orderResponse);
             const { url } = paymentResponse.data;
 
             setNotification({
