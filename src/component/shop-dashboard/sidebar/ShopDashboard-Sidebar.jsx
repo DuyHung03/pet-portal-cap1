@@ -3,16 +3,15 @@ import {
     CalendarMonth,
     Logout,
     ShoppingCart,
-    People,
     BarChart,
 } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../../store/authStore';
-
+import DiscountIcon from '@mui/icons-material/Discount';
 function ShopDashboardSideBar() {
     const location = useLocation();
     const { user } = useAuthStore();
-
+    console.log('usser:', user.store_logo);
     const isActive = (path) => location.pathname.includes(path);
 
     return (
@@ -25,7 +24,7 @@ function ShopDashboardSideBar() {
             }}
         >
             <Avatar
-                src="https://i.pinimg.com/564x/87/19/bd/8719bd600d09de24784cedb300f758f1.jpg"
+                src={user.store_logo}
                 size={80}
                 className="mb-4 border-4 border-gray-300"
             />
@@ -54,6 +53,13 @@ function ShopDashboardSideBar() {
                     label="Orders"
                     icon={<CalendarMonth />}
                     isActive={isActive('/shop-dashboard/orders')}
+                />
+                <Divider className="my-4 bg-[#5789cf]" />
+                <SidebarLink
+                    to="/shop-dashboard/coupon"
+                    label="Coupons"
+                    icon={<DiscountIcon />}
+                    isActive={isActive('/shop-dashboard/coupon')}
                 />
                 <Divider className="my-4 bg-[#5789cf]" />
 

@@ -37,7 +37,7 @@ import Orders from '@pages/shop-dashboard/shop-orders';
 import Overview from '@pages/shop-dashboard/shop-overview';
 import Products from '@pages/shop-dashboard/shop-products';
 import Reports from '@pages/shop-dashboard/shop-reports';
-import Users from '@pages/shop-dashboard/shop-users';
+import Coupon from '@pages/shop-dashboard/shop-coupon';
 import Profile from '@pages/user/Profile';
 import DoctorDashboardLayout from '../layout/DoctorDashboardLayout';
 import PostLayout from '../layout/PostLayout';
@@ -116,7 +116,7 @@ const router = createBrowserRouter(
                 <Route path="overview" element={<Overview />} />
                 <Route path="products" element={<Products />} />
                 <Route path="orders" element={<Orders />} />
-                <Route path="users" element={<Users />} />
+                <Route path="coupon" element={<Coupon />} />
                 <Route path="reports" element={<Reports />} />
             </Route>
 
