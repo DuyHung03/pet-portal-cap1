@@ -31,44 +31,35 @@ function ShopDashboardSideBar() {
             <h2 className="text-xl font-semibold text-[#5789cf] mb-6">{`Admin ${user.username}`}</h2>
 
             <div className="w-full">
+                <Divider className="my-4 bg-[#5789cf]" />
                 <SidebarLink
-                    to="/shop-dashboard/overview"
-                    label="Overview"
-                    icon={<CalendarMonth />}
-                    isActive={isActive('/shop-dashboard/overview')}
+                    to="/shop-dashboard/reports"
+                    label="Báo Cáo"
+                    icon={<BarChart />}
+                    isActive={isActive('/shop-dashboard/reports')}
                 />
                 <Divider className="my-4 bg-[#5789cf]" />
-
                 <SidebarLink
                     to="/shop-dashboard/products"
-                    label="Products"
+                    label="Sản Phẩm"
                     icon={<ShoppingCart />}
                     isActive={isActive('/shop-dashboard/products')}
                 />
-
                 <Divider className="my-4 bg-[#5789cf]" />
-
                 <SidebarLink
                     to="/shop-dashboard/orders"
-                    label="Orders"
+                    label="Đơn Hàng"
                     icon={<CalendarMonth />}
                     isActive={isActive('/shop-dashboard/orders')}
                 />
                 <Divider className="my-4 bg-[#5789cf]" />
                 <SidebarLink
                     to="/shop-dashboard/coupon"
-                    label="Coupons"
+                    label="Mã Giảm Giá"
                     icon={<DiscountIcon />}
                     isActive={isActive('/shop-dashboard/coupon')}
                 />
                 <Divider className="my-4 bg-[#5789cf]" />
-
-                <SidebarLink
-                    to="/shop-dashboard/reports"
-                    label="Reports"
-                    icon={<BarChart />}
-                    isActive={isActive('/shop-dashboard/reports')}
-                />
             </div>
             <Button
                 variant="subtle"

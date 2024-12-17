@@ -112,8 +112,7 @@ const router = createBrowserRouter(
                 }
                 errorElement={<Error404 />}
             >
-                <Route index element={<Navigate to="overview" replace />} />
-                <Route path="overview" element={<Overview />} />
+                <Route index element={<Navigate to="reports" replace />} />
                 <Route path="products" element={<Products />} />
                 <Route path="orders" element={<Orders />} />
                 <Route path="coupon" element={<Coupon />} />

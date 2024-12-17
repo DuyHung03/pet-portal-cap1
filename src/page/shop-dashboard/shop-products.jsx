@@ -269,7 +269,7 @@ function Products() {
                     page={page}
                     onChange={setPage}
                     total={totalPages}
-                    className="mt-2 flex justify-center"
+                    className="mt-2 flex justify-center z-0"
                 />
             </div>
             <Modal

@@ -122,7 +122,6 @@ const Coupon = () => {
                 </div>
             )}
             <div className="flex justify-between mb-4">
-                <h1 className="text-2xl font-bold">Danh Sách Mã Giảm Giá</h1>
                 <button
                     onClick={() => setIsAddModalOpen(true)}
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"

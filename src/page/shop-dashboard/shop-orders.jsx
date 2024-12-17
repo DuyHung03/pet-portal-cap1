@@ -15,7 +15,7 @@ function Orders() {
     const [orders, setOrders] = useState([]);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [orderToDelete, setOrderToDelete] = useState(null);
-    const [notification, setNotification] = useState(''); // Thông báo sau khi xóa
+    const [notification, setNotification] = useState('');
     const productSectionRef = useRef(null);
     const pageSize = 5;
 
@@ -122,7 +122,7 @@ function Orders() {
     };
 
     return (
-        <div className="px-8 pt-2 pb-1 bg-white w-full h-[100vh] min-h-screen flex flex-col">
+        <div className="px-8 pt-2 pb-1 bg-white w-full min-h-screen flex flex-col">
             {notification && (
                 <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
                     {notification}
@@ -307,6 +307,13 @@ function Orders() {
                         </table>
                     </div>
                 </div>
+                <div className="flex justify-center mt-4">
+                    <Pagination
+                        total={totalPages}
+                        value={page}
+                        onChange={setPage}
+                    />
+                </div>
             </div>
 
             <Modal
@@ -344,14 +351,6 @@ function Orders() {
                     </div>
                 </div>
             </Modal>
-
-            <div className="flex justify-center mt-4">
-                <Pagination
-                    total={totalPages}
-                    value={page}
-                    onChange={setPage}
-                />
-            </div>
         </div>
     );
 }
