@@ -1,3 +1,4 @@
+import emailjs from '@emailjs/browser';
 import {
     Button,
     Divider,
@@ -24,6 +25,7 @@ import { uploadImage } from '@util/firebaseUtils';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import moment from 'moment';
 import { useRef, useState } from 'react';
 import { IMaskInput } from 'react-imask';
 import { useNavigate } from 'react-router-dom';
@@ -155,6 +157,21 @@ function ShopRegister() {
 
             if (res.status == 200) {
                 nextStep();
+                const templateParams = {
+                    to_email: user.email,
+                    service_name: 'NHÀ BÁN HÀNG',
+                    submission_date: `${moment.format('DD/MM/YYYY')}, ${moment.format('HH:mm')}`,
+                };
+                emailjs
+                    .send('service_ubdnywu', 'template_zj79f3s', templateParams)
+                    .then(
+                        () => {
+                            console.log('Send email successfully');
+                        },
+                        (error) => {
+                            console.log(error);
+                        },
+                    );
                 setTimeout(() => {
                     window.location.href = '/';
                 }, 5000);

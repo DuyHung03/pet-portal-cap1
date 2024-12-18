@@ -1,3 +1,4 @@
+import emailjs from '@emailjs/browser';
 import {
     Avatar,
     Button,
@@ -25,6 +26,7 @@ import { useAuthStore } from '@store/authStore';
 import { uploadImage } from '@util/firebaseUtils';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
+import moment from 'moment';
 import { useRef, useState } from 'react';
 import { IMaskInput } from 'react-imask';
 import { useNavigate } from 'react-router-dom';
@@ -149,6 +151,21 @@ function DoctorRegister() {
             );
             if (res.status == 200) {
                 nextStep();
+                const templateParams = {
+                    to_email: user.email,
+                    service_name: 'BÁC SĨ THÚ Y',
+                    submission_date: `${moment.format('DD/MM/YYYY')}, ${moment.format('HH:mm')}`,
+                };
+                emailjs
+                    .send('service_ubdnywu', 'template_zj79f3s', templateParams)
+                    .then(
+                        () => {
+                            console.log('Send email successfully');
+                        },
+                        (error) => {
+                            console.log(error);
+                        },
+                    );
                 setTimeout(() => {
                     window.location.href = '/';
                 }, 5000);
