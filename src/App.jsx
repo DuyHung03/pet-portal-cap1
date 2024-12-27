@@ -9,7 +9,7 @@ function App() {
     const { user, setUserInfo } = useAuthStore();
 
     emailjs.init({
-        publicKey: 'M5U-7455uJ97kM2oR',
+        publicKey: 'rr_4AyrAKicUp9DQH',
         limitRate: {
             // Set the limit rate for the application
             id: 'app',
