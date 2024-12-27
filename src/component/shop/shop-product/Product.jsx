@@ -85,8 +85,7 @@ function Product({ product }) {
                 onMouseLeave={() => setHovered(false)}
             >
                 <Image
-                    src={'https://via.placeholder.com/150'}
-                    // src={product.images || 'https://via.placeholder.com/150'}
+                    src={product.images || 'https://via.placeholder.com/150'}
                     alt={product.name}
                     style={{
                         borderRadius: '8px',
@@ -94,6 +93,7 @@ function Product({ product }) {
                         height: '150px',
                         objectFit: 'cover',
                         marginBottom: '10px',
+                        backgroundColor: '#f0f0f0',
                     }}
                 />
 

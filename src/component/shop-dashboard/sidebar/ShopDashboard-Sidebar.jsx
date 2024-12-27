@@ -5,14 +5,24 @@ import {
     ShoppingCart,
     BarChart,
 } from '@mui/icons-material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/authStore';
 import DiscountIcon from '@mui/icons-material/Discount';
 function ShopDashboardSideBar() {
     const location = useLocation();
-    const { user } = useAuthStore();
+    const { user, logout } = useAuthStore();
     console.log('usser:', user.store_logo);
     const isActive = (path) => location.pathname.includes(path);
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
+    };
 
     return (
         <div
@@ -64,7 +74,7 @@ function ShopDashboardSideBar() {
             <Button
                 variant="subtle"
                 color="red"
-                leftSection={<Logout />}
+                onClick={handleLogout}
                 className="mt-auto w-full text-white hover:bg-red-600 transition-all duration-200"
             >
                 Sign Out

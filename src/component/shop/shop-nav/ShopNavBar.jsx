@@ -95,7 +95,7 @@ function ShopNavBar() {
                     </Text>
                 </Link>
 
-                <Link to={'pet'}>
+                {/* <Link to={'pet'}>
                     <Text
                         c={
                             isActive('pet') || hoveredNav === 'pet'
@@ -118,7 +118,7 @@ function ShopNavBar() {
                     >
                         Thú Cưng
                     </Text>
-                </Link>
+                </Link> */}
                 <Link to={'contact'}>
                     <Text
                         c={
