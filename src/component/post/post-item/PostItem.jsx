@@ -37,6 +37,7 @@ function PostItem({ post, onPostDeleted }) {
     const [modalOpened, { open: openModal, close: closeModal }] =
         useDisclosure(false);
 
+    console.log('post', post.image_url);
     // Post comment mutation
     const commentMutation = useMutation({
         mutationFn: async ({ postId, user, content }) => {
@@ -78,9 +79,10 @@ function PostItem({ post, onPostDeleted }) {
             setComments((prev) =>
                 prev.filter((comment) => comment.id !== commentId),
             );
+            toast.success('Đã xoá bình luận.');
         },
         onError: () => {
-            toast.error('An error occurred while deleting the comment.');
+            toast.error('Lỗi rồi nhe.');
         },
     });
 
@@ -265,7 +267,7 @@ function PostItem({ post, onPostDeleted }) {
                                 onClick={handleAddComment}
                                 disabled={commentMutation.isLoading}
                             >
-                                Submit
+                                Gửi
                             </Button>
                         </Flex>
 

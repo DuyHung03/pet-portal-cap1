@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../component/Input/Input';
 import withBackground from '../../Hoc/FloatingShape';
 import { useAuthStore } from '../../store/authStore';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -12,13 +13,42 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const { login, isLoading, error } = useAuthStore();
 
+    const validateForm = () => {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const passwordRegex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
+
+        if (!email || !emailRegex.test(email)) {
+            toast.error('Please enter a valid email address.');
+            return false;
+        }
+        if (!password || !passwordRegex.test(password)) {
+            toast.error(
+                'Password must be 8-64 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.',
+            );
+            return false;
+        }
+        return true;
+    };
+
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        await login(email, password);
-        const prevUrl = location.state?.prevUrl || '/';
+        if (!validateForm()) {
+            return;
+        }
 
-        navigate(prevUrl, { replace: true });
+        try {
+            await login(email, password);
+            toast.success('Login Successfully');
+            const prevUrl = location.state?.prevUrl || '/';
+            navigate(prevUrl, { replace: true });
+        } catch (error) {
+            console.log(error);
+            toast.error(
+                'Login failed. Please check your credentials and try again.',
+            );
+        }
     };
 
     return (

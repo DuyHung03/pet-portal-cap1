@@ -46,7 +46,7 @@ export const useAuthStore = create((set) => {
                 });
             } catch (error) {
                 set({
-                    error: error.response?.data?.error || 'Error signing up',
+                    // error: error.response?.data?.error || 'Error signing up',
                     isLoading: false,
                 });
                 throw error;
@@ -79,7 +79,7 @@ export const useAuthStore = create((set) => {
                 });
             } catch (error) {
                 set({
-                    error: error.response?.data?.message || 'Error logging in',
+                    // error: error.response?.data?.message || 'Error logging in',
                     isLoading: false,
                 });
                 throw error;

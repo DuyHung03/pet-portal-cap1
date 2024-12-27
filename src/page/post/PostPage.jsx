@@ -12,6 +12,7 @@ function PostPage() {
         '/posts/all',
         params,
     );
+    console.log('data', data);
 
     return (
         <Group w={'100%'} justify="center" m={20}>
