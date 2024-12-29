@@ -29,6 +29,7 @@ import moment from 'moment';
 import { useRef, useState } from 'react';
 import { IMaskInput } from 'react-imask';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import entrepreneur from '../../../assets/entrepreneur.png';
 import registeredDocument from '../../../assets/registered-document.png';
 import ShopSummary from './ShopSummary';
@@ -170,6 +171,7 @@ function ShopRegister() {
                         },
                         (error) => {
                             console.log(error);
+                            toast.error('Đã xảy ra lỗi');
                         },
                     );
                 setTimeout(() => {
@@ -180,6 +182,7 @@ function ShopRegister() {
             }
         } catch (error) {
             console.log(error);
+            toast.error('Đã xảy ra lỗi');
         } finally {
             setLoading(false);
         }
@@ -213,398 +216,408 @@ function ShopRegister() {
     }
 
     return (
-        <Group w={'100%'} justify="center" mb={80} mt={30}>
-            <Group w={1000} p={20}>
-                <Group w={'100%'}>
-                    <Image src={entrepreneur} w={60} />
+        <>
+            <ToastContainer />
 
-                    <Text fw={500} c={'#5789CF'} size={'26px'}>
-                        Đăng kí dịch vụ nhà bán hàng
-                    </Text>
-                    <Divider w={'100%'} />
-                </Group>
+            <Group w={'100%'} justify="center" mb={80} mt={30}>
+                <Group w={1000} p={20}>
+                    <Group w={'100%'}>
+                        <Image src={entrepreneur} w={60} />
 
-                <Stepper
-                    active={active}
-                    onStepClick={setActive}
-                    w={'100%'}
-                    allowNextStepsSelect={false}
-                >
-                    <Stepper.Step
-                        label="Thông tin cá nhân"
-                        description="Personal information"
+                        <Text fw={500} c={'#5789CF'} size={'26px'}>
+                            Đăng kí dịch vụ nhà bán hàng
+                        </Text>
+                        <Divider w={'100%'} />
+                    </Group>
+
+                    <Stepper
+                        active={active}
+                        onStepClick={setActive}
+                        w={'100%'}
+                        allowNextStepsSelect={false}
                     >
-                        <SimpleGrid cols={2}>
-                            <Group
-                                justify="center"
-                                align="flex-start"
-                                w={'100%'}
-                            >
-                                <TextInput
+                        <Stepper.Step
+                            label="Thông tin cá nhân"
+                            description="Personal information"
+                        >
+                            <SimpleGrid cols={2}>
+                                <Group
+                                    justify="center"
+                                    align="flex-start"
                                     w={'100%'}
-                                    label="Họ và tên"
-                                    placeholder="Nhập họ và tên"
-                                    {...personal_info_form.getInputProps(
-                                        'fullName',
-                                    )}
-                                    required
-                                />
-                                <SimpleGrid cols={2} w={'100%'}>
-                                    <Select
-                                        label="Giới tính"
-                                        placeholder="Chọn giới tính"
-                                        data={[
-                                            { value: 'Nam', label: 'Nam' },
-                                            {
-                                                value: 'Nữ',
-                                                label: 'Nữ',
-                                            },
-                                            {
-                                                value: 'Khác',
-                                                label: 'Khác',
-                                            },
-                                        ]}
-                                        {...personal_info_form.getInputProps(
-                                            'gender',
-                                        )}
-                                        required
-                                    />
-                                    <DateInput
-                                        valueFormat="DD/MM/YYYY"
-                                        label="Ngày sinh"
-                                        placeholder="Chọn ngày sinh"
-                                        {...personal_info_form.getInputProps(
-                                            'birthDate',
-                                        )}
-                                        required
-                                        locale="vi"
-                                    />
-                                </SimpleGrid>
-                                <SimpleGrid w={'100%'} cols={2}>
-                                    <InputWrapper
-                                        label="Số điện thoại"
-                                        withAsterisk
-                                        required
-                                        error={
-                                            personal_info_form.errors
-                                                .phoneNumber
-                                        }
-                                    >
-                                        <Input
-                                            component={IMaskInput}
-                                            mask="0000000000"
-                                            placeholder="+84"
-                                            {...personal_info_form.getInputProps(
-                                                'phoneNumber',
-                                            )}
-                                        />
-                                    </InputWrapper>
-                                    <TextInput
-                                        label="Email"
-                                        placeholder="Nhập email"
-                                        {...personal_info_form.getInputProps(
-                                            'email',
-                                        )}
-                                        disabled
-                                        required
-                                    />
-                                </SimpleGrid>
-                                <Group w={'100%'} justify="flex-end" mt="md">
-                                    <Button onClick={nextStep}>
-                                        Tiếp theo
-                                    </Button>
-                                </Group>
-                            </Group>
-                            <Group
-                                w={'100%'}
-                                justify="center"
-                                align="flex-start"
-                            >
-                                {storeLogo ? (
-                                    <Image
-                                        w={250}
-                                        mah={350}
-                                        src={URL.createObjectURL(storeLogo)}
-                                    />
-                                ) : (
-                                    <Text
-                                        w={'100%'}
-                                        ta={'center'}
-                                        c={'gray'}
-                                        fs={'italic'}
-                                    >
-                                        Hãy thêm ảnh đại diện của bạn
-                                    </Text>
-                                )}
-                                <FileButton
-                                    resetRef={resetRef}
-                                    accept="image/png,image/jpeg,image/jpg"
-                                    onChange={setStoreLogo}
                                 >
-                                    {(props) => (
-                                        <Button
-                                            w={'100%'}
-                                            {...props}
-                                            leftSection={<AddAPhoto />}
-                                            c={'#5789cf'}
-                                            variant="transparent"
-                                        >
-                                            Chọn ảnh đại diện
-                                        </Button>
-                                    )}
-                                </FileButton>
-                            </Group>
-                        </SimpleGrid>
-                    </Stepper.Step>
-
-                    <Stepper.Step
-                        label="Thông tin cửa hàng"
-                        description="Shop information"
-                    >
-                        <Group w={'100%'} justify="center">
-                            <Flex direction={'column'} w={600} gap={10}>
-                                <TextInput
-                                    w={'100%'}
-                                    label="Tên cửa hàng"
-                                    placeholder="Nhập tên cửa hàng"
-                                    {...shop_info_form.getInputProps(
-                                        'store_name',
-                                    )}
-                                    required
-                                />
-                                <TextInput
-                                    w={'100%'}
-                                    label="Địa chỉ cửa hàng"
-                                    placeholder="Nhập địa chỉ cửa hàng"
-                                    {...shop_info_form.getInputProps(
-                                        'store_address',
-                                    )}
-                                    required
-                                />
-                                <TextInput
-                                    w={'100%'}
-                                    label="Mã giấy phép kinh doanh"
-                                    placeholder="Nhập mã giấy phép kinh doanh"
-                                    {...shop_info_form.getInputProps(
-                                        'business_license',
-                                    )}
-                                    required
-                                />
-                                <TextInput
-                                    w={'100%'}
-                                    label="Số Căn cước công dân (CCCD)"
-                                    placeholder="Nhập số CCCD"
-                                    {...shop_info_form.getInputProps(
-                                        'id_number',
-                                    )}
-                                    required
-                                    type="number"
-                                    disabled={user.cccd}
-                                    maxLength={12}
-                                />
-                                <Textarea
-                                    w={'100%'}
-                                    label="Mô tả cửa hàng"
-                                    placeholder="Mô tả ngắn về cửa hàng của bạn"
-                                    {...shop_info_form.getInputProps(
-                                        'store_description',
-                                    )}
-                                />
-
-                                <Group justify="center" w={'100%'}>
-                                    <InputLabel
-                                        required
+                                    <TextInput
                                         w={'100%'}
-                                        ta={'start'}
-                                    >
-                                        Hình ảnh giấy phép kinh doanh
-                                    </InputLabel>
-                                    {businessLicenseUrl ? (
-                                        <Image
-                                            w={180}
-                                            mah={180}
-                                            src={URL.createObjectURL(
-                                                businessLicenseUrl,
+                                        label="Họ và tên"
+                                        placeholder="Nhập họ và tên"
+                                        {...personal_info_form.getInputProps(
+                                            'fullName',
+                                        )}
+                                        required
+                                    />
+                                    <SimpleGrid cols={2} w={'100%'}>
+                                        <Select
+                                            label="Giới tính"
+                                            placeholder="Chọn giới tính"
+                                            data={[
+                                                { value: 'Nam', label: 'Nam' },
+                                                {
+                                                    value: 'Nữ',
+                                                    label: 'Nữ',
+                                                },
+                                                {
+                                                    value: 'Khác',
+                                                    label: 'Khác',
+                                                },
+                                            ]}
+                                            {...personal_info_form.getInputProps(
+                                                'gender',
                                             )}
+                                            required
                                         />
-                                    ) : null}
+                                        <DateInput
+                                            valueFormat="DD/MM/YYYY"
+                                            label="Ngày sinh"
+                                            placeholder="Chọn ngày sinh"
+                                            {...personal_info_form.getInputProps(
+                                                'birthDate',
+                                            )}
+                                            required
+                                            locale="vi"
+                                        />
+                                    </SimpleGrid>
+                                    <SimpleGrid w={'100%'} cols={2}>
+                                        <InputWrapper
+                                            label="Số điện thoại"
+                                            withAsterisk
+                                            required
+                                            error={
+                                                personal_info_form.errors
+                                                    .phoneNumber
+                                            }
+                                        >
+                                            <Input
+                                                component={IMaskInput}
+                                                mask="0000000000"
+                                                placeholder="+84"
+                                                {...personal_info_form.getInputProps(
+                                                    'phoneNumber',
+                                                )}
+                                            />
+                                        </InputWrapper>
+                                        <TextInput
+                                            label="Email"
+                                            placeholder="Nhập email"
+                                            {...personal_info_form.getInputProps(
+                                                'email',
+                                            )}
+                                            disabled
+                                            required
+                                        />
+                                    </SimpleGrid>
+                                    <Group
+                                        w={'100%'}
+                                        justify="flex-end"
+                                        mt="md"
+                                    >
+                                        <Button onClick={nextStep}>
+                                            Tiếp theo
+                                        </Button>
+                                    </Group>
+                                </Group>
+                                <Group
+                                    w={'100%'}
+                                    justify="center"
+                                    align="flex-start"
+                                >
+                                    {storeLogo ? (
+                                        <Image
+                                            w={250}
+                                            mah={350}
+                                            src={URL.createObjectURL(storeLogo)}
+                                        />
+                                    ) : (
+                                        <Text
+                                            w={'100%'}
+                                            ta={'center'}
+                                            c={'gray'}
+                                            fs={'italic'}
+                                        >
+                                            Hãy thêm ảnh đại diện của bạn
+                                        </Text>
+                                    )}
                                     <FileButton
                                         resetRef={resetRef}
                                         accept="image/png,image/jpeg,image/jpg"
-                                        onChange={setBusinessLicenseUrl}
+                                        onChange={setStoreLogo}
                                     >
                                         {(props) => (
                                             <Button
-                                                style={{
-                                                    border: '1px dashed #ddd',
-                                                }}
-                                                w={96}
-                                                h={96}
+                                                w={'100%'}
                                                 {...props}
-                                                variant="transparent"
+                                                leftSection={<AddAPhoto />}
                                                 c={'#5789cf'}
+                                                variant="transparent"
                                             >
-                                                <AddAPhoto fontSize="large" />
+                                                Chọn ảnh đại diện
                                             </Button>
                                         )}
                                     </FileButton>
                                 </Group>
+                            </SimpleGrid>
+                        </Stepper.Step>
 
-                                {!user.cccd ? (
-                                    <Group>
-                                        <Group justify="center" w={'100%'}>
-                                            <InputLabel
-                                                required
-                                                w={'100%'}
-                                                ta={'start'}
-                                            >
-                                                Hình ảnh mặt trước của CCCD
-                                            </InputLabel>
-                                            {front_ID ? (
-                                                <Image
-                                                    w={180}
-                                                    mah={180}
-                                                    src={URL.createObjectURL(
-                                                        front_ID,
-                                                    )}
-                                                />
-                                            ) : null}
-                                            <FileButton
-                                                resetRef={resetRef}
-                                                accept="image/png,image/jpeg,image/jpg"
-                                                onChange={setFront_ID}
-                                            >
-                                                {(props) => (
-                                                    <Button
-                                                        style={{
-                                                            border: '1px dashed #ddd',
-                                                        }}
-                                                        w={96}
-                                                        h={96}
-                                                        {...props}
-                                                        variant="transparent"
-                                                        c={'#5789cf'}
-                                                    >
-                                                        <AddAPhoto fontSize="large" />
-                                                    </Button>
+                        <Stepper.Step
+                            label="Thông tin cửa hàng"
+                            description="Shop information"
+                        >
+                            <Group w={'100%'} justify="center">
+                                <Flex direction={'column'} w={600} gap={10}>
+                                    <TextInput
+                                        w={'100%'}
+                                        label="Tên cửa hàng"
+                                        placeholder="Nhập tên cửa hàng"
+                                        {...shop_info_form.getInputProps(
+                                            'store_name',
+                                        )}
+                                        required
+                                    />
+                                    <TextInput
+                                        w={'100%'}
+                                        label="Địa chỉ cửa hàng"
+                                        placeholder="Nhập địa chỉ cửa hàng"
+                                        {...shop_info_form.getInputProps(
+                                            'store_address',
+                                        )}
+                                        required
+                                    />
+                                    <TextInput
+                                        w={'100%'}
+                                        label="Mã giấy phép kinh doanh"
+                                        placeholder="Nhập mã giấy phép kinh doanh"
+                                        {...shop_info_form.getInputProps(
+                                            'business_license',
+                                        )}
+                                        required
+                                    />
+                                    <TextInput
+                                        w={'100%'}
+                                        label="Số Căn cước công dân (CCCD)"
+                                        placeholder="Nhập số CCCD"
+                                        {...shop_info_form.getInputProps(
+                                            'id_number',
+                                        )}
+                                        required
+                                        type="number"
+                                        disabled={user.cccd}
+                                        maxLength={12}
+                                    />
+                                    <Textarea
+                                        w={'100%'}
+                                        label="Mô tả cửa hàng"
+                                        placeholder="Mô tả ngắn về cửa hàng của bạn"
+                                        {...shop_info_form.getInputProps(
+                                            'store_description',
+                                        )}
+                                    />
+
+                                    <Group justify="center" w={'100%'}>
+                                        <InputLabel
+                                            required
+                                            w={'100%'}
+                                            ta={'start'}
+                                        >
+                                            Hình ảnh giấy phép kinh doanh
+                                        </InputLabel>
+                                        {businessLicenseUrl ? (
+                                            <Image
+                                                w={180}
+                                                mah={180}
+                                                src={URL.createObjectURL(
+                                                    businessLicenseUrl,
                                                 )}
-                                            </FileButton>
-                                        </Group>
-                                        <Group justify="center" w={'100%'}>
-                                            <InputLabel
-                                                required
-                                                w={'100%'}
-                                                ta={'start'}
-                                            >
-                                                Hình ảnh mặt sau của CCCD
-                                            </InputLabel>
-                                            {back_ID ? (
-                                                <Image
-                                                    w={180}
-                                                    mah={180}
-                                                    src={URL.createObjectURL(
-                                                        back_ID,
-                                                    )}
-                                                />
-                                            ) : null}
-                                            <FileButton
-                                                resetRef={resetRef}
-                                                accept="image/png,image/jpeg,image/jpg"
-                                                onChange={setBack_ID}
-                                            >
-                                                {(props) => (
-                                                    <Button
-                                                        style={{
-                                                            border: '1px dashed #ddd',
-                                                        }}
-                                                        w={96}
-                                                        h={96}
-                                                        {...props}
-                                                        variant="transparent"
-                                                        c={'#5789cf'}
-                                                    >
-                                                        <AddAPhoto fontSize="large" />
-                                                    </Button>
-                                                )}
-                                            </FileButton>
-                                        </Group>
+                                            />
+                                        ) : null}
+                                        <FileButton
+                                            resetRef={resetRef}
+                                            accept="image/png,image/jpeg,image/jpg"
+                                            onChange={setBusinessLicenseUrl}
+                                        >
+                                            {(props) => (
+                                                <Button
+                                                    style={{
+                                                        border: '1px dashed #ddd',
+                                                    }}
+                                                    w={96}
+                                                    h={96}
+                                                    {...props}
+                                                    variant="transparent"
+                                                    c={'#5789cf'}
+                                                >
+                                                    <AddAPhoto fontSize="large" />
+                                                </Button>
+                                            )}
+                                        </FileButton>
                                     </Group>
-                                ) : null}
 
-                                <Group
-                                    w={'100%'}
-                                    mt="md"
-                                    justify="space-between"
-                                >
-                                    <Button
-                                        onClick={prevStep}
-                                        variant="transparent"
+                                    {!user.cccd ? (
+                                        <Group>
+                                            <Group justify="center" w={'100%'}>
+                                                <InputLabel
+                                                    required
+                                                    w={'100%'}
+                                                    ta={'start'}
+                                                >
+                                                    Hình ảnh mặt trước của CCCD
+                                                </InputLabel>
+                                                {front_ID ? (
+                                                    <Image
+                                                        w={180}
+                                                        mah={180}
+                                                        src={URL.createObjectURL(
+                                                            front_ID,
+                                                        )}
+                                                    />
+                                                ) : null}
+                                                <FileButton
+                                                    resetRef={resetRef}
+                                                    accept="image/png,image/jpeg,image/jpg"
+                                                    onChange={setFront_ID}
+                                                >
+                                                    {(props) => (
+                                                        <Button
+                                                            style={{
+                                                                border: '1px dashed #ddd',
+                                                            }}
+                                                            w={96}
+                                                            h={96}
+                                                            {...props}
+                                                            variant="transparent"
+                                                            c={'#5789cf'}
+                                                        >
+                                                            <AddAPhoto fontSize="large" />
+                                                        </Button>
+                                                    )}
+                                                </FileButton>
+                                            </Group>
+                                            <Group justify="center" w={'100%'}>
+                                                <InputLabel
+                                                    required
+                                                    w={'100%'}
+                                                    ta={'start'}
+                                                >
+                                                    Hình ảnh mặt sau của CCCD
+                                                </InputLabel>
+                                                {back_ID ? (
+                                                    <Image
+                                                        w={180}
+                                                        mah={180}
+                                                        src={URL.createObjectURL(
+                                                            back_ID,
+                                                        )}
+                                                    />
+                                                ) : null}
+                                                <FileButton
+                                                    resetRef={resetRef}
+                                                    accept="image/png,image/jpeg,image/jpg"
+                                                    onChange={setBack_ID}
+                                                >
+                                                    {(props) => (
+                                                        <Button
+                                                            style={{
+                                                                border: '1px dashed #ddd',
+                                                            }}
+                                                            w={96}
+                                                            h={96}
+                                                            {...props}
+                                                            variant="transparent"
+                                                            c={'#5789cf'}
+                                                        >
+                                                            <AddAPhoto fontSize="large" />
+                                                        </Button>
+                                                    )}
+                                                </FileButton>
+                                            </Group>
+                                        </Group>
+                                    ) : null}
+
+                                    <Group
+                                        w={'100%'}
+                                        mt="md"
+                                        justify="space-between"
                                     >
-                                        Quay lại
-                                    </Button>
-                                    <Button onClick={nextStep}>
-                                        Tiếp theo
-                                    </Button>
-                                </Group>
-                            </Flex>
-                        </Group>
-                    </Stepper.Step>
+                                        <Button
+                                            onClick={prevStep}
+                                            variant="transparent"
+                                        >
+                                            Quay lại
+                                        </Button>
+                                        <Button onClick={nextStep}>
+                                            Tiếp theo
+                                        </Button>
+                                    </Group>
+                                </Flex>
+                            </Group>
+                        </Stepper.Step>
 
-                    <Stepper.Step label="Hoàn thành" description="Done">
-                        <ShopSummary
-                            data={{
-                                personalInfo: personal_info_form.values,
-                                shopInfo: shop_info_form.values,
-                                storeLogo: storeLogo
-                                    ? URL.createObjectURL(storeLogo)
-                                    : null,
-                                businessLicenseUrl: businessLicenseUrl
-                                    ? URL.createObjectURL(businessLicenseUrl)
-                                    : null,
-                                front_ID: front_ID
-                                    ? URL.createObjectURL(front_ID)
-                                    : null,
-                                back_ID: back_ID
-                                    ? URL.createObjectURL(back_ID)
-                                    : null,
-                            }}
-                        />
-                        <Group w={'100%'} mt="md" justify="center" gap={50}>
-                            <Button
-                                onClick={prevStep}
-                                variant="transparent"
-                                disabled={loading}
-                            >
-                                Quay lại
-                            </Button>
-                            <Button
-                                onClick={handleRegisterSeller}
-                                loading={loading}
-                            >
-                                Đăng kí
-                            </Button>
-                        </Group>
-                    </Stepper.Step>
-                    <Stepper.Completed>
-                        <Group w={'100%'} justify="center">
-                            <Image src={registeredDocument} w={150} />
-                            <Text fw={600} w={'100%'} ta={'center'}>
-                                Hoàn thành đăng kí
-                            </Text>
-                            <Text w={'100%'} ta={'center'}>
-                                Yêu cầu đăng kí của bạn đang được xem xét và phê
-                                duyệt
-                            </Text>
-                            <a href="/">
-                                <Button bg={'#5789cf'}>
-                                    Quay về trang chủ
+                        <Stepper.Step label="Hoàn thành" description="Done">
+                            <ShopSummary
+                                data={{
+                                    personalInfo: personal_info_form.values,
+                                    shopInfo: shop_info_form.values,
+                                    storeLogo: storeLogo
+                                        ? URL.createObjectURL(storeLogo)
+                                        : null,
+                                    businessLicenseUrl: businessLicenseUrl
+                                        ? URL.createObjectURL(
+                                              businessLicenseUrl,
+                                          )
+                                        : null,
+                                    front_ID: front_ID
+                                        ? URL.createObjectURL(front_ID)
+                                        : null,
+                                    back_ID: back_ID
+                                        ? URL.createObjectURL(back_ID)
+                                        : null,
+                                }}
+                            />
+                            <Group w={'100%'} mt="md" justify="center" gap={50}>
+                                <Button
+                                    onClick={prevStep}
+                                    variant="transparent"
+                                    disabled={loading}
+                                >
+                                    Quay lại
                                 </Button>
-                            </a>
-                        </Group>
-                    </Stepper.Completed>
-                </Stepper>
+                                <Button
+                                    onClick={handleRegisterSeller}
+                                    loading={loading}
+                                >
+                                    Đăng kí
+                                </Button>
+                            </Group>
+                        </Stepper.Step>
+                        <Stepper.Completed>
+                            <Group w={'100%'} justify="center">
+                                <Image src={registeredDocument} w={150} />
+                                <Text fw={600} w={'100%'} ta={'center'}>
+                                    Hoàn thành đăng kí
+                                </Text>
+                                <Text w={'100%'} ta={'center'}>
+                                    Yêu cầu đăng kí của bạn đang được xem xét và
+                                    phê duyệt
+                                </Text>
+                                <a href="/">
+                                    <Button bg={'#5789cf'}>
+                                        Quay về trang chủ
+                                    </Button>
+                                </a>
+                            </Group>
+                        </Stepper.Completed>
+                    </Stepper>
+                </Group>
             </Group>
-        </Group>
+        </>
     );
 }
 

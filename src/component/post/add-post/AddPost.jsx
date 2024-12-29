@@ -17,6 +17,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { Add, AddPhotoAlternate, Close } from '@mui/icons-material';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import axiosInstance from '../../../network/httpRequest';
 import { useAuthStore } from '../../../store/authStore';
 import { uploadImage } from '../../../util/firebaseUtils';
@@ -71,6 +72,7 @@ function AddPost({ onPostCreated }) {
             }
         } catch (error) {
             console.log(error);
+            toast.error('Đã xảy ra lỗi');
         } finally {
             closeLoading();
         }
@@ -83,6 +85,7 @@ function AddPost({ onPostCreated }) {
 
     return (
         <>
+            <ToastContainer />
             <Group
                 bg={'#f8f8f8'}
                 p={20}

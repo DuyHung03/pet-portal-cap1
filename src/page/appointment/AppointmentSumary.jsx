@@ -68,6 +68,7 @@ function AppointmentSummary() {
                         },
                         (error) => {
                             console.log(error);
+                            toast.error('Đã xảy ra lỗi');
                         },
                     );
                 toast.success('Đặt lịch thành công');
@@ -82,95 +83,106 @@ function AppointmentSummary() {
         }
     };
     return (
-        <Group w={'100%'} justify="center">
-            <LoadingOverlay visible={loading} />
-            <ToastContainer style={{ marginTop: '100px' }} />
-            <Group
-                w={800}
-                m={20}
-                p={20}
-                style={{
-                    boxShadow:
-                        'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
-                    borderRadius: '12px',
-                }}
-            >
-                <Flex gap={10} align={'center'}>
-                    {/* <CheckCircle htmlColor="#40C057" /> */}
-                    <Text w={'100%'} c={'#5789cf'} size="xl" fw={500}>
-                        Xác nhận đặt lịch
-                    </Text>
-                </Flex>
-                <Progress color={'green'} w={'100%'} animated value={80} />
-
-                <SimpleGrid w={'100%'} cols={{ xl: 2, sm: 1 }}>
-                    {/* User Information Section */}
-                    <Flex justify="flex-start" direction={'column'} gap={20}>
-                        <Text w={'100%'} fw={500}>
-                            Thông tin người đặt:
-                        </Text>
-                        <Flex gap={20} direction={'column'}>
-                            <Group>
-                                <Avatar
-                                    size={'lg'}
-                                    src={user.avatar_url || null}
-                                    name={formData.ownerName}
-                                />
-                                <Text fw={500}>{formData.ownerName}</Text>
-                            </Group>
-                            <Text>
-                                <b>Số điện thoại: </b>
-                                {formData.ownerPhone}
-                            </Text>
-                            <Text>
-                                <b>Email: </b>
-                                {formData.ownerEmail}
-                            </Text>
-                        </Flex>
-                    </Flex>
-
-                    <Flex justify="flex-start" direction={'column'} gap={20}>
-                        <Text w={'100%'} fw={500}>
-                            Thông tin cuộc hẹn:
-                        </Text>
-                        <Flex gap={20} direction={'column'}>
-                            <Text>
-                                <b>Thú cưng: </b>
-                                {formData.pet.name}
-                            </Text>
-                            <Text>
-                                <b>Bác sĩ: </b>
-                                {formData.doctor.username}
-                            </Text>
-                            <Text>
-                                <b>Ngày: </b>
-                                {formData.date}
-                            </Text>
-                            <Text>
-                                <b>Giờ: </b>
-                                {formData.time.slice(0, -3)}
-                            </Text>
-                            <Text>
-                                <b>Ghi chú: </b>
-                                {formData.notes || 'Không có ghi chú'}
-                            </Text>
-                        </Flex>
-                    </Flex>
-                </SimpleGrid>
-            </Group>
-            <Group w={'100%'} justify="center" gap={30}>
-                <Button
-                    onClick={() => navigate(-1)}
-                    variant="transparent"
-                    disabled={loading}
+        <>
+            <ToastContainer />
+            <Group w={'100%'} justify="center">
+                <LoadingOverlay visible={loading} />
+                <ToastContainer style={{ marginTop: '100px' }} />
+                <Group
+                    w={800}
+                    m={20}
+                    p={20}
+                    style={{
+                        boxShadow:
+                            'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                        borderRadius: '12px',
+                    }}
                 >
-                    Quay lại
-                </Button>
-                <Button onClick={handleBooking} loading={loading}>
-                    Đặt lịch
-                </Button>
+                    <Flex gap={10} align={'center'}>
+                        {/* <CheckCircle htmlColor="#40C057" /> */}
+                        <Text w={'100%'} c={'#5789cf'} size="xl" fw={500}>
+                            Xác nhận đặt lịch
+                        </Text>
+                    </Flex>
+                    <Progress color={'green'} w={'100%'} animated value={80} />
+
+                    <SimpleGrid w={'100%'} cols={{ xl: 2, sm: 1 }}>
+                        {/* User Information Section */}
+                        <Flex
+                            justify="flex-start"
+                            direction={'column'}
+                            gap={20}
+                        >
+                            <Text w={'100%'} fw={500}>
+                                Thông tin người đặt:
+                            </Text>
+                            <Flex gap={20} direction={'column'}>
+                                <Group>
+                                    <Avatar
+                                        size={'lg'}
+                                        src={user.avatar_url || null}
+                                        name={formData.ownerName}
+                                    />
+                                    <Text fw={500}>{formData.ownerName}</Text>
+                                </Group>
+                                <Text>
+                                    <b>Số điện thoại: </b>
+                                    {formData.ownerPhone}
+                                </Text>
+                                <Text>
+                                    <b>Email: </b>
+                                    {formData.ownerEmail}
+                                </Text>
+                            </Flex>
+                        </Flex>
+
+                        <Flex
+                            justify="flex-start"
+                            direction={'column'}
+                            gap={20}
+                        >
+                            <Text w={'100%'} fw={500}>
+                                Thông tin cuộc hẹn:
+                            </Text>
+                            <Flex gap={20} direction={'column'}>
+                                <Text>
+                                    <b>Thú cưng: </b>
+                                    {formData.pet.name}
+                                </Text>
+                                <Text>
+                                    <b>Bác sĩ: </b>
+                                    {formData.doctor.username}
+                                </Text>
+                                <Text>
+                                    <b>Ngày: </b>
+                                    {formData.date}
+                                </Text>
+                                <Text>
+                                    <b>Giờ: </b>
+                                    {formData.time.slice(0, -3)}
+                                </Text>
+                                <Text>
+                                    <b>Ghi chú: </b>
+                                    {formData.notes || 'Không có ghi chú'}
+                                </Text>
+                            </Flex>
+                        </Flex>
+                    </SimpleGrid>
+                </Group>
+                <Group w={'100%'} justify="center" gap={30}>
+                    <Button
+                        onClick={() => navigate(-1)}
+                        variant="transparent"
+                        disabled={loading}
+                    >
+                        Quay lại
+                    </Button>
+                    <Button onClick={handleBooking} loading={loading}>
+                        Đặt lịch
+                    </Button>
+                </Group>
             </Group>
-        </Group>
+        </>
     );
 }
 

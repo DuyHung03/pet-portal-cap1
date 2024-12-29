@@ -2,11 +2,11 @@ import { motion } from 'framer-motion';
 import { Loader, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store/authStore';
-import PasswordStrengthMeter from '../../component/PasswordStrengthMeter/PasswordStrengthMeter';
-import Input from '../../component/Input/Input';
-import withBackground from '../../Hoc/FloatingShape';
 import { toast } from 'react-toastify';
+import Input from '../../component/Input/Input';
+import PasswordStrengthMeter from '../../component/PasswordStrengthMeter/PasswordStrengthMeter';
+import withBackground from '../../Hoc/FloatingShape';
+import { useAuthStore } from '../../store/authStore';
 
 const SignUpPage = () => {
     const [username, setUserName] = useState('');
@@ -28,10 +28,10 @@ const SignUpPage = () => {
             );
             return false;
         }
-        if (!email || !emailRegex.test(email)) {
-            toast.error('Please enter a valid email address.');
-            return false;
-        }
+        // if (!email || !emailRegex.test(email)) {
+        //     toast.error('Please enter a valid email address.');
+        //     return false;
+        // }
         if (!password || !passwordRegex.test(password)) {
             toast.error(
                 'Password must be 8-64 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.',
